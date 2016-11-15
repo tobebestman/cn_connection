@@ -10,7 +10,7 @@ Imports Bentley.MicroStation.InteropServices
 'Append line 'BridgeSingleBrace, Macros, PSN_BRIDGESINGLEBRACE,,' in follow file:
 'C:\Program Files (x86)\Bentley\ProStructures\V8i_S6\MicroStation 081109\Localised\English\Resource\PlugIns\ConnectionCenter.txt
 
-<Bentley.MicroStation.AddIn(MdlTaskID:="BridgeSingleBrace", KeyinTree:="BridgeSingleBrace.keyins")>
+<Bentley.MicroStation.AddIn(MdlTaskId:="BridgeSingleBrace", KeyinTree:="BridgeSingleBrace.keyins")> _
 Friend NotInheritable Class AddInMain
     Inherits Bentley.MicroStation.AddIn
     ' Methods

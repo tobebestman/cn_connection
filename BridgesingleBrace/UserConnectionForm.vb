@@ -45,8 +45,8 @@ Imports PlugInBase.PlugInCommon.CommonFunctions
 Imports PlugInBase.PlugInCommon.ListsFunctions
 Imports PlugInBase.PlugInCommon.CommonConstants
 Imports PlugInBase.PlugInCommon.KeyBoard
+Imports PlugInBase.KsxUnits
 Imports System.Windows.Forms
-Imports Microsoft.VisualBasic.Compatibility
 
 Friend Class UserConnectionForm
     Inherits System.Windows.Forms.Form
@@ -54,7 +54,8 @@ Friend Class UserConnectionForm
     Public mCallBack As UserConnection
     Public mIsCreatingConn As Boolean = False
 
-    Private ConnectionId As IntPtr
+    Private ConnectionId As Long
+
     Private CancelData As Parameters
     Private hOriginalParent As Integer
     Private mEnableBitmaps As Boolean
@@ -67,6 +68,7 @@ Friend Class UserConnectionForm
     Private NoLine As Integer
     Private mCurrentTextBox As System.Windows.Forms.TextBox
     Private oCheckInput As CheckInput
+    Private UIConverter As New KsxUnits
 
 
     Private Sub cmdBitmaps_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdBitmaps.Click
@@ -119,8 +121,9 @@ Friend Class UserConnectionForm
 
                             If Identifier = PLUGIN_IDENTIFIER Then
                                 Index = -1
-                                UserConnection.Data.ReadFromConnection(SourceConnection, True)
-                                WriteToDialog(UserConnection.Data)
+                                Dim data As New Parameters
+                                data.ReadFromConnection(SourceConnection, True)
+                                WriteToDialog(data)
                                 Exit For
                             End If
                         End If
@@ -146,10 +149,10 @@ Friend Class UserConnectionForm
             mCallBack.CleanI(ConnectionId)
         Else
             mCallBack.CleanI(ConnectionId, False)
-            CancelData.WriteToConnectionId(ConnectionId.ToInt64)
+            CancelData.WriteToConnectionId(ConnectionId)
             Dim oTrans As New PsTransaction
             Try
-                If oTrans.GetObject(ConnectionId.ToInt64, PsOpenMode.kForWrite, eConnection) Then
+                If oTrans.GetObject(ConnectionId, PsOpenMode.kForWrite, eConnection) Then
                     eConnection.IsBuilt = True
                 End If
             Catch ex As Exception
@@ -198,8 +201,10 @@ Friend Class UserConnectionForm
 
         DisableUpdate = True
 
-        ReadFromDialog(UserConnection.Data)
-        UserConnection.Data.WriteToTemplate(Template)
+        Dim data As New Parameters
+
+        ReadFromDialog(data)
+        data.WriteToTemplate(Template)
         Template.SetTemplateFile(PLUGIN_IDENTIFIER)
 
         Me.Hide()
@@ -208,8 +213,8 @@ Friend Class UserConnectionForm
         Me.Show()
         'Me.TopMost = True
 
-        UserConnection.Data.ReadFromTemplate(Template)
-        WriteToDialog(UserConnection.Data)
+        data.ReadFromTemplate(Template)
+        WriteToDialog(data)
 
         DisableUpdate = False
         UpdateConnection()
@@ -219,14 +224,14 @@ Friend Class UserConnectionForm
 
     Private Sub cmdAccept_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdAccept.Click
         Dim Template As New PsTemplateManager
-
-        UserConnection.Data.WriteToTemplate(Template)
+        Dim data As New Parameters
+        data.WriteToTemplate(Template)
         Template.SaveTemplateEntry(PLUGIN_IDENTIFIER, PLUGIN_VERSION)
         Template = Nothing
 
         Template = New PsTemplateManager
-        Template.AppendDouble(Top)
-        Template.AppendDouble(Left)
+        Template.AppendDouble(Me.Top)
+        Template.AppendDouble(Me.Left)
         Template.AppendNumber(Me.TabStrip1.SelectedIndex)
         Template.AppendBoolean(mBitmapStatus)
         Template.SaveTemplateEntry(PLUGIN_IDENTIFIER & "_WndCfg", PLUGIN_VERSION)
@@ -238,132 +243,40 @@ Friend Class UserConnectionForm
     End Sub
 
     Private Sub ReadFromDialog(ByRef Data As Parameters)
-        'bottom plate
-        Data.mBpAngleA = AngToF(txtBpA.Text)
-        Data.mBpEdgeOuter = AToF(txtBpB.Text)
-        Data.mBpEdgeInter = AToF(txtBpC.Text)
-        Data.mBpEdgeDistance = AToF(txtBpD.Text)
-        Data.mBpOffsetGusset = AToF(txtBpE.Text)
-        Data.mBpThick = AToF(txtBpThick.Text)
-        Data.mBpGapEnd = AToF(txtBpGapEnd.Text)
-        Data.mBpTolerance = AToF(txtBpTolerance.Text)
+        Data.mPlateThickness = UIConverter.ConvertToNumeric(txtPlateThick.Text)
 
-        Data.mBpHorHoleNum = Convert.ToInt32(txtBpHorHoleNum.Text)
-        Data.mBpA = AToF(txtBpHorA.Text)
-        Data.mBpB = AToF(txtBpHorB.Text)
-        Data.mBpVerHoleNum = Convert.ToInt32(txtBpVerHoleNum.Text)
-        Data.mBpA2 = AToF(txtBpVerA.Text)
-        Data.mBpB2 = AToF(txtBpVerB.Text)
+        Data.mSupport1CutBack = UIConverter.ConvertToNumeric(txtSupportCutBack1.Text)
+        Data.mSupport2CutBack = UIConverter.ConvertToNumeric(txtSupportCutBack2.Text)
 
-        Data.mHoleDia = AToF(txtBoltSize.Text)
-        Data.mSlotLen = AToF(txtSlotLen.Text)
-        Data.mWorkLoose = AToF(txtWorkLoose.Text)
-        Data.mSlotRotation = AToF(txtSlotRotation.Text)
-
-        Data.mBoltStyle = cbBoltStyle.Text
-        Data.mWeldStyle = cbWeldStyle.Text
-        Data.mBoltWeldStatus = IIf(Me.radioWeld.Checked, 2, IIf(Me.radioHole.Checked, 1, 0))
-        Data.mTurnBolt = Me.chkTurnBolts.CheckState
-
-        'side plate 1
-        Data.mSpHeight = AToF(txtSpHeight.Text)
-        Data.mSpThick = AToF(txtSpThick.Text)
-        Data.mSpChamferDistance = AToF(txtSpChamferDistance.Text)
-        Data.mSpParallelToLeg = chkParallelToLeg.Checked
-
-        'side plate 2
-        Data.mSp2Height = AToF(txtSp2Height.Text)
-        Data.mSp2Thick = AToF(txtSp2Thick.Text)
-        Data.mSp2ChamferDistance = AToF(txtSp2ChamferDistance.Text)
-
-        'Group
-        Data.mCreateGroup = chkCreateGroup.Checked
-
-        'Assignment
-        Data.mElement = CInt(GetImageCombo(cboElement, (Data.mElement)))
-        Dim index As Integer = Data.mElement
-        Data.mAssign(index).Material = GetMaterialIndex(cboMaterial)
-        Data.mAssign(index).DetailStyle = cboDetailStyle.Text
-        Data.mAssign(index).DisplayClass = cboDisplayClass.SelectedIndex
-        Data.mAssign(index).AreaClass = cboAreaClass.SelectedIndex
-        Data.mAssign(index).PartFamily = GetPartFamilyIndex((cboPartFamily))
-        Data.mAssign(index).Description = cboDescription.SelectedIndex
-        Data.mAssign(index).Level = cboLevel.Text
-        Data.mAssign(index).ItemNumber = txtItemNumber.Text
+        Data.mConnect1CutBack = UIConverter.ConvertToNumeric(txtConnectCutBack1.Text)
+        Data.mConnect2CutBack = UIConverter.ConvertToNumeric(txtConnectCutBack2.Text)
     End Sub
 
     Private Sub WriteToDialog(ByRef Data As Parameters)
-        'bottom plate
-        txtBpA.Text = oCheckInput.CheckAngular(FToA(Data.mBpAngleA))
-        txtBpB.Text = FToA(Data.mBpEdgeOuter)
-        txtBpC.Text = FToA(Data.mBpEdgeInter)
-        txtBpD.Text = FToA(Data.mBpEdgeDistance)
-        txtBpE.Text = FToA(Data.mBpOffsetGusset)
-        txtBpThick.Text = FToA(Data.mBpThick)
-        txtBpGapEnd.Text = FToA(Data.mBpGapEnd)
-        txtBpTolerance.Text = FToA(Data.mBpTolerance)
 
-        txtBpHorHoleNum.Text = Data.mBpHorHoleNum.ToString()
-        txtBpHorA.Text = FToA(Data.mBpA)
-        txtBpHorB.Text = FToA(Data.mBpB)
-        txtBpVerHoleNum.Text = Data.mBpVerHoleNum.ToString()
-        txtBpVerA.Text = FToA(Data.mBpA2)
-        txtBpVerB.Text = FToA(Data.mBpB2)
+        txtPlateThick.Text = UIConverter.ConvertToText(Data.mPlateThickness)
 
-        txtBoltSize.Text = FToA(Data.mHoleDia)
-        txtSlotLen.Text = FToA(Data.mSlotLen)
-        txtWorkLoose.Text = FToA(Data.mWorkLoose)
-        txtSlotRotation.Text = oCheckInput.CheckAngular(FToA(Data.mSlotRotation))
+        txtSupportCutBack1.Text = UIConverter.ConvertToText(Data.mSupport1CutBack)
+        txtSupportCutBack2.Text = UIConverter.ConvertToText(Data.mSupport2CutBack)
 
-        cbBoltStyle.Text = Data.mBoltStyle
-        cbWeldStyle.Text = Data.mWeldStyle
+        txtConnectCutBack1.Text = UIConverter.ConvertToText(Data.mConnect1CutBack)
+        txtConnectCutBack2.Text = UIConverter.ConvertToText(Data.mConnect2CutBack)
 
-        Me.radioHoleBolt.Checked = Data.mBoltWeldStatus = 0
-        Me.radioHole.Checked = Data.mBoltWeldStatus = 1
-        Me.radioWeld.Checked = Data.mBoltWeldStatus = 2
-        Me.chkTurnBolts.CheckState = Data.mTurnBolt
-
-        'side plate 1
-        txtSpHeight.Text = FToA(Data.mSpHeight)
-        txtSpThick.Text = FToA(Data.mSpThick)
-        txtSpChamferDistance.Text = FToA(Data.mSpChamferDistance)
-        chkParallelToLeg.Checked = Data.mSpParallelToLeg
-
-        'side plate 2
-        txtSp2Height.Text = FToA(Data.mSp2Height)
-        txtSp2Thick.Text = FToA(Data.mSp2Thick)
-        txtSp2ChamferDistance.Text = FToA(Data.mSp2ChamferDistance)
-
-        'Group
-        chkCreateGroup.Checked = Data.mCreateGroup
-
-        'Assignment
-        Dim index As Integer = Data.mElement
-        SetImageCombo(cboElement, (index))
-        SetMaterialIndex(cboMaterial, Data.mAssign(index).Material)
-        cboDetailStyle.Text = Data.mAssign(index).DetailStyle
-
-        SafeSetIndex(cboDisplayClass, Data.mAssign(index).DisplayClass)
-        SafeSetIndex(cboAreaClass, Data.mAssign(index).AreaClass)
-        SafeSetIndex(cboPartFamily, Data.mAssign(index).PartFamily)
-        SafeSetIndex(cboDescription, Data.mAssign(index).Description)
-
-        cboLevel.Text = Data.mAssign(index).Level
-        txtItemNumber.Text = Data.mAssign(index).ItemNumber
     End Sub
 
-    Public Sub EditData(ByRef ConnId As IntPtr)
+    Public Sub EditData(ByRef ConnId As Long)
         If ConnId <> 0 Then
             ConnectionId = ConnId
-
-            UserConnection.Data.ReadFromConnectionId(ConnectionId.ToInt64)
+            Dim data As New Parameters
+            data.ReadFromConnectionId(ConnId)
 
             If Not mIsCreatingConn Then
-                CancelData.ReadFromConnectionId(ConnectionId.ToInt64)
+                CancelData.ReadFromConnectionId(ConnectionId)
             End If
 
             Me.Show(Owner)
-            WriteToDialog(UserConnection.Data)
+            WriteToDialog(data)
+
             bFormLoadFinished = True
 
             DisableUpdate = False
@@ -392,29 +305,6 @@ Friend Class UserConnectionForm
     Private Sub UserConnectionForm_Load(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles MyBase.Load
         Me.Width = TabStrip1.Width + LAYOUTGAP * 2
 
-        'bolt style
-        DisplayBoltTypeList(Me.cbBoltStyle, UserConnection.Data.mBoltStyle)
-
-        'weld style
-        Dim weldStyle As New WeldStyleManager
-        For Each style As String In weldStyle.WeldStyle
-            Me.cbWeldStyle.Items.Add(style)
-        Next
-        weldStyle = Nothing
-
-        'Assignment
-        cboElement.AddNewItem(UserConnection.RSS.RSS("S0100"), -1)
-        cboElement.AddNewItem(UserConnection.RSS.RSS("S0101"), -1)
-
-        cboMaterial.Enabled = DisplayMaterialList(cboMaterial) > 0
-        cboDetailStyle.Enabled = DisplayDetailStyleList(cboDetailStyle) > 0
-        cboDisplayClass.Enabled = DisplayDisplayClassList(cboDisplayClass) > 0
-        cboAreaClass.Enabled = DisplayAreaClassList(cboAreaClass) > 0
-        cboPartFamily.Enabled = DisplayFamilyClassList(cboPartFamily) > 0
-        cboDescription.Enabled = DisplayDescriptionClassList(cboDescription) > 0
-        cboLevel.Enabled = DisplayLayerList(cboLevel) > 0
-
-        '
         Dim Resource As New KsxLanguage
 
         'LaterModify
@@ -436,8 +326,8 @@ Friend Class UserConnectionForm
             Template.LoadTemplateEntry(PLUGIN_IDENTIFIER & "_WndCfg")
 
             If Template.DoubleCount > 1 Then
-                Me.Top = (Template.Double(0))
-                Me.Left = (Template.Double(1))
+                Me.Top = Template.Double(0)
+                Me.Left = Template.Double(1)
             End If
 
             If Template.NumberCount > 0 Then
@@ -486,51 +376,38 @@ Friend Class UserConnectionForm
         End If
     End Sub
 
-    Private Sub txt_Enter(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) _
-    Handles txtWorkLoose.Enter, txtSlotRotation.Enter, txtSlotLen.Enter, txtBoltSize.Enter, _
-        txtBpVerB.Enter, txtBpHorB.Enter, txtBpVerA.Enter, txtBpHorA.Enter, txtBpVerHoleNum.Enter, txtBpHorHoleNum.Enter, _
-        txtBpTolerance.Enter, txtBpGapEnd.Enter, txtBpThick.Enter, txtBpE.Enter, txtBpD.Enter, txtBpC.Enter, txtBpB.Enter, txtBpA.Enter, _
-        txtSpThick.Enter, txtSpHeight.Enter, txtSpChamferDistance.Enter, _
-        txtSp2Thick.Enter, txtSp2Height.Enter, txtSp2ChamferDistance.Enter
 
-        oCheckInput.OldValue = eventSender.Text
-        mCurrentTextBox = eventSender
-        NoLine = 0
-        GreyOptions()
-    End Sub
+    'Private Sub txt_Enter(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) _
+    'Handles txtPlateThick.Enter
 
-    Private Sub txtPositive_Leave(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) _
-    Handles txtBoltSize.Leave, _
-        txtBpVerB.Leave, txtBpHorB.Leave, txtBpVerA.Leave, txtBpHorA.Leave, _
-        txtBpThick.Leave, txtBpC.Leave, txtBpB.Leave, txtBpE.Leave, _
-        txtSpThick.Leave, txtSpHeight.Leave, txtSpChamferDistance.Leave, _
-        txtSp2Thick.Leave, txtSp2Height.Leave, txtSp2ChamferDistance.Leave
+    '    oCheckInput.OldValue = eventSender.Text
+    '    mCurrentTextBox = eventSender
+    '    NoLine = 0
+    '    GreyOptions()
+    'End Sub
 
-        eventSender.Text = oCheckInput.CheckPositive(eventSender.Text)
-        If oCheckInput.OldValue <> eventSender.Text Then UpdateConnection()
-    End Sub
 
-    Private Sub txtNonNegative_Leave(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) _
-    Handles txtWorkLoose.Leave, txtSlotLen.Leave, _
-        txtBpTolerance.Leave, txtBpGapEnd.Leave, txtBpD.Leave
 
-        eventSender.Text = oCheckInput.CheckNonNegative(eventSender.Text)
-        If oCheckInput.OldValue <> eventSender.Text Then UpdateConnection()
-    End Sub
+    'Private Sub txtNonNegative_Leave(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs)
 
-    Private Sub txtAngle_Leave(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) _
-    Handles txtSlotRotation.Leave, txtBpA.Leave
 
-        eventSender.Text = oCheckInput.CheckAngular(eventSender.Text)
-        If oCheckInput.OldValue <> eventSender.Text Then UpdateConnection()
-    End Sub
+    '    eventSender.Text = oCheckInput.CheckNonNegative(eventSender.Text)
+    '    If oCheckInput.OldValue <> eventSender.Text Then UpdateConnection()
+    'End Sub
 
-    Private Sub txtPositiveInt_Leave(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) _
-    Handles txtBpVerHoleNum.Leave, txtBpHorHoleNum.Leave
+    'Private Sub txtAngle_Leave(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs)
 
-        eventSender.Text = Math.Abs(Convert.ToInt32(Single.Parse(oCheckInput.CheckNumeric(eventSender.Text, True))))
-        If oCheckInput.OldValue <> eventSender.Text Then UpdateConnection()
-    End Sub
+
+    '    eventSender.Text = oCheckInput.CheckAngular(eventSender.Text)
+    '    If oCheckInput.OldValue <> eventSender.Text Then UpdateConnection()
+    'End Sub
+
+    'Private Sub txtPositiveInt_Leave(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs)
+
+
+    '    eventSender.Text = Math.Abs(Convert.ToInt32(Single.Parse(oCheckInput.CheckNumeric(eventSender.Text, True))))
+    '    If oCheckInput.OldValue <> eventSender.Text Then UpdateConnection()
+    'End Sub
 
     Private Sub UpdateConnection(Optional ByRef ForceUpdate As Boolean = False)
         If Not bFormLoadFinished OrElse DisableUpdate Then Return
@@ -538,46 +415,29 @@ Friend Class UserConnectionForm
         Try
             EnableUI()
             If (DisableUpdate = 0 And Not mEnableForceUpdate) Or ForceUpdate Then
-                Dim oConnAdapter As ConnectionAdapter = New ConnectionAdapter(ConnectionId.ToInt64)
+                Dim oConnAdapter As ConnectionAdapter = New ConnectionAdapter(ConnectionId)
                 If Not oConnAdapter.IsValidConnection Then Return
                 oConnAdapter = Nothing
-
-                ReadFromDialog(UserConnection.Data)
-                UserConnection.Data.WriteToConnectionId(ConnectionId.ToInt64)
+                Dim data As New Parameters
+                ReadFromDialog(data)
+                data.WriteToConnectionId(ConnectionId)
 
                 mCallBack.BuildI(ConnectionId)
             End If
         Catch ex As Exception
-            ErrorLog.ShowError(ex)
+            MessageBox.Show(ex.Message)
         End Try
     End Sub
 
     Private Sub GreyOptions()
-        If NoLine = 0 Then
-            cmdGetLengthFromLine.Enabled = True
-        Else
-            cmdGetLengthFromLine.Enabled = False
-        End If
+        'If NoLine = 0 Then
+        '    cmdGetLengthFromLine.Enabled = True
+        'Else
+        '    cmdGetLengthFromLine.Enabled = False
+        'End If
 
-        cmdForceUpdate.Visible = mEnableForceUpdate
+        'cmdForceUpdate.Visible = mEnableForceUpdate
 
-        If cboMaterial.Items.Count > 0 Then
-            cboMaterial.Visible = True
-        Else
-            cboMaterial.Visible = False
-        End If
-
-        If cboDescription.Items.Count > 0 Then
-            cboDescription.Visible = True
-        Else
-            cboDescription.Visible = False
-        End If
-
-        If cboDetailStyle.Items.Count > 0 Then
-            cboDetailStyle.Visible = True
-        Else
-            cboDetailStyle.Visible = False
-        End If
     End Sub
 
     Protected Overrides Sub Finalize()
@@ -586,119 +446,23 @@ Friend Class UserConnectionForm
     End Sub
 
     Private Sub EnableUI()
-        groupHoles.Enabled = Not radioWeld.Checked
-        groupBolt.Enabled = Not radioWeld.Checked
-        groupWeld.Enabled = radioWeld.Checked
-    End Sub
-    Private Sub radioHoleBolt_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-    Handles radioHoleBolt.CheckedChanged, radioHole.CheckedChanged, radioWeld.CheckedChanged
-        If sender Is radioWeld Then EnableUI()
-        UpdateConnection()
     End Sub
 
-    Private Sub chkCreateGroup_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkCreateGroup.CheckedChanged
-        UpdateConnection()
-    End Sub
-
-    Private Sub cboElement_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboElement.SelectedIndexChanged
-        If DisableUpdate = True Then Return
-        Try
-            Dim index As Integer
-            index = CInt(GetImageCombo(cboElement, (index)))
-            If index <> UserConnection.Data.mElement Then
-                DisableUpdate = True
-
-                SetMaterialIndex(cboMaterial, UserConnection.Data.mAssign(index).Material)
-                cboDetailStyle.Text = UserConnection.Data.mAssign(index).DetailStyle
-
-                If cboDisplayClass.Items.Count > UserConnection.Data.mAssign(index).DisplayClass Then
-                    cboDisplayClass.SelectedIndex = UserConnection.Data.mAssign(index).DisplayClass
-                End If
-
-                If cboAreaClass.Items.Count > UserConnection.Data.mAssign(index).AreaClass Then
-                    cboAreaClass.SelectedIndex = UserConnection.Data.mAssign(index).AreaClass
-                End If
-
-                SetPartFamilyIndex((cboPartFamily), UserConnection.Data.mAssign(index).PartFamily)
-
-                If cboDescription.Items.Count > UserConnection.Data.mAssign(index).Description Then
-                    cboDescription.SelectedIndex = UserConnection.Data.mAssign(index).Description
-                End If
-
-                cboLevel.Text = UserConnection.Data.mAssign(index).Level
-                txtItemNumber.Text = UserConnection.Data.mAssign(index).ItemNumber
-
-                DisableUpdate = False
-                UpdateConnection()
-            End If
-        Catch ex As Exception
-            ErrorLog.ShowError(ex)
-        End Try
-    End Sub
-
-    Private Sub cboMaterial_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboMaterial.SelectedIndexChanged
-        If GetMaterialIndex(cboMaterial) <> UserConnection.Data.mAssign(UserConnection.Data.mElement).Material Then
-            UpdateConnection()
-        End If
-    End Sub
-
-    Private Sub cboDetailStyle_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboDetailStyle.SelectedIndexChanged
-        If Not cboDetailStyle.Text.Equals(UserConnection.Data.mAssign(UserConnection.Data.mElement).DetailStyle) Then
-            UpdateConnection()
-        End If
-    End Sub
-
-    Private Sub cboDisplayClass_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboDisplayClass.SelectedIndexChanged
-        If cboDisplayClass.SelectedIndex <> UserConnection.Data.mAssign(UserConnection.Data.mElement).DisplayClass Then
-            UpdateConnection()
-        End If
-    End Sub
-
-    Private Sub cboAreaClass_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboAreaClass.SelectedIndexChanged
-        If cboAreaClass.SelectedIndex <> UserConnection.Data.mAssign(UserConnection.Data.mElement).AreaClass Then
-            UpdateConnection()
-        End If
-    End Sub
-
-    Private Sub cboPartFamily_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboPartFamily.SelectedIndexChanged
-        If GetPartFamilyIndex((cboPartFamily)) <> UserConnection.Data.mAssign(UserConnection.Data.mElement).PartFamily Then
-            UpdateConnection()
-        End If
-    End Sub
-
-    Private Sub cboDescription_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboDescription.SelectedIndexChanged
-        If cboDescription.SelectedIndex <> UserConnection.Data.mAssign(UserConnection.Data.mElement).Description Then
-            UpdateConnection()
-        End If
-    End Sub
-
-    Private Sub cboLevel_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles cboLevel.SelectedIndexChanged
-        If Not cboLevel.Text.Equals(UserConnection.Data.mAssign(UserConnection.Data.mElement).Level) Then
-            UpdateConnection()
-        End If
-    End Sub
-
-    Private Sub txtItemNumber_Leave(ByVal sender As Object, ByVal e As System.EventArgs) Handles txtItemNumber.Leave
-        If Not txtItemNumber.Text.Equals(UserConnection.Data.mAssign(UserConnection.Data.mElement).ItemNumber) Then
-            UpdateConnection()
-        End If
-    End Sub
-
-    Private Sub cb_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-    Handles _
-        cbBoltStyle.SelectedIndexChanged, cbWeldStyle.SelectedIndexChanged
-        UpdateConnection()
-    End Sub
-
-    Private Sub chk_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) _
-    Handles _
-        chkTurnBolts.CheckedChanged, chkParallelToLeg.CheckedChanged
-        UpdateConnection()
-    End Sub
     Protected Overrides Sub DefWndProc(ByRef m As System.Windows.Forms.Message)
         If (m.Msg = 2) Then 'WM_DESTORY
             Me.Close() 'remove the ConnectionId from the re-entry guard set
         End If
         MyBase.DefWndProc(m)
     End Sub
+
+    Private Sub txtPlateThick_leave(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) _
+    Handles txtPlateThick.Leave, _
+            txtSupportCutBack1.Leave, txtSupportCutBack2.Leave, _
+            txtConnectCutBack1.Leave, txtConnectCutBack2.Leave
+
+        eventSender.Text = oCheckInput.CheckPositive(eventSender.Text)
+        If oCheckInput.OldValue <> eventSender.Text Then UpdateConnection()
+
+    End Sub
+
 End Class

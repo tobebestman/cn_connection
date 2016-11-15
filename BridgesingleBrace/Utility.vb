@@ -63,6 +63,30 @@ Module Utility
     Public Const kShapeClass_HALF_HE As Short = 20 ' SHAPECLASS_HALF_HE        
     Public Const kShapeClassCOLD_C As Short = 21 ' SHAPECLASS_COLD_C 
 
+    Public Function IsWeldShape(ByVal objId As Integer) As Boolean
+        Dim oTrans As New PsTransaction
+        Dim oShape As PsShape = Nothing
+        Try
+            If oTrans.GetObject(objId, PsOpenMode.kForRead, oShape) = False Then
+                Return False
+            End If
+            'Return oShape.CrossSectionType = ShapeType.kWeldType
+            'just for test on the std-shape purposes
+            Return True
+        Catch ex As Exception
+            Return False
+        Finally
+            oTrans.Close()
+        End Try
+    End Function
+
+    Public Sub CreateBall(org As PsPoint)
+        Dim oPrim As New PsCreatePrimitive
+        oPrim.SetInsertPoint(org)
+        oPrim.SetXYPlane(New PsVector(1, 0, 0), New PsVector(0, 1, 0))
+        oPrim.CreateSphere(100)
+    End Sub
+
     Public Function IsPipe(ByVal objId As Integer) As Boolean
         Dim shapeInfo As New PsShapeInfo
         shapeInfo.SetObjectId(objId)

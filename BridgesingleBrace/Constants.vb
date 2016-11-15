@@ -7,8 +7,6 @@ Module TheConstants
     Public Const MAX_ASSIGN As Integer = 2
     Public Const PRECISION As Double = 0.00000001 '1e-8
 
-    Public Const CreatedEntitySize As Integer = 10
-
     Public Enum IntersectType
         itUnbounded = 0
         itFirstBounded

@@ -40,15 +40,13 @@ Imports Bentley.ProStructures.Steel.Shape
 Imports Bentley.ProStructures.StructuralObject
 Imports Bentley.ProStructures.StructuralObject.JoistData
 
-
-
 Friend Class KeyinCommands
+
     ' Methods
     Public Shared Sub CreateBridgeSingleBrace(ByVal unparsed As String)
         Dim oConn As New UserConnection
         oConn.Create()
     End Sub
-
 
 End Class
 
