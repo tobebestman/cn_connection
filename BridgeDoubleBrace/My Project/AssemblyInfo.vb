@@ -8,10 +8,10 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("BridgeSingleBrace")>
+<Assembly: AssemblyTitle("BridgeDoubleBrace")>
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")>
-<Assembly: AssemblyProduct("BridgeSingleBrace")>
+<Assembly: AssemblyProduct("BridgeDoubleBrace")>
 <Assembly: AssemblyCopyright("Copyright ©  2016")> 
 <Assembly: AssemblyTrademark("")> 
 

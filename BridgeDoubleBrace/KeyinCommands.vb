@@ -43,7 +43,7 @@ Imports Bentley.ProStructures.StructuralObject.JoistData
 Friend Class KeyinCommands
 
     ' Methods
-    Public Shared Sub CreateBridgeSingleBrace(ByVal unparsed As String)
+    Public Shared Sub CreateBridgeDoubleBrace(ByVal unparsed As String)
         Dim oConn As New UserConnection
         oConn.Create()
     End Sub

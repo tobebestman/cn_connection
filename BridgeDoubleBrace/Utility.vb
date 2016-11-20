@@ -105,6 +105,14 @@ Module Utility
         shapeInfo = Nothing
     End Function
 
+    Public Sub drawBall(pt As PsPoint, r As Double)
+        Dim oPrimit As New PsCreatePrimitive
+        oPrimit.Init()
+        oPrimit.SetInsertPoint(pt)
+        oPrimit.SetXYPlane(New PsVector(1, 0, 0), New PsVector(0, 1, 0))
+        oPrimit.CreateSphere(r)
+    End Sub
+
     'Public Function BoltObjects(ByVal objectIds As List(Of Long), ByVal BoltType As String, ByVal BoltWorkLoose As Double, ByVal BoltAdditionalLen As Double, ByVal BoltGap As Double, ByVal BoltTurn As Boolean, ByVal ConnectionID As Long) As List(Of Long)
 
     '    Dim BoltId As Long = 0

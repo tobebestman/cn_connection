@@ -317,6 +317,60 @@ Public Class UserConnection
         Return CreatePlate(plateWidth, plateLength, plateThickness,
                            0, 0, vertPos, oMat)
     End Function
+    ''' <summary>
+    ''' some assumptions: pts1 and pte1 are at the same side of the intersection.
+    ''' </summary>
+    ''' <param name="pts1"></param>
+    ''' <param name="pte1"></param>
+    ''' <param name="cut1"></param>
+    ''' <param name="w1"></param>
+    ''' <param name="angle1"></param>
+    ''' <param name="pts2"></param>
+    ''' <param name="pte2"></param>
+    ''' <param name="cut2"></param>
+    ''' <param name="w2"></param>
+    ''' <param name="angle2"></param>
+    ''' <param name="radius"></param>
+    ''' <returns></returns>
+    Private Function linkLine(pts1 As PsPoint, pte1 As PsPoint, cut1 As Double, w1 As Double, angle1 As Double,
+                              pts2 As PsPoint, pte2 As PsPoint, cut2 As Double, w2 As Double, angle2 As Double, radius As Double) As List(Of PsPoint)
+        Dim result As New List(Of PsPoint)
+        Dim intersect As New PsPoint
+        If MathTool.IntersectLineWithLine(pts1, pte1, pts1, pte2, 4, intersect) = False Then
+            Debug.Assert(False)
+            result.Clear()
+            Return result
+        End If
+
+        Dim pt As New PsPoint
+        pt.CopyFrom(intersect)
+
+        Dim vec1 As New PsVector
+        vec1.SetFromPoints(intersect, pts1)
+        vec1.Normalize()
+
+        Dim vec2 As New PsVector
+        vec2.SetFromPoints(intersect, pts2)
+        vec2.Normalize()
+
+        Dim vecZ As New PsVector
+        vecZ.SetFromCrossProduct(vec1, vec2)
+        vecZ.Normalize()
+
+        Dim dirBetween As New PsVector
+        dirBetween.SetFromCrossProduct(vecZ, vec1)
+        dirBetween.Normalize()
+
+        pt = MathTool.GetPointInDirection(pt, -vec1, cut1)
+        result.Add(pt)
+
+        pt = MathTool.GetPointInDirection(pt, dirBetween, w1 / 2)
+        result.Add(pt)
+
+
+        Return result
+    End Function
+
 
     Private Function CreateLeftPlate(supportId As Long, splitDist As Double, oData As Parameters, oUcsMat As PsMatrix) As Long
         Dim shpApt As New ShapeAdapter(supportId)
@@ -383,7 +437,7 @@ Public Class UserConnection
         Dim org As New PsPoint
         oMat.getOrigin(org)
 
-        Utility.CreateBall(org)
+        'Utility.CreateBall(org)
 
         oCreatePlate.SetInsertMatrix(oMat)
         If oCreatePlate.Create() = False Then
@@ -403,7 +457,7 @@ Public Class UserConnection
             Dim oConnAdpt As New ConnectionAdapter(ConnectionId)
             Dim data As New Parameters
             data.ReadFromConnectionId(ConnectionId)
-           
+
             oConnAdpt.ReadAddtionalObjects()
             oConnAdpt.ReadCreatedObjectArray()
 
@@ -431,41 +485,12 @@ Public Class UserConnection
                 Return
             End If
 
-            Dim spliter As New PsEditShapeModification
-            spliter.SplitAtPoint(supportId, instPt1)
-            If spliter.NewObjectCount < 1 Then
-                Return
-            End If
-
-            Dim newSupportId = spliter.getNewObjectId(0)
-            If ((instPt1 - instPt2).Length > PRECISION) Then
-                AdjustShapeToPoint(instPt1, instPt2, supportId, newSupportId)
-            End If
-
-            'Dim oTrans As New PsTransaction
-            'Dim oshape As PsShape = Nothing
-            'If oTrans.GetObject(newSupportId, PsOpenMode.kForRead, oshape) = True Then
-            '    oTrans.Close()
-            'End If
-
-            'Dim oInfo As New PsShapeInfo
-            'oInfo.SetObjectId(newSupportId)
-            'oInfo.GetInfo()
-
-            'Dim oRef As New PsShapeReference
-            'oRef.init(0)
-            'oRef.setAccessKey(oInfo.SectionCatalog, oInfo.SectionName)
-            'oRef.getExplodeInPlates()
-
-            Dim firstSupportCutId As Long = CutShapeInwards(supportId, instPt1, data.mSupport1CutBack)
-            Dim secondSupportCutId As Long = CutShapeInwards(newSupportId, instPt2, data.mSupport2CutBack)
+            CutSupportShapeSidePlate(connMat, supportId, data, instPt1, instPt2)
 
             Dim firstConnectingCutId As Long = CutShapeInwards(connectingId1, instPt1, data.mConnect1CutBack)
             Dim secondConnectingCutId As Long = CutShapeInwards(connectingId2, instPt2, data.mConnect2CutBack)
-            Dim dist As Double = Math.Abs((instPt2 - instPt1).Length)
+            Dim dist As Double = MathTool.GetDistanceBetween(instPt1, instPt2)
 
-            Dim topPlateId As Long = CreateTopPlate(supportId, dist, data, connMat)
-            Dim bottomPlateId As Long = CreateBottomPlate(supportId, dist, data, connMat)
             Dim leftPlateId As Long = CreateLeftPlate(supportId, dist, data, connMat)
             Dim rightPlateId As Long = CreateRightPlate(supportId, dist, data, connMat)
 
@@ -476,17 +501,10 @@ Public Class UserConnection
             oConnAdpt.AppendAdditionalObjectId(supportId)
             oConnAdpt.AppendAdditionalObjectId(connectingId1)
             oConnAdpt.AppendAdditionalObjectId(connectingId2)
-            oConnAdpt.AppendAdditionalObjectId(newSupportId)
 
-            oConnAdpt.AppendCreatedObjectArray(0, topPlateId)
-            oConnAdpt.AppendCreatedObjectArray(0, bottomPlateId)
+            oConnAdpt.AppendCreatedObjectArray(0, leftPlateId)
+            oConnAdpt.AppendCreatedObjectArray(0, rightPlateId)
 
-            oConnAdpt.AppendCreatedObjectArray(1, leftPlateId)
-            oConnAdpt.AppendCreatedObjectArray(1, rightPlateId)
-
-            'oConnAdpt.AppendCreatedObjectId(plateId)
-            oConnAdpt.AppendSecondActiveObjectId(topPlateId)
-            oConnAdpt.AppendSecondActiveObjectId(bottomPlateId)
             oConnAdpt.AppendSecondActiveObjectId(leftPlateId)
             oConnAdpt.AppendSecondActiveObjectId(rightPlateId)
 
@@ -502,63 +520,101 @@ Public Class UserConnection
             MessageBox.Show(ex.Message)
         End Try
     End Sub
-    ''' <summary>
-    ''' this function is used to adjsut the stat/end point of the split members
-    ''' based on the intersect point 1, and 2.
-    ''' the supporId is the origin shape
-    ''' the newSupportId is the new created shape.
-    ''' because of the split operation's result is not always stable. we need re-match
-    ''' the shapes with the break points.
-    ''' </summary>
-    ''' <param name="instPt1"></param>
-    ''' <param name="instPt2"></param>
-    ''' <param name="supportId"></param>
-    ''' <param name="newSupportId"></param>
-    ''' <remarks></remarks>
-    Private Sub AdjustShapeToPoint(instPt1 As PsPoint, instPt2 As PsPoint,
-                                   ByRef supportId As Long, ByRef newSupportId As Long)
-        Dim orgAdpt As New ShapeAdapter(supportId)
-        Dim newAdpt As New ShapeAdapter(newSupportId)
 
-        Dim dirVec1 As New PsVector
-        dirVec1.SetFromPoints(orgAdpt.MidLineMid, newAdpt.MidLineMid)
-        dirVec1.Normalize()
+    Private Function CutSupportRightSide(oMat As PsMatrix, supportId As Long,
+                                         oData As Parameters,
+                                         instPt1 As PsPoint,
+                                         instPt2 As PsPoint) As Long
+        Dim oAdpt As New ShapeAdapter(supportId)
+        Dim width = oAdpt.Width
+        Dim cutHeight = oAdpt.Height + 2 * oData.mPlateThickness
 
-        Dim dirVec2 As New PsVector
-        dirVec2.SetFromPoints(instPt1, instPt2)
-        dirVec2.Normalize()
+        Dim oStart As New PsPoint
+        oMat.getOrigin(oStart)
+        Dim xAxis As New PsVector
+        Dim yAxis As New PsVector
+        Dim zAxis As New PsVector
 
-        'the shapes are following the break points
-        '   orgShape --------------------> new Shape
-        '            instPt1 ---> instPt2
-        If (Math.Abs(dirVec1.GetAngleTo(dirVec2)) < PRECISION) Then
-            Select Case newAdpt.GetEndSideTo(instPt1)
-                Case 1
-                    newAdpt.SetShapeStart(instPt2)
-                Case 2
-                    newAdpt.SetShapeEnd(instPt2)
-            End Select
-        Else
-            'the shapes are opposite to the break points
-            '   newShape <-------------------- orgShape
-            '             instPt1 ---> instPt2
-            Select Case orgAdpt.GetEndSideTo(instPt1)
-                Case 1
-                    orgAdpt.SetShapeStart(instPt2)
-                Case 2
-                    orgAdpt.SetShapeEnd(instPt2)
-            End Select
+        oMat.getXAxis(xAxis)
+        oMat.getYAxis(yAxis)
+        oMat.getZAxis(zAxis)
 
-            'change to this
-            '   orgShape ----------------------> newShape
-            '             instPt1 ---> instPt2
-            Dim temp As Long = supportId
-            supportId = newSupportId
-            newSupportId = temp
+        oStart = MathTool.GetPointInDirection(oStart, -zAxis, oData.mSupport1CutBack)
+        oStart = MathTool.GetPointInDirection(oStart, xAxis, width / 2 - oData.mPlateThickness)
+        oStart = MathTool.GetPointInDirection(oStart, -yAxis, cutHeight / 2)
 
-        End If
+        Dim polyLength As Double = oData.mSupport1CutBack +
+                             MathTool.GetDistanceBetween(instPt1, instPt2) +
+                             oData.mSupport2CutBack
+        Dim polyWidth As Double = 2 * oData.mPlateThickness
 
-    End Sub
+        Dim oPoly As New PsPolygon
+        oPoly.appendVertex(0, 0, 0)
+        oPoly.appendVertex(polyLength, 0, 0)
+        oPoly.appendVertex(polyLength, polyWidth, 0)
+        oPoly.appendVertex(0, polyWidth, 0)
+        oPoly.appendVertex(0, 0, 0)
+
+        Dim oCut As New PsCutObjects
+        oCut.SetAsPolyCut(oPoly, oStart, zAxis, xAxis, cutHeight)
+        oCut.SetObjectId(supportId)
+
+        Dim result As Long = oCut.Apply()
+        Return result
+    End Function
+
+    Private Function CutSupportLeftSide(oMat As PsMatrix, supportId As Long,
+                                         oData As Parameters,
+                                         instPt1 As PsPoint,
+                                         instPt2 As PsPoint) As Long
+        Dim oAdpt As New ShapeAdapter(supportId)
+        Dim width = oAdpt.Width
+        Dim cutHeight = oAdpt.Height + 2 * oData.mPlateThickness
+
+        Dim oStart As New PsPoint
+        oMat.getOrigin(oStart)
+        Dim xAxis As New PsVector
+        Dim yAxis As New PsVector
+        Dim zAxis As New PsVector
+
+        oMat.getXAxis(xAxis)
+        oMat.getYAxis(yAxis)
+        oMat.getZAxis(zAxis)
+
+        oStart = MathTool.GetPointInDirection(oStart, -zAxis, oData.mSupport1CutBack)
+        oStart = MathTool.GetPointInDirection(oStart, -xAxis, width / 2 - oData.mPlateThickness)
+        oStart = MathTool.GetPointInDirection(oStart, -yAxis, cutHeight / 2)
+
+        Dim polyLength As Double = oData.mSupport1CutBack +
+                             MathTool.GetDistanceBetween(instPt1, instPt2) +
+                             oData.mSupport2CutBack
+        Dim polyWidth As Double = 2 * oData.mPlateThickness
+
+        Dim oPoly As New PsPolygon
+        oPoly.appendVertex(0, 0, 0)
+        oPoly.appendVertex(polyLength, 0, 0)
+        oPoly.appendVertex(polyLength, polyWidth, 0)
+        oPoly.appendVertex(0, polyWidth, 0)
+        oPoly.appendVertex(0, 0, 0)
+
+        Dim oCut As New PsCutObjects
+        oCut.SetAsPolyCut(oPoly, oStart, zAxis, -xAxis, cutHeight)
+        oCut.SetObjectId(supportId)
+
+        Dim result As Long = oCut.Apply()
+        Return result
+    End Function
+
+
+    Private Function CutSupportShapeSidePlate(oMat As PsMatrix, supportId As Long,
+                                              oData As Parameters,
+                                              instPt1 As PsPoint,
+                                              instPt2 As PsPoint) As List(Of Integer)
+        Dim oResult As New List(Of Integer)
+        oResult.Add(CutSupportRightSide(oMat, supportId, oData, instPt1, instPt2))
+        oResult.Add(CutSupportLeftSide(oMat, supportId, oData, instPt1, instPt2))
+        Return oResult
+    End Function
 
     Public Sub EditI(ByVal connId As Long)
         Try
@@ -606,20 +662,20 @@ Public Class UserConnection
                     oConnection.RemoveAllAdditionalEntity(False)
 
 
-                    ''now remove the new created supporing shape introduced by the split operation
+                    'now remove the new created left/right plate
                     For i As Integer = oConnection.ArrayCreatedEntityCount(0) - 1 To 0 Step -1
                         oConnection.RemoveArrayCreatedObjectId(0, i)
                     Next
 
-                    'now remove the new created top/bottom plate
-                    For i As Integer = oConnection.ArrayCreatedEntityCount(1) - 1 To 0 Step -1
-                        oConnection.RemoveArrayCreatedObjectId(1, i)
-                    Next
+                    ''now remove the new created top/bottom plate
+                    'For i As Integer = oConnection.ArrayCreatedEntityCount(1) - 1 To 0 Step -1
+                    '    oConnection.RemoveArrayCreatedObjectId(1, i)
+                    'Next
 
-                    'now remove the new created left/right plate
-                    For i As Integer = oConnection.ArrayCreatedEntityCount(2) - 1 To 0 Step -1
-                        oConnection.RemoveArrayCreatedObjectId(2, i)
-                    Next
+
+                    'For i As Integer = oConnection.ArrayCreatedEntityCount(2) - 1 To 0 Step -1
+                    '    oConnection.RemoveArrayCreatedObjectId(2, i)
+                    'Next
 
                     oConnection.RemoveAllSecondActiveEntity(True)
 
@@ -639,6 +695,7 @@ Public Class UserConnection
     End Sub
 
     Public Function Create() As Long
+
         Dim ConnectionId As Long
 
         IsCreatingConn = True

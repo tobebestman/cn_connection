@@ -59,6 +59,25 @@ Public Class Parameters
 
     Public mPlateThickness As Double
 
+    Public mBottomAngle1 As Double
+    Public mBottomAngle2 As Double
+    Public mBottomAngle3 As Double
+    Public mBottomAngle4 As Double
+
+    Public mTopAngle1 As Double
+    Public mTopAngle2 As Double
+
+    Public mTopColumnWidth As Double
+    Public mTopColumnDist As Double
+
+    Public mBottomFillet1 As Double
+    Public mBottomFillet2 As Double
+    Public mBottomFillet3 As Double
+    Public mBottomFillet4 As Double
+
+    Public mTopFillet1 As Double
+    Public mTopFillet2 As Double
+
 
     Public Sub WriteToConnectionId(ByVal ConnectionId As Long)
         Dim oTrans As New PsTransaction
@@ -102,6 +121,17 @@ Public Class Parameters
 
         eConnection.Double(iDbl) = mPlateThickness : iDbl = iDbl + 1
 
+        eConnection.Double(iDbl) = mBottomAngle1 : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mBottomAngle2 : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mBottomAngle3 : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mBottomAngle4 : iDbl = iDbl + 1
+
+        eConnection.Double(iDbl) = mTopAngle1 : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mTopAngle2 : iDbl = iDbl + 1
+
+        eConnection.Double(iDbl) = mTopColumnWidth : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mTopColumnDist : iDbl = iDbl + 1
+
     End Sub
 
     Public Sub ReadFromConnection(ByRef eConnection As PsConnection, Optional ByVal forClone As Boolean = False)
@@ -119,6 +149,17 @@ Public Class Parameters
 
         mPlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
 
+        mBottomAngle1 = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mBottomAngle2 = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mBottomAngle3 = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mBottomAngle4 = eConnection.Double(iDbl) : iDbl = iDbl + 1
+
+        mTopAngle1 = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mTopAngle2 = eConnection.Double(iDbl) : iDbl = iDbl + 1
+
+        mTopColumnWidth = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mTopColumnDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
+
     End Sub
 
     Public Sub WriteToTemplate(ByRef Template As PsTemplateManager)
@@ -133,9 +174,22 @@ Public Class Parameters
         Template.AppendDouble(mSupport1CutBack)
         Template.AppendDouble(mSupport2CutBack)
         Template.AppendDouble(mConnect1CutBack)
-        Template.AppendDouble(mConnect2cutBack)
+        Template.AppendDouble(mConnect2CutBack)
 
         Template.AppendDouble(mPlateThickness)
+
+        Template.AppendDouble(mBottomAngle1)
+        Template.AppendDouble(mBottomAngle2)
+        Template.AppendDouble(mBottomAngle3)
+        Template.AppendDouble(mBottomAngle3)
+
+        Template.AppendDouble(mTopAngle1)
+        Template.AppendDouble(mTopAngle2)
+
+        Template.AppendDouble(mTopColumnWidth)
+        Template.AppendDouble(mTopColumnDist)
+
+
     End Sub
 
 
@@ -149,9 +203,21 @@ Public Class Parameters
         mSupport1CutBack = Template.Double(iDbl) : iDbl = iDbl + 1
         mSupport2CutBack = Template.Double(iDbl) : iDbl = iDbl + 1
         mConnect1CutBack = Template.Double(iDbl) : iDbl = iDbl + 1
-        mConnect2cutBack = Template.Double(iDbl) : iDbl = iDbl + 1
+        mConnect2CutBack = Template.Double(iDbl) : iDbl = iDbl + 1
 
         mPlateThickness = Template.Double(iDbl) : iDbl = iDbl + 1
+
+        mBottomAngle1 = Template.Double(iDbl) : iDbl = iDbl + 1
+        mBottomAngle2 = Template.Double(iDbl) : iDbl = iDbl + 1
+        mBottomAngle3 = Template.Double(iDbl) : iDbl = iDbl + 1
+        mBottomAngle4 = Template.Double(iDbl) : iDbl = iDbl + 1
+
+        mTopAngle1 = Template.Double(iDbl) : iDbl = iDbl + 1
+        mTopAngle2 = Template.Double(iDbl) : iDbl = iDbl + 1
+
+        mTopColumnWidth = Template.Double(iDbl) : iDbl = iDbl + 1
+        mTopColumnDist = Template.Double(iDbl) : iDbl = iDbl + 1
+
     End Sub
 
     Public Sub New()
@@ -176,14 +242,37 @@ Public Class Parameters
             mConnect2CutBack = 10
 
             mPlateThickness = 2
+
+            mBottomAngle1 = 5
+            mBottomAngle2 = 5
+            mBottomAngle3 = 5
+            mBottomAngle3 = 5
+
+            mTopAngle1 = 5
+            mTopAngle2 = 5
+
+            mTopColumnWidth = 30
+            mTopColumnDist = 30
+
         Else
-            mSupport1CutBack = 1400
-            mSupport2CutBack = 1200
+            mSupport1CutBack = 1800
+            mSupport2CutBack = 1600
 
-            mConnect1CutBack = 2000
-            mConnect2CutBack = 1600
+            mConnect1CutBack = 2400
+            mConnect2CutBack = 2400
 
-            mPlateThickness = 40
+            mPlateThickness = 52
+
+            mBottomAngle1 = 5
+            mBottomAngle2 = 5
+            mBottomAngle3 = 5
+            mBottomAngle3 = 5
+
+            mTopAngle1 = 5
+            mTopAngle2 = 5
+
+            mTopColumnWidth = 2400
+            mTopColumnDist = 1800
         End If
 
     End Sub

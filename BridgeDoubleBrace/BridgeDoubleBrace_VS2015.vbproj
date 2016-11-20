@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProjectGuid>{3AFAF32B-F5B6-4516-BE18-708F6605737A}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>PSN_BridgeSingleBrace</RootNamespace>
-    <AssemblyName>PSN_BridgeSingleBrace</AssemblyName>
+    <RootNamespace>PSN_BridgeDoubleBrace</RootNamespace>
+    <AssemblyName>PSN_BridgeDoubleBrace</AssemblyName>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
     <TargetFrameworkProfile />
@@ -106,12 +106,13 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BridgeSingleBrace.keyins">
+    <Content Include="BridgeDoubleBrace.keyins">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Compile Include="AddInMain.vb" />
     <Compile Include="ConnectionBuilder.vb" />
     <Compile Include="Constants.vb" />
+    <Compile Include="GeoHelper.vb" />
     <Compile Include="KeyinCommands.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -150,7 +151,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="BridgeSingleBrace.rss" />
+    <None Include="BridgeDoubleBrace.rss" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>

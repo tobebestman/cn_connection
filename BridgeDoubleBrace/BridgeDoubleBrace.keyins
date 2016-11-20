@@ -10,8 +10,8 @@
         table of subentries. The diference is that the entry for the root is labelled
         RootKeyinTable, but an entry for a subtable is labelled as KeyinTable.-->
   <RootKeyinTable ID="root">
-    <Keyword SubtableRef="PSN_BridgeSingleBrace"
-            CommandClass="MacroCommand" CommandWord="PSN_BridgeSingleBrace">
+    <Keyword SubtableRef="PSN_BridgeDoubleBrace"
+            CommandClass="MacroCommand" CommandWord="PSN_BridgeDoubleBrace">
       <Options Required="true" />
     </Keyword>
   </RootKeyinTable>
@@ -20,15 +20,15 @@
   <!--Define subtables-->
   <SubKeyinTables>
     <!--VB_USTN subtable-->
-    <KeyinTable ID="PSN_BridgeSingleBrace">
+    <KeyinTable ID="PSN_BridgeDoubleBrace">
       <Keyword CommandWord="CREATE"  > </Keyword>
     </KeyinTable>
   </SubKeyinTables>
 
   <!--Define a mapping from key-in to the method that handles the key-in.-->
   <KeyinHandlers>
-    <KeyinHandler Keyin="PSN_BridgeSingleBrace CREATE"
-        Function="PSN_BridgeSingleBrace.KeyinCommands.CreateBridgeSingleBrace"/>
+    <KeyinHandler Keyin="PSN_BridgeDoubleBrace CREATE"
+        Function="PSN_BridgeDoubleBrace.KeyinCommands.CreateBridgeDoubleBrace"/>
   </KeyinHandlers>
 
 

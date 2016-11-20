@@ -64,12 +64,12 @@
         Me.txtConnectCutBack2 = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.txtConnectCutBack1 = New System.Windows.Forms.TextBox()
+        Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me._TabFrames_0 = New System.Windows.Forms.GroupBox()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.txtSupportCutBack2 = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.txtSupportCutBack1 = New System.Windows.Forms.TextBox()
-        Me.TabPage1 = New System.Windows.Forms.TabPage()
-        Me._TabFrames_0 = New System.Windows.Forms.GroupBox()
         Me.lblThick = New System.Windows.Forms.Label()
         Me.txtPlateThick = New System.Windows.Forms.TextBox()
         Me.TabPage3 = New System.Windows.Forms.TabPage()
@@ -273,10 +273,6 @@
         Me.TabPage2.Controls.Add(Me.txtConnectCutBack2)
         Me.TabPage2.Controls.Add(Me.Label4)
         Me.TabPage2.Controls.Add(Me.txtConnectCutBack1)
-        Me.TabPage2.Controls.Add(Me.Label2)
-        Me.TabPage2.Controls.Add(Me.txtSupportCutBack2)
-        Me.TabPage2.Controls.Add(Me.Label1)
-        Me.TabPage2.Controls.Add(Me.txtSupportCutBack1)
         Me.TabPage2.Location = New System.Drawing.Point(4, 22)
         Me.TabPage2.Name = "TabPage2"
         Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
@@ -341,62 +337,6 @@
         Me.txtConnectCutBack1.Size = New System.Drawing.Size(57, 20)
         Me.txtConnectCutBack1.TabIndex = 84
         '
-        'Label2
-        '
-        Me.Label2.AutoSize = True
-        Me.Label2.BackColor = System.Drawing.Color.Transparent
-        Me.Label2.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label2.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label2.Location = New System.Drawing.Point(0, 40)
-        Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.Label2.Name = "Label2"
-        Me.Label2.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label2.Size = New System.Drawing.Size(133, 13)
-        Me.Label2.TabIndex = 83
-        Me.Label2.Text = "D0402'Support Cut back 2"
-        '
-        'txtSupportCutBack2
-        '
-        Me.txtSupportCutBack2.AcceptsReturn = True
-        Me.txtSupportCutBack2.BackColor = System.Drawing.SystemColors.Window
-        Me.txtSupportCutBack2.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.txtSupportCutBack2.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSupportCutBack2.Location = New System.Drawing.Point(131, 37)
-        Me.txtSupportCutBack2.Margin = New System.Windows.Forms.Padding(2)
-        Me.txtSupportCutBack2.MaxLength = 0
-        Me.txtSupportCutBack2.Name = "txtSupportCutBack2"
-        Me.txtSupportCutBack2.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtSupportCutBack2.Size = New System.Drawing.Size(57, 20)
-        Me.txtSupportCutBack2.TabIndex = 82
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.BackColor = System.Drawing.Color.Transparent
-        Me.Label1.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label1.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label1.Location = New System.Drawing.Point(0, 12)
-        Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.Label1.Name = "Label1"
-        Me.Label1.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label1.Size = New System.Drawing.Size(133, 13)
-        Me.Label1.TabIndex = 81
-        Me.Label1.Text = "D0401'Support Cut back 1"
-        '
-        'txtSupportCutBack1
-        '
-        Me.txtSupportCutBack1.AcceptsReturn = True
-        Me.txtSupportCutBack1.BackColor = System.Drawing.SystemColors.Window
-        Me.txtSupportCutBack1.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.txtSupportCutBack1.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSupportCutBack1.Location = New System.Drawing.Point(131, 9)
-        Me.txtSupportCutBack1.Margin = New System.Windows.Forms.Padding(2)
-        Me.txtSupportCutBack1.MaxLength = 0
-        Me.txtSupportCutBack1.Name = "txtSupportCutBack1"
-        Me.txtSupportCutBack1.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtSupportCutBack1.Size = New System.Drawing.Size(57, 20)
-        Me.txtSupportCutBack1.TabIndex = 80
-        '
         'TabPage1
         '
         Me.TabPage1.Controls.Add(Me._TabFrames_0)
@@ -411,6 +351,10 @@
         '_TabFrames_0
         '
         Me._TabFrames_0.BackColor = System.Drawing.Color.Transparent
+        Me._TabFrames_0.Controls.Add(Me.Label2)
+        Me._TabFrames_0.Controls.Add(Me.txtSupportCutBack2)
+        Me._TabFrames_0.Controls.Add(Me.Label1)
+        Me._TabFrames_0.Controls.Add(Me.txtSupportCutBack1)
         Me._TabFrames_0.Controls.Add(Me.lblThick)
         Me._TabFrames_0.Controls.Add(Me.txtPlateThick)
         Me._TabFrames_0.Dock = System.Windows.Forms.DockStyle.Fill
@@ -423,6 +367,62 @@
         Me._TabFrames_0.Size = New System.Drawing.Size(408, 242)
         Me._TabFrames_0.TabIndex = 12
         Me._TabFrames_0.TabStop = False
+        '
+        'Label2
+        '
+        Me.Label2.AutoSize = True
+        Me.Label2.BackColor = System.Drawing.Color.Transparent
+        Me.Label2.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label2.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label2.Location = New System.Drawing.Point(12, 83)
+        Me.Label2.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label2.Name = "Label2"
+        Me.Label2.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label2.Size = New System.Drawing.Size(133, 13)
+        Me.Label2.TabIndex = 87
+        Me.Label2.Text = "D0103'Support Cut back 2"
+        '
+        'txtSupportCutBack2
+        '
+        Me.txtSupportCutBack2.AcceptsReturn = True
+        Me.txtSupportCutBack2.BackColor = System.Drawing.SystemColors.Window
+        Me.txtSupportCutBack2.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtSupportCutBack2.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtSupportCutBack2.Location = New System.Drawing.Point(147, 80)
+        Me.txtSupportCutBack2.Margin = New System.Windows.Forms.Padding(2)
+        Me.txtSupportCutBack2.MaxLength = 0
+        Me.txtSupportCutBack2.Name = "txtSupportCutBack2"
+        Me.txtSupportCutBack2.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtSupportCutBack2.Size = New System.Drawing.Size(57, 20)
+        Me.txtSupportCutBack2.TabIndex = 86
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.BackColor = System.Drawing.Color.Transparent
+        Me.Label1.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label1.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label1.Location = New System.Drawing.Point(12, 55)
+        Me.Label1.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label1.Name = "Label1"
+        Me.Label1.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label1.Size = New System.Drawing.Size(133, 13)
+        Me.Label1.TabIndex = 85
+        Me.Label1.Text = "D0102'Support Cut back 1"
+        '
+        'txtSupportCutBack1
+        '
+        Me.txtSupportCutBack1.AcceptsReturn = True
+        Me.txtSupportCutBack1.BackColor = System.Drawing.SystemColors.Window
+        Me.txtSupportCutBack1.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtSupportCutBack1.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtSupportCutBack1.Location = New System.Drawing.Point(147, 52)
+        Me.txtSupportCutBack1.Margin = New System.Windows.Forms.Padding(2)
+        Me.txtSupportCutBack1.MaxLength = 0
+        Me.txtSupportCutBack1.Name = "txtSupportCutBack1"
+        Me.txtSupportCutBack1.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtSupportCutBack1.Size = New System.Drawing.Size(57, 20)
+        Me.txtSupportCutBack1.TabIndex = 84
         '
         'lblThick
         '
@@ -444,7 +444,7 @@
         Me.txtPlateThick.BackColor = System.Drawing.SystemColors.Window
         Me.txtPlateThick.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtPlateThick.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtPlateThick.Location = New System.Drawing.Point(116, 20)
+        Me.txtPlateThick.Location = New System.Drawing.Point(147, 20)
         Me.txtPlateThick.Margin = New System.Windows.Forms.Padding(2)
         Me.txtPlateThick.MaxLength = 0
         Me.txtPlateThick.Name = "txtPlateThick"
@@ -665,13 +665,13 @@
     Public WithEvents chkTurnBolts As System.Windows.Forms.CheckBox
     Public WithEvents cbBoltStyle As System.Windows.Forms.ComboBox
     Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
-    Public WithEvents Label1 As System.Windows.Forms.Label
-    Public WithEvents txtSupportCutBack1 As System.Windows.Forms.TextBox
-    Public WithEvents Label2 As System.Windows.Forms.Label
-    Public WithEvents txtSupportCutBack2 As System.Windows.Forms.TextBox
     Public WithEvents Label3 As System.Windows.Forms.Label
     Public WithEvents txtConnectCutBack2 As System.Windows.Forms.TextBox
     Public WithEvents Label4 As System.Windows.Forms.Label
     Public WithEvents txtConnectCutBack1 As System.Windows.Forms.TextBox
+    Public WithEvents Label2 As Windows.Forms.Label
+    Public WithEvents txtSupportCutBack2 As Windows.Forms.TextBox
+    Public WithEvents Label1 As Windows.Forms.Label
+    Public WithEvents txtSupportCutBack1 As Windows.Forms.TextBox
 #End Region
 End Class

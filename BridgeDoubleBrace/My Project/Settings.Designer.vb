@@ -64,9 +64,9 @@ Namespace My
     Friend Module MySettingsProperty
         
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
-        Friend ReadOnly Property Settings() As Global.PSN_BridgeSingleBrace.My.MySettings
+        Friend ReadOnly Property Settings() As Global.PSN_BridgeDoubleBrace.My.MySettings
             Get
-                Return Global.PSN_BridgeSingleBrace.My.MySettings.Default
+                Return Global.PSN_BridgeDoubleBrace.My.MySettings.Default
             End Get
         End Property
     End Module

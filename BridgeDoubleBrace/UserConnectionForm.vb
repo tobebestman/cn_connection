@@ -243,24 +243,63 @@ Friend Class UserConnectionForm
     End Sub
 
     Private Sub ReadFromDialog(ByRef Data As Parameters)
-        Data.mPlateThickness = UIConverter.ConvertToNumeric(txtPlateThick.Text)
+        Data.mPlateThickness = UIConverter.ConvertToNumeric(txtPlateThickness.Text)
 
-        Data.mSupport1CutBack = UIConverter.ConvertToNumeric(txtSupportCutBack1.Text)
-        Data.mSupport2CutBack = UIConverter.ConvertToNumeric(txtSupportCutBack2.Text)
+        Data.mSupport1CutBack = UIConverter.ConvertToNumeric(txtSupport1CutBack.Text)
+        Data.mSupport2CutBack = UIConverter.ConvertToNumeric(txtSupport2CutBack.Text)
 
         Data.mConnect1CutBack = UIConverter.ConvertToNumeric(txtConnectCutBack1.Text)
         Data.mConnect2CutBack = UIConverter.ConvertToNumeric(txtConnectCutBack2.Text)
+
+        Data.mBottomAngle1 = UIConverter.ConvertAngleToNumeric(txtAngle1.Text)
+        Data.mBottomAngle2 = UIConverter.ConvertAngleToNumeric(txtAngle2.Text)
+        Data.mBottomAngle3 = UIConverter.ConvertAngleToNumeric(txtAngle3.Text)
+        Data.mBottomAngle4 = UIConverter.ConvertAngleToNumeric(txtAngle4.Text)
+
+        Data.mTopAngle1 = UIConverter.ConvertAngleToNumeric(txtTopAngle1.Text)
+        Data.mTopAngle2 = UIConverter.ConvertAngleToNumeric(txtTopAngle2.Text)
+
+        Data.mBottomFillet1 = UIConverter.ConvertToNumeric(txtFillet1.Text)
+        Data.mBottomFillet2 = UIConverter.ConvertToNumeric(txtFillet2.Text)
+        Data.mBottomFillet3 = UIConverter.ConvertToNumeric(txtFillet3.Text)
+        Data.mBottomFillet4 = UIConverter.ConvertToNumeric(txtFillet4.Text)
+
+        Data.mTopFillet1 = UIConverter.ConvertToNumeric(txtTopFillet1.Text)
+        Data.mTopFillet2 = UIConverter.ConvertToNumeric(txtTopFillet2.Text)
+
+        Data.mTopColumnWidth = UIConverter.ConvertToNumeric(txtTopColumnWidth.Text)
+        Data.mTopColumnDist = UIConverter.ConvertToNumeric(txtTopColumnDist.Text)
+
     End Sub
 
     Private Sub WriteToDialog(ByRef Data As Parameters)
 
-        txtPlateThick.Text = UIConverter.ConvertToText(Data.mPlateThickness)
+        txtPlateThickness.Text = UIConverter.ConvertToText(Data.mPlateThickness)
 
-        txtSupportCutBack1.Text = UIConverter.ConvertToText(Data.mSupport1CutBack)
-        txtSupportCutBack2.Text = UIConverter.ConvertToText(Data.mSupport2CutBack)
+        txtSupport1CutBack.Text = UIConverter.ConvertToText(Data.mSupport1CutBack)
+        txtSupport2CutBack.Text = UIConverter.ConvertToText(Data.mSupport2CutBack)
 
         txtConnectCutBack1.Text = UIConverter.ConvertToText(Data.mConnect1CutBack)
         txtConnectCutBack2.Text = UIConverter.ConvertToText(Data.mConnect2CutBack)
+
+        txtAngle1.Text = UIConverter.ConvertAngleToText(Data.mBottomAngle1)
+        txtAngle2.Text = UIConverter.ConvertAngleToText(Data.mBottomAngle2)
+        txtAngle3.Text = UIConverter.ConvertAngleToText(Data.mBottomAngle3)
+        txtAngle4.Text = UIConverter.ConvertAngleToText(Data.mBottomAngle4)
+
+        txtTopAngle1.Text = UIConverter.ConvertAngleToText(Data.mTopAngle1)
+        txtTopAngle2.Text = UIConverter.ConvertAngleToText(Data.mTopAngle2)
+
+        txtFillet1.Text = UIConverter.ConvertToText(Data.mBottomFillet1)
+        txtFillet2.Text = UIConverter.ConvertToText(Data.mBottomFillet2)
+        txtFillet3.Text = UIConverter.ConvertToText(Data.mBottomFillet3)
+        txtFillet4.Text = UIConverter.ConvertToText(Data.mBottomFillet4)
+
+        txtTopFillet1.Text = UIConverter.ConvertToText(Data.mTopFillet1)
+        txtTopFillet2.Text = UIConverter.ConvertToText(Data.mTopFillet2)
+
+        txtTopColumnWidth.Text = UIConverter.ConvertToText(Data.mTopColumnWidth)
+        txtTopColumnDist.Text = UIConverter.ConvertToText(Data.mTopColumnDist)
 
     End Sub
 
@@ -455,14 +494,16 @@ Friend Class UserConnectionForm
         MyBase.DefWndProc(m)
     End Sub
 
-    Private Sub txtPlateThick_leave(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) _
-    Handles txtPlateThick.Leave, _
-            txtSupportCutBack1.Leave, txtSupportCutBack2.Leave, _
-            txtConnectCutBack1.Leave, txtConnectCutBack2.Leave
+    Private Sub txtNumberValue_leave(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) _
+    Handles txtPlateThickness.Leave,
+            txtConnectCutBack1.Leave, txtConnectCutBack2.Leave,
+            txtSupport1CutBack.Leave, txtSupport2CutBack.Leave,
+            txtFillet1.Leave, txtFillet2.Leave, txtFillet3.Leave, txtFillet4.Leave,
+            txtTopFillet2.Leave, txtTopFillet1.Leave, txtTopColumnWidth.Leave,
+            txtTopColumnDist.Leave
 
         eventSender.Text = oCheckInput.CheckPositive(eventSender.Text)
         If oCheckInput.OldValue <> eventSender.Text Then UpdateConnection()
 
     End Sub
-
 End Class

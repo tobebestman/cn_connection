@@ -1,0 +1,13 @@
+﻿Imports Bentley.ProStructures.Geometry.Data
+Imports Bentley.ProStructures.Geometry.Utilities
+
+Public Module GeoHelper
+    Dim MathTool As New PsGeometryFunctions
+
+    Public Function rotateVector(vect As PsVector, angle As Double) As PsVector
+        Dim oMat As New PsMatrix
+        oMat.SetToRotation(MathTool.Degrees2Radians(angle), New PsVector(0, 0, 1))
+        Return oMat.TransformVector(vect)
+    End Function
+
+End Module

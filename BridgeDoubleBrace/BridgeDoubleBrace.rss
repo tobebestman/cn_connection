@@ -13,13 +13,22 @@
 
 @D0100,"Plate",
 @D0101,"Thickness",
-@D0102,"Angle",
-@D0103,"Left Side Gap",
-@D0104,"Right Side Gap",
-@D0105,"Edge Distance",
-@D0106,"Side Gap",
-@D0107,"Gap End",
-@D0108,"Tolerance",
+
+@D0102,"Fillet 1",
+@D0103,"Angle 1",
+@D0104,"Fillet 2",
+@D0105,"Angle 2",
+@D0106,"Fillet 3",
+@D0107,"Angle 3",
+@D0108,"Fillet 4",
+@D0109,"Angle 4",
+@D0110,"Bottom"
+
+@D0111,"Has top column"
+
+@D0112,"Top"
+@D0113,"Width"
+@D0114,"Dist"
 
 @D0200,"Hole",
 @D0201,"Distribution in Shape Direction",
