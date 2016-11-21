@@ -243,6 +243,9 @@ Friend Class UserConnectionForm
     End Sub
 
     Private Sub ReadFromDialog(ByRef Data As Parameters)
+
+        Data.mHasTopColumn = chkHasTopColumn.Checked
+
         Data.mPlateThickness = UIConverter.ConvertToNumeric(txtPlateThickness.Text)
 
         Data.mSupport1CutBack = UIConverter.ConvertToNumeric(txtSupport1CutBack.Text)
@@ -261,8 +264,6 @@ Friend Class UserConnectionForm
 
         Data.mBottomFillet1 = UIConverter.ConvertToNumeric(txtFillet1.Text)
         Data.mBottomFillet2 = UIConverter.ConvertToNumeric(txtFillet2.Text)
-        Data.mBottomFillet3 = UIConverter.ConvertToNumeric(txtFillet3.Text)
-        Data.mBottomFillet4 = UIConverter.ConvertToNumeric(txtFillet4.Text)
 
         Data.mTopFillet1 = UIConverter.ConvertToNumeric(txtTopFillet1.Text)
         Data.mTopFillet2 = UIConverter.ConvertToNumeric(txtTopFillet2.Text)
@@ -273,6 +274,8 @@ Friend Class UserConnectionForm
     End Sub
 
     Private Sub WriteToDialog(ByRef Data As Parameters)
+
+        chkHasTopColumn.Checked = Data.mHasTopColumn
 
         txtPlateThickness.Text = UIConverter.ConvertToText(Data.mPlateThickness)
 
@@ -292,8 +295,6 @@ Friend Class UserConnectionForm
 
         txtFillet1.Text = UIConverter.ConvertToText(Data.mBottomFillet1)
         txtFillet2.Text = UIConverter.ConvertToText(Data.mBottomFillet2)
-        txtFillet3.Text = UIConverter.ConvertToText(Data.mBottomFillet3)
-        txtFillet4.Text = UIConverter.ConvertToText(Data.mBottomFillet4)
 
         txtTopFillet1.Text = UIConverter.ConvertToText(Data.mTopFillet1)
         txtTopFillet2.Text = UIConverter.ConvertToText(Data.mTopFillet2)
@@ -498,12 +499,22 @@ Friend Class UserConnectionForm
     Handles txtPlateThickness.Leave,
             txtConnectCutBack1.Leave, txtConnectCutBack2.Leave,
             txtSupport1CutBack.Leave, txtSupport2CutBack.Leave,
-            txtFillet1.Leave, txtFillet2.Leave, txtFillet3.Leave, txtFillet4.Leave,
+            txtFillet1.Leave, txtFillet2.Leave,
             txtTopFillet2.Leave, txtTopFillet1.Leave, txtTopColumnWidth.Leave,
             txtTopColumnDist.Leave
 
         eventSender.Text = oCheckInput.CheckPositive(eventSender.Text)
-        If oCheckInput.OldValue <> eventSender.Text Then UpdateConnection()
+        If oCheckInput.OldValue <> eventSender.Text Then
+            UpdateConnection()
+        End If
 
+    End Sub
+
+    Private Sub txtAngle3_Leave(sender As Object, e As EventArgs) Handles txtTopAngle2.Leave,
+        txtTopAngle1.Leave, txtAngle4.Leave, txtAngle3.Leave, txtAngle2.Leave, txtAngle1.Leave
+        sender.text = oCheckInput.CheckAngular(sender.text)
+        If (oCheckInput.OldValue <> sender.text) Then
+            UpdateConnection()
+        End If
     End Sub
 End Class

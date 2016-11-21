@@ -134,7 +134,7 @@ Public Class UserConnection
                                                               supportAdpt.MidLineStart,
                                                               supportAdpt.MidLineEnd)
         Dim yAxis As New PsVector
-        yAxis.SetFromPoints(pt1, connectAdpt.MidLineMid)
+        yAxis.SetFromPoints(connectAdpt.MidLineMid, pt1)
 
         connectId = mBuilder.getConnectingShapeIdFromAdapter(oConnAdpt, 2)
         If connectId = 0 Then
@@ -580,11 +580,14 @@ Public Class UserConnection
             Dim firstConnectingCutId As Long = CutShapeInwards(connectingId1, instPt1, data.mConnect1CutBack)
             Dim secondConnectingCutId As Long = CutShapeInwards(connectingId2, instPt2, data.mConnect2CutBack)
 
-            createSidePlateProfile(data, supportId, connectingId1, connectingId2, connMat)
-
+            Dim oPoly As PsPolygon = CreateSidePlateProfile(data, supportId, connectingId1, connectingId2, connMat, instPt1, instPt2)
             Dim dist As Double = MathTool.GetDistanceBetween(instPt1, instPt2)
-            Dim leftPlateId As Long = CreateLeftPlate(supportId, dist, data, connMat)
-            Dim rightPlateId As Long = CreateRightPlate(supportId, dist, data, connMat)
+
+            Dim leftPlateId As Long = CreateLeftPlate(data, supportId, connMat, oPoly)
+            Dim rightPlateId As Long = CreateRightPlate(data, supportId, connMat, oPoly)
+
+            'Dim leftPlateId As Long = CreateLeftPlate(supportId, dist, data, connMat)
+            'Dim rightPlateId As Long = CreateRightPlate(supportId, dist, data, connMat)
 
             oConnAdpt = Nothing
 
@@ -613,11 +616,175 @@ Public Class UserConnection
         End Try
     End Sub
 
-    Private Sub CreateSidePlateProfile(data As Parameters,
+    Private Shared Function CreateLeftPlate(data As Parameters, supportId As Long, connMat As PsMatrix, oPoly As PsPolygon) As Long
+        Dim oCreater As New PsCreatePlate
+        oCreater.SetToDefaults()
+
+        Dim org As New PsPoint
+        connMat.getOrigin(org)
+
+        Dim xAxis As New PsVector
+        connMat.getXAxis(xAxis)
+
+        Dim yAxis As New PsVector
+        connMat.getYAxis(yAxis)
+        org = MathTool.GetPointInDirection(org, xAxis, New ShapeAdapter(supportId).Width / 2)
+
+        connMat.getZAxis(xAxis)
+        Dim insMat As New PsMatrix()
+        insMat.SetCoordinateSystem(org, xAxis, yAxis)
+        oCreater.SetInsertMatrix(insMat)
+        oCreater.SetNormalPosition(VerticalPosition.kDown)
+        oCreater.SetThickness(data.mPlateThickness)
+        oCreater.SetFromPolygon(oPoly)
+        Dim newId As Long
+        If oCreater.Create() = False Then
+            Return -1
+        End If
+        newId = oCreater.ObjectId
+        Return newId
+    End Function
+
+    Private Shared Function CreateRightPlate(data As Parameters, supportId As Long, connMat As PsMatrix, oPoly As PsPolygon) As Long
+        Dim oCreater As New PsCreatePlate
+        oCreater.SetToDefaults()
+
+        Dim org As New PsPoint
+        connMat.getOrigin(org)
+
+        Dim xAxis As New PsVector
+        connMat.getXAxis(xAxis)
+
+        Dim yAxis As New PsVector
+        connMat.getYAxis(yAxis)
+        org = MathTool.GetPointInDirection(org, -xAxis, New ShapeAdapter(supportId).Width / 2)
+
+        connMat.getZAxis(xAxis)
+        Dim insMat As New PsMatrix()
+        insMat.SetCoordinateSystem(org, xAxis, yAxis)
+        oCreater.SetInsertMatrix(insMat)
+        oCreater.SetNormalPosition(VerticalPosition.kTop)
+        oCreater.SetThickness(data.mPlateThickness)
+        oCreater.SetFromPolygon(oPoly)
+        Dim newId As Long
+        If oCreater.Create() = False Then
+            Return -1
+        End If
+        newId = oCreater.ObjectId
+        Return newId
+    End Function
+
+    Private Function CreateSidePlateProfile(data As Parameters,
                                        supportId As Long,
                                        connectingId1 As Long,
                                        connectingId2 As Long,
-                                       connMat As PsMatrix)
+                                       connMat As PsMatrix,
+                                       instPt1 As PsPoint,
+                                       instPt2 As PsPoint) As PsPolygon
+
+        Dim bottomHalf As List(Of PsPoint) = GetBottomHalfPlateProfile(data, supportId, connectingId1, connectingId2, connMat)
+
+        'For i As Long = 0 To bottomHalf.Count - 1
+        '    Utility.drawBall(bottomHalf(i), 50)
+        'Next
+
+        Dim TopHalf As New List(Of PsPoint)
+        If data.mHasTopColumn = False Then
+            GetTopHalfProfileWithoutTopColumn(data, supportId, connMat, instPt1, instPt2, TopHalf)
+        End If
+
+        'For i As Long = 0 To TopHalf.Count - 1
+        '    Utility.drawBall(TopHalf(i), 100)
+        'Next
+
+        Dim transMat As PsMatrix = ConvertConnectionMatToSidePlateInsertMat(connMat)
+        transMat.Invert()
+        Dim oPoly As New PsPolygon
+
+        For i As Integer = 0 To bottomHalf.Count - 1
+            Dim pt As PsPoint = transMat.TransformPoint(bottomHalf(i))
+            Debug.Assert(Math.Abs(pt.z) < PRECISION)
+            oPoly.appendVertex(pt)
+        Next
+
+        SetFirstBottomFillet(bottomHalf, oPoly)
+        SetSecondBottomFillet(bottomHalf, oPoly)
+
+        For i As Integer = 0 To TopHalf.Count - 1
+            Dim pt As PsPoint = transMat.TransformPoint(TopHalf(i))
+            oPoly.appendVertex(pt)
+        Next
+
+        Return oPoly
+
+    End Function
+    Private Shared Sub SetFirstBottomFillet(bottomHalf As List(Of PsPoint), oPoly As PsPolygon)
+        Dim dir1 As New PsVector
+        Dim dir2 As New PsVector
+        dir1.SetFromPoints(bottomHalf(1), bottomHalf(2))
+        dir1.Normalize()
+        dir2.SetFromPoints(bottomHalf(4), bottomHalf(3))
+        dir2.Normalize()
+        Dim burge1 As Double = -Math.Tan(dir1.GetAngleTo(dir2) / 4)
+
+        Dim roundVertex As New PsPolygonVertex
+        oPoly.getVertex(2, roundVertex)
+        roundVertex.Bulge = burge1
+        oPoly.setVertex(2, roundVertex)
+    End Sub
+
+
+    Private Shared Sub SetSecondBottomFillet(bottomHalf As List(Of PsPoint), oPoly As PsPolygon)
+        Dim dir1 As New PsVector
+        Dim dir2 As New PsVector
+        dir1.SetFromPoints(bottomHalf(10), bottomHalf(9))
+        dir1.Normalize()
+        dir2.SetFromPoints(bottomHalf(11), bottomHalf(12))
+        dir2.Normalize()
+        Dim burge1 As Double = -Math.Tan(dir1.GetAngleTo(dir2) / 4)
+
+        Dim roundVertex As New PsPolygonVertex
+        oPoly.getVertex(10, roundVertex)
+        roundVertex.Bulge = burge1
+        oPoly.setVertex(10, roundVertex)
+    End Sub
+
+    Private Shared Function ConvertConnectionMatToSidePlateInsertMat(connMat As PsMatrix) As PsMatrix
+        Dim transMat As New PsMatrix
+        Dim transX As New PsVector
+        Dim transY As New PsVector
+        Dim transOrg As New PsPoint
+        connMat.getOrigin(transOrg)
+        connMat.getZAxis(transX)
+        connMat.getYAxis(transY)
+
+        transMat.SetCoordinateSystem(transOrg, transX, transY)
+        Return transMat
+    End Function
+
+    Private Shared Sub GetTopHalfProfileWithoutTopColumn(data As Parameters, supportId As Long, connMat As PsMatrix, instPt1 As PsPoint, instPt2 As PsPoint, TopHalf As List(Of PsPoint))
+        Dim org As New PsPoint
+        Dim xAxis As New PsVector
+        Dim yAxis As New PsVector
+        Dim zAxis As New PsVector
+
+        connMat.getOrigin(org)
+        connMat.getZAxis(zAxis)
+        connMat.getYAxis(yAxis)
+
+        Dim dist As Double = MathTool.GetDistanceBetween(instPt1, instPt2)
+        Dim spt As PsPoint
+        spt = MathTool.GetPointInDirection(org, zAxis, MathTool.GetDistanceBetween(instPt1, instPt2) + data.mSupport2CutBack)
+        spt = MathTool.GetPointInDirection(spt, yAxis, New ShapeAdapter(supportId).Height / 2)
+        TopHalf.Add(spt)
+        spt = MathTool.GetPointInDirection(spt, -zAxis,
+                                            data.mSupport1CutBack +
+                                            MathTool.GetDistanceBetween(instPt1, instPt2) +
+                                            data.mSupport2CutBack)
+        TopHalf.Add(spt)
+    End Sub
+
+    Private Function GetBottomHalfPlateProfile(data As Parameters, supportId As Long, connectingId1 As Long, connectingId2 As Long, connMat As PsMatrix) As List(Of PsPoint)
         Dim ls1 As New PsPoint
         Dim ls2 As New PsPoint
         GetSupportPointsInOrder(supportId, connMat, True, ls1, ls2)
@@ -628,10 +795,10 @@ Public Class UserConnection
 
         Dim leftBoundary As List(Of PsPoint) = GetPlateBoundaryBetweenLines(ls1, ls2,
                                                data.mSupport1CutBack,
-                                               New ShapeAdapter(supportId).Height, 5,
+                                               New ShapeAdapter(supportId).Height, data.mBottomAngle1,
                                                lc1, lc2,
                                                data.mConnect1CutBack,
-                                               New ShapeAdapter(connectingId1).Width, 5, 50)
+                                               New ShapeAdapter(connectingId1).Width, data.mBottomAngle2, data.mBottomFillet1)
 
         Dim rs1 As New PsPoint
         Dim rs2 As New PsPoint
@@ -643,26 +810,23 @@ Public Class UserConnection
         GetConnectingPointsInOrder(connectingId2, connMat, rc1, rc2)
         Dim rightBoundary As List(Of PsPoint) = GetPlateBoundaryBetweenLines(rs1, rs2,
                                                data.mSupport2CutBack,
-                                               New ShapeAdapter(supportId).Height, 5,
+                                               New ShapeAdapter(supportId).Height, data.mBottomAngle4,
                                                rc1, rc2,
                                                data.mConnect2CutBack,
-                                               New ShapeAdapter(connectingId2).Width, 5, 50)
+                                               New ShapeAdapter(connectingId2).Width, data.mBottomAngle3, data.mBottomFillet2)
 
         Dim middleBounary As List(Of PsPoint) = GetDriectConnectedPlateBoundaryBetweenLines(
                                                 lc1, lc2, data.mConnect1CutBack,
                                                 New ShapeAdapter(connectingId1).Width,
                                                 rc1, rc2, data.mConnect2CutBack,
-                                                New ShapeAdapter(connectingId2).Width
-                                                )
+                                                New ShapeAdapter(connectingId2).Width)
+
         'combine the bottom 3 parts together
         leftBoundary.AddRange(middleBounary)
         rightBoundary.Reverse()
         leftBoundary.AddRange(rightBoundary)
-
-        For i As Long = 0 To leftBoundary.Count - 1
-            Utility.drawBall(leftBoundary(i), 50)
-        Next
-    End Sub
+        Return leftBoundary
+    End Function
 
     Private Sub GetConnectingPointsInOrder(id As Long, oMat As PsMatrix, ByRef spt As PsPoint, ByRef ept As PsPoint)
         Dim org As New PsPoint
