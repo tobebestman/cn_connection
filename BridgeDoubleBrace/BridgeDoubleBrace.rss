@@ -11,7 +11,7 @@
 @D0000,"Error - No right object was selected",
 @D0001,"Bridge K Brace Designer",
 
-@D0100,"Plate",
+@D0100,"Side Plate",
 @D0101,"Thickness",
 
 @D0102,"Fillet 1",
@@ -59,7 +59,7 @@
 @D0403,"Connect Cut back 1",
 @D0404,"Connect Cut back 2",
 
-@D0500,"Branch Gusset",
+@D0500,"Connect Plate",
 @D0501,"Thickness",
 @D0502,"Height",
 @D0503,"Chamfer Distance",

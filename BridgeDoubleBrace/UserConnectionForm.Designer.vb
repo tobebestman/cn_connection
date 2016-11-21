@@ -114,6 +114,7 @@
         Me.imgBitmaps4 = New System.Windows.Forms.ImageList(Me.components)
         Me.imgBitmaps5 = New System.Windows.Forms.ImageList(Me.components)
         Me.imgBitmaps6 = New System.Windows.Forms.ImageList(Me.components)
+        Me.TabPage4 = New System.Windows.Forms.TabPage()
         CType(Me.Picture2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picBitmap, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabStrip1.SuspendLayout()
@@ -287,6 +288,7 @@
         '
         Me.TabStrip1.Controls.Add(Me.TabPage2)
         Me.TabStrip1.Controls.Add(Me.TabPage1)
+        Me.TabStrip1.Controls.Add(Me.TabPage4)
         Me.TabStrip1.Controls.Add(Me.TabPage3)
         Me.TabStrip1.Controls.Add(Me.TabPage7)
         Me.TabStrip1.Location = New System.Drawing.Point(4, 1)
@@ -434,7 +436,7 @@
         Me.TabPage1.Name = "TabPage1"
         Me.TabPage1.Size = New System.Drawing.Size(408, 281)
         Me.TabPage1.TabIndex = 0
-        Me.TabPage1.Text = "D0100'Plate"
+        Me.TabPage1.Text = "D0100'Side Plate"
         Me.TabPage1.UseVisualStyleBackColor = True
         '
         '_TabFrames_0
@@ -1033,6 +1035,15 @@
         Me.imgBitmaps6.TransparentColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.imgBitmaps6.Images.SetKeyName(0, "")
         '
+        'TabPage4
+        '
+        Me.TabPage4.Location = New System.Drawing.Point(4, 22)
+        Me.TabPage4.Name = "TabPage4"
+        Me.TabPage4.Size = New System.Drawing.Size(408, 281)
+        Me.TabPage4.TabIndex = 12
+        Me.TabPage4.Text = "D0500'Connect Plate"
+        Me.TabPage4.UseVisualStyleBackColor = True
+        '
         'UserConnectionForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -1129,5 +1140,6 @@
     Public WithEvents txtTopAngle1 As Windows.Forms.TextBox
     Public WithEvents Label16 As Windows.Forms.Label
     Public WithEvents txtTopFillet1 As Windows.Forms.TextBox
+    Friend WithEvents TabPage4 As Windows.Forms.TabPage
 #End Region
 End Class
