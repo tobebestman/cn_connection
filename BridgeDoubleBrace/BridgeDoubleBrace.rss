@@ -79,10 +79,11 @@
 @D0709,"Item Number",
 
 @M0000,"Select supporting weld shape1",
-@M0001,"Select connecting weld shape1",
-@M0002,"Select connecting weld shape2",
+@M0001,"Select supporting weld shape2",
+@M0002,"Select connecting weld shape1",
+@M0003,"Select connecting weld shape2",
 
-@M0003,"Select connecting angle shape/brace",
+
 @M0004,"Select same connection you want to clone from: ",
 
 @T0003,"Length by line",

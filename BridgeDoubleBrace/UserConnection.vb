@@ -108,26 +108,23 @@ Public Class UserConnection
         DrawI(Id)
     End Sub
 
-    Private Function GetConnectionIntersectPtAndUcs(ByRef oConnAdpt As ConnectionAdapter,
-                                        ByRef instPt1 As PsPoint,
-                                        ByRef instPt2 As PsPoint,
-                                        ByRef connUcs As PsMatrix) As Boolean
-        Dim supportId As Long = mBuilder.getOriginSupportingShapeIdFromAdapter(oConnAdpt)
-        If supportId = 0 Then
-            Return False
-        End If
-
-        Dim connectId As Long = mBuilder.getConnectingShapeIdFromAdapter(oConnAdpt, 1)
-        If connectId = 0 Then
-            Return False
-        End If
-
+    ''' <summary>
+    ''' get the intersect point and usc defined by the input supportId and
+    ''' connectId. 
+    ''' </summary>
+    ''' <param name="supportId"></param>
+    ''' <param name="connectId"></param>
+    ''' <param name="instPt"></param>
+    ''' <param name="connUcs"></param>
+    ''' <returns></returns>
+    Private Function GetIntersectPtAndUcs(supportId As Long, connectId As Long,
+                                          ByRef instPt As PsPoint, ByRef connUcs As PsMatrix) As Boolean
         Dim MathTool As New PsGeometryFunctions
         Dim supportAdpt As New ShapeAdapter(supportId)
         Dim connectAdpt As New ShapeAdapter(connectId)
 
         If MathTool.IntersectLineWithLine(supportAdpt.MidLineStart, supportAdpt.MidLineEnd,
-                                                   connectAdpt.MidLineStart, connectAdpt.MidLineEnd, 4, instPt1) = False Then
+                                                   connectAdpt.MidLineStart, connectAdpt.MidLineEnd, 4, instPt) = False Then
             Return False
         End If
         Dim pt1 As PsPoint = MathTool.OrthoProjectPointToLine(connectAdpt.MidLineMid,
@@ -136,29 +133,53 @@ Public Class UserConnection
         Dim yAxis As New PsVector
         yAxis.SetFromPoints(connectAdpt.MidLineMid, pt1)
 
-        connectId = mBuilder.getConnectingShapeIdFromAdapter(oConnAdpt, 2)
-        If connectId = 0 Then
-            Return False
-        End If
-
-        connectAdpt.ReadFrom(connectId)
-        If MathTool.IntersectLineWithLine(supportAdpt.MidLineStart, supportAdpt.MidLineEnd,
-                                                   connectAdpt.MidLineStart, connectAdpt.MidLineEnd, 4, instPt2) = False Then
-            Return False
-        End If
-        Dim pt2 As PsPoint = MathTool.OrthoProjectPointToLine(connectAdpt.MidLineMid,
-                                                              supportAdpt.MidLineStart,
-                                                              supportAdpt.MidLineEnd)
         Dim zAxis As New PsVector
-        zAxis.SetFromPoints(pt1, pt2)
+        If supportAdpt.GetEndSideTo(instPt) = 1 Then
+            zAxis.SetFromPoints(supportAdpt.MidLineEnd, supportAdpt.MidLineStart)
+        Else
+            zAxis.SetFromPoints(supportAdpt.MidLineStart, supportAdpt.MidLineMid)
+        End If
 
+        zAxis.Normalize() : yAxis.Normalize()
         Dim xAxis As New PsVector
-        yAxis.Normalize()
-        zAxis.Normalize()
         xAxis.SetFromCrossProduct(yAxis, zAxis)
         xAxis.Normalize()
 
-        connUcs.SetCoordinateSystem(instPt1, xAxis, yAxis)
+        connUcs.SetCoordinateSystem(instPt, xAxis, yAxis)
+        Return True
+    End Function
+
+    Private Function GetConnectionIntersectPtAndUcs(ByRef oConnAdpt As ConnectionAdapter,
+                                        ByRef instPt1 As PsPoint,
+                                        ByRef instPt2 As PsPoint,
+                                        ByRef connUcs1 As PsMatrix,
+                                        ByRef connUcs2 As PsMatrix) As Boolean
+
+        Dim supportId1 As Long = mBuilder.getOriginSupportingShapeIdFromAdapter(oConnAdpt, 0)
+        If supportId1 = 0 Then
+            Return False
+        End If
+        Dim supportId2 As Long = mBuilder.getOriginSupportingShapeIdFromAdapter(oConnAdpt, 1)
+        If supportId2 = 0 Then
+            Return False
+        End If
+
+        Dim connectId1 As Long = mBuilder.getConnectingShapeIdFromAdapter(oConnAdpt, 2)
+        If connectId1 = 0 Then
+            Return False
+        End If
+        Dim connectId2 As Long = mBuilder.getConnectingShapeIdFromAdapter(oConnAdpt, 3)
+        If connectId2 = 0 Then
+            Return False
+        End If
+
+        If GetIntersectPtAndUcs(supportId1, connectId1, instPt1, connUcs1) = False Then
+            Return False
+        End If
+
+        If GetIntersectPtAndUcs(supportId2, connectId2, instPt2, connUcs2) = False Then
+            Return False
+        End If
 
         Return True
     End Function
@@ -258,16 +279,6 @@ Public Class UserConnection
 
         Dim result As Long = oCut.Apply
         Return result
-    End Function
-
-    Private Function RecoverOriginSupporingShape(ByRef oConnAdpt As ConnectionAdapter) As Boolean
-        Dim originId As Long = mBuilder.getOriginSupportingShapeIdFromAdapter(oConnAdpt)
-        Dim createdId As Long = mBuilder.getCreatedSupporingShapeFromAdapter(oConnAdpt)
-        If (CombineInlineShape(originId, createdId) = False) Then
-            Debug.Assert(False)
-            Return False
-        End If
-        Return True
     End Function
 
     Private Function CreateTopPlate(supportId As Long, splitDist As Double, oData As Parameters, oUcsMat As PsMatrix) As Long
@@ -551,15 +562,16 @@ Public Class UserConnection
             oConnAdpt.ReadAddtionalObjects()
             oConnAdpt.ReadCreatedObjectArray()
 
-            Dim supportId = mBuilder.getOriginSupportingShapeIdFromAdapter(oConnAdpt)
-            If supportId = 0 Then
+            Dim supportingId1 = mBuilder.getOriginSupportingShapeIdFromAdapter(oConnAdpt, 0)
+            Dim supportingId2 = mBuilder.getOriginSupportingShapeIdFromAdapter(oConnAdpt, 1)
+            Dim connectingId1 = mBuilder.getConnectingShapeIdFromAdapter(oConnAdpt, 2)
+            Dim connectingId2 = mBuilder.getConnectingShapeIdFromAdapter(oConnAdpt, 3)
+
+            If (supportingId1 <= 0 Or supportingId2 <= 0 Or
+                    connectingId1 <= 0 Or connectingId2 <= 0) Then
+                Debug.Assert(False)
                 Return
             End If
-
-            Dim connectingId1 = mBuilder.getConnectingShapeIdFromAdapter(oConnAdpt, 1)
-            Dim connectingId2 = mBuilder.getConnectingShapeIdFromAdapter(oConnAdpt, 2)
-
-            Debug.Assert(connectingId1 <> 0 And connectingId2 <> 0)
 
             'execute creation
             If oConnAdpt.IsBuilt Then
@@ -569,22 +581,29 @@ Public Class UserConnection
 
             Dim instPt1 As PsPoint = New PsPoint
             Dim instPt2 As PsPoint = New PsPoint
-            Dim connMat As PsMatrix = New PsMatrix
+            Dim connMat1 As PsMatrix = New PsMatrix
+            Dim connMat2 As PsMatrix = New PsMatrix
 
-            If GetConnectionIntersectPtAndUcs(oConnAdpt, instPt1, instPt2, connMat) = False Then
+            If GetConnectionIntersectPtAndUcs(oConnAdpt,
+                                              instPt1, instPt2,
+                                              connMat1, connMat2) = False Then
                 Return
             End If
 
-            CutSupportShapeSidePlate(connMat, supportId, data, instPt1, instPt2)
+            CutSupportShapeSidePlate(connMat1, supportingId1, data, instPt1, instPt2, True)
+            CutSupportShapeSidePlate(connMat2, supportingId2, data, instPt1, instPt2, False)
 
             Dim firstConnectingCutId As Long = CutShapeInwards(connectingId1, instPt1, data.mConnect1CutBack)
             Dim secondConnectingCutId As Long = CutShapeInwards(connectingId2, instPt2, data.mConnect2CutBack)
 
-            Dim oPoly As PsPolygon = CreateSidePlateProfile(data, supportId, connectingId1, connectingId2, connMat, instPt1, instPt2)
+            Dim oPoly As PsPolygon = CreateSidePlateProfile(data,
+                                                            supportingId1, supportingId2,
+                                                            connectingId1, connectingId2,
+                                                            connMat1, connMat2, instPt1, instPt2)
             Dim dist As Double = MathTool.GetDistanceBetween(instPt1, instPt2)
 
-            Dim leftPlateId As Long = CreateLeftPlate(data, supportId, connMat, oPoly)
-            Dim rightPlateId As Long = CreateRightPlate(data, supportId, connMat, oPoly)
+            Dim leftPlateId As Long = CreateLeftPlate(data, supportingId1, connMat1, oPoly)
+            Dim rightPlateId As Long = CreateRightPlate(data, supportingId1, connMat1, oPoly)
 
             'Dim leftPlateId As Long = CreateLeftPlate(supportId, dist, data, connMat)
             'Dim rightPlateId As Long = CreateRightPlate(supportId, dist, data, connMat)
@@ -593,7 +612,7 @@ Public Class UserConnection
 
             oConnAdpt = New ConnectionAdapter(ConnectionId)
 
-            oConnAdpt.AppendAdditionalObjectId(supportId)
+            oConnAdpt.AppendAdditionalObjectId(supportingId1)
             oConnAdpt.AppendAdditionalObjectId(connectingId1)
             oConnAdpt.AppendAdditionalObjectId(connectingId2)
 
@@ -675,14 +694,16 @@ Public Class UserConnection
     End Function
 
     Private Function CreateSidePlateProfile(data As Parameters,
-                                       supportId As Long,
+                                       supportId1 As Long,
+                                       supportId2 As Long,
                                        connectingId1 As Long,
                                        connectingId2 As Long,
-                                       connMat As PsMatrix,
+                                       connMat1 As PsMatrix,
+                                       connMat2 As PsMatrix,
                                        instPt1 As PsPoint,
                                        instPt2 As PsPoint) As PsPolygon
 
-        Dim bottomHalf As List(Of PsPoint) = GetBottomHalfPlateProfile(data, supportId, connectingId1, connectingId2, connMat)
+        Dim bottomHalf As List(Of PsPoint) = GetBottomHalfPlateProfile(data, supportId1, supportId2, connectingId1, connectingId2, connMat1, connMat2)
 
         'For i As Long = 0 To bottomHalf.Count - 1
         '    Utility.drawBall(bottomHalf(i), 50)
@@ -690,14 +711,14 @@ Public Class UserConnection
 
         Dim TopHalf As New List(Of PsPoint)
         If data.mHasTopColumn = False Then
-            GetTopHalfProfileWithoutTopColumn(data, supportId, connMat, instPt1, instPt2, TopHalf)
+            GetTopHalfProfileWithoutTopColumn(data, supportId1, supportId2, connMat1, connMat2, instPt1, instPt2, TopHalf)
         End If
 
         'For i As Long = 0 To TopHalf.Count - 1
         '    Utility.drawBall(TopHalf(i), 100)
         'Next
 
-        Dim transMat As PsMatrix = ConvertConnectionMatToSidePlateInsertMat(connMat)
+        Dim transMat As PsMatrix = ConvertConnectionMatToSidePlateInsertMat(connMat1)
         transMat.Invert()
         Dim oPoly As New PsPolygon
 
@@ -762,55 +783,76 @@ Public Class UserConnection
         Return transMat
     End Function
 
-    Private Shared Sub GetTopHalfProfileWithoutTopColumn(data As Parameters, supportId As Long, connMat As PsMatrix, instPt1 As PsPoint, instPt2 As PsPoint, TopHalf As List(Of PsPoint))
-        Dim org As New PsPoint
-        Dim xAxis As New PsVector
-        Dim yAxis As New PsVector
-        Dim zAxis As New PsVector
+    Private Shared Sub GetTopHalfProfileWithoutTopColumn(data As Parameters,
+                                                         supportId1 As Long, supportId2 As Long,
+                                                         connMat1 As PsMatrix, connMat2 As PsMatrix,
+                                                         instPt1 As PsPoint, instPt2 As PsPoint, TopHalf As List(Of PsPoint))
+        Dim org2 As New PsPoint
+        Dim yAxis2 As New PsVector
+        Dim zAxis2 As New PsVector
 
-        connMat.getOrigin(org)
-        connMat.getZAxis(zAxis)
-        connMat.getYAxis(yAxis)
+        connMat2.getOrigin(org2)
+        connMat2.getZAxis(zAxis2)
+        connMat2.getYAxis(yAxis2)
 
         Dim dist As Double = MathTool.GetDistanceBetween(instPt1, instPt2)
         Dim spt As PsPoint
-        spt = MathTool.GetPointInDirection(org, zAxis, MathTool.GetDistanceBetween(instPt1, instPt2) + data.mSupport2CutBack)
-        spt = MathTool.GetPointInDirection(spt, yAxis, New ShapeAdapter(supportId).Height / 2)
+        spt = MathTool.GetPointInDirection(org2, -zAxis2, data.mSupport2CutBack)
+        spt = MathTool.GetPointInDirection(spt, yAxis2, New ShapeAdapter(supportId2).Height / 2)
         TopHalf.Add(spt)
-        spt = MathTool.GetPointInDirection(spt, -zAxis,
-                                            data.mSupport1CutBack +
-                                            MathTool.GetDistanceBetween(instPt1, instPt2) +
-                                            data.mSupport2CutBack)
-        TopHalf.Add(spt)
+
+        Dim org1 As New PsPoint
+        Dim yAxis1 As New PsVector
+        Dim zAxis1 As New PsVector
+
+        connMat1.getOrigin(org1)
+        connMat1.getZAxis(zAxis1)
+        connMat1.getYAxis(yAxis1)
+        Dim ept As PsPoint
+        ept = MathTool.GetPointInDirection(org1, -zAxis1, data.mSupport1CutBack)
+        ept = MathTool.GetPointInDirection(ept, yAxis1, New ShapeAdapter(supportId1).Height / 2)
+
+        Dim mPt As New PsPoint
+        If MathTool.IntersectLineWithLine(spt, MathTool.GetPointInDirection(spt, -zAxis2, 10),
+                                        ept, MathTool.GetPointInDirection(ept, zAxis1, 10), 4, mPt) = False Then
+            Debug.Assert(False)
+            TopHalf.Add(ept)
+            Return
+        End If
+        TopHalf.Add(mPt)
+        TopHalf.Add(ept)
     End Sub
 
-    Private Function GetBottomHalfPlateProfile(data As Parameters, supportId As Long, connectingId1 As Long, connectingId2 As Long, connMat As PsMatrix) As List(Of PsPoint)
+    Private Function GetBottomHalfPlateProfile(data As Parameters,
+                                               supportId1 As Long, supportId2 As Long,
+                                               connectingId1 As Long, connectingId2 As Long,
+                                               connMat1 As PsMatrix, connMat2 As PsMatrix) As List(Of PsPoint)
         Dim ls1 As New PsPoint
         Dim ls2 As New PsPoint
-        GetSupportPointsInOrder(supportId, connMat, True, ls1, ls2)
+        GetSupportPointsInOrder(supportId1, connMat1, True, ls1, ls2)
 
         Dim lc1 As New PsPoint
         Dim lc2 As New PsPoint
-        GetConnectingPointsInOrder(connectingId1, connMat, lc1, lc2)
+        GetConnectingPointsInOrder(connectingId1, connMat1, lc1, lc2)
 
         Dim leftBoundary As List(Of PsPoint) = GetPlateBoundaryBetweenLines(ls1, ls2,
                                                data.mSupport1CutBack,
-                                               New ShapeAdapter(supportId).Height, data.mBottomAngle1,
+                                               New ShapeAdapter(supportId1).Height, data.mBottomAngle1,
                                                lc1, lc2,
                                                data.mConnect1CutBack,
                                                New ShapeAdapter(connectingId1).Width, data.mBottomAngle2, data.mBottomFillet1)
 
         Dim rs1 As New PsPoint
         Dim rs2 As New PsPoint
-        GetSupportPointsInOrder(supportId, connMat, False, rs1, rs2)
+        GetSupportPointsInOrder(supportId2, connMat2, True, rs1, rs2)
 
 
         Dim rc1 As New PsPoint
         Dim rc2 As New PsPoint
-        GetConnectingPointsInOrder(connectingId2, connMat, rc1, rc2)
+        GetConnectingPointsInOrder(connectingId2, connMat2, rc1, rc2)
         Dim rightBoundary As List(Of PsPoint) = GetPlateBoundaryBetweenLines(rs1, rs2,
                                                data.mSupport2CutBack,
-                                               New ShapeAdapter(supportId).Height, data.mBottomAngle4,
+                                               New ShapeAdapter(supportId1).Height, data.mBottomAngle4,
                                                rc1, rc2,
                                                data.mConnect2CutBack,
                                                New ShapeAdapter(connectingId2).Width, data.mBottomAngle3, data.mBottomFillet2)
@@ -833,7 +875,7 @@ Public Class UserConnection
         oMat.getOrigin(org)
 
         Dim adpt As New ShapeAdapter(id)
-        Debug.Assert(GeoHelper.isOnTheSameSide(adpt.MidLineStart, adpt.MidLineMid, org) = True)
+        Debug.Assert(GeoHelper.IsOnTheSameSide(adpt.MidLineStart, adpt.MidLineMid, org) = True)
 
         If adpt.GetEndSideTo(org) = 1 Then
             'ept---spt--org
@@ -892,7 +934,8 @@ Public Class UserConnection
     Private Function CutSupportRightSide(oMat As PsMatrix, supportId As Long,
                                          oData As Parameters,
                                          instPt1 As PsPoint,
-                                         instPt2 As PsPoint) As Long
+                                         instPt2 As PsPoint,
+                                         isFirstPair As Boolean) As Long
         Dim oAdpt As New ShapeAdapter(supportId)
         Dim width = oAdpt.Width
         Dim cutHeight = oAdpt.Height + 2 * oData.mPlateThickness
@@ -907,7 +950,12 @@ Public Class UserConnection
         oMat.getYAxis(yAxis)
         oMat.getZAxis(zAxis)
 
-        oStart = MathTool.GetPointInDirection(oStart, -zAxis, oData.mSupport1CutBack)
+        If (isFirstPair) Then
+            oStart = MathTool.GetPointInDirection(oStart, -zAxis, oData.mSupport1CutBack)
+        Else
+            oStart = MathTool.GetPointInDirection(oStart, -zAxis, oData.mSupport2CutBack)
+        End If
+
         oStart = MathTool.GetPointInDirection(oStart, xAxis, width / 2 - oData.mPlateThickness)
         oStart = MathTool.GetPointInDirection(oStart, -yAxis, cutHeight / 2)
 
@@ -934,7 +982,8 @@ Public Class UserConnection
     Private Function CutSupportLeftSide(oMat As PsMatrix, supportId As Long,
                                          oData As Parameters,
                                          instPt1 As PsPoint,
-                                         instPt2 As PsPoint) As Long
+                                         instPt2 As PsPoint,
+                                         isFirstPair As Boolean) As Long
         Dim oAdpt As New ShapeAdapter(supportId)
         Dim width = oAdpt.Width
         Dim cutHeight = oAdpt.Height + 2 * oData.mPlateThickness
@@ -949,7 +998,12 @@ Public Class UserConnection
         oMat.getYAxis(yAxis)
         oMat.getZAxis(zAxis)
 
-        oStart = MathTool.GetPointInDirection(oStart, -zAxis, oData.mSupport1CutBack)
+        If isFirstPair = True Then
+            oStart = MathTool.GetPointInDirection(oStart, -zAxis, oData.mSupport1CutBack)
+        Else
+            oStart = MathTool.GetPointInDirection(oStart, -zAxis, oData.mSupport2CutBack)
+        End If
+
         oStart = MathTool.GetPointInDirection(oStart, -xAxis, width / 2 - oData.mPlateThickness)
         oStart = MathTool.GetPointInDirection(oStart, -yAxis, cutHeight / 2)
 
@@ -977,10 +1031,11 @@ Public Class UserConnection
     Private Function CutSupportShapeSidePlate(oMat As PsMatrix, supportId As Long,
                                               oData As Parameters,
                                               instPt1 As PsPoint,
-                                              instPt2 As PsPoint) As List(Of Integer)
+                                              instPt2 As PsPoint,
+                                              isFirstPair As Boolean) As List(Of Integer)
         Dim oResult As New List(Of Integer)
-        oResult.Add(CutSupportRightSide(oMat, supportId, oData, instPt1, instPt2))
-        oResult.Add(CutSupportLeftSide(oMat, supportId, oData, instPt1, instPt2))
+        oResult.Add(CutSupportRightSide(oMat, supportId, oData, instPt1, instPt2, isFirstPair))
+        oResult.Add(CutSupportLeftSide(oMat, supportId, oData, instPt1, instPt2, isFirstPair))
         Return oResult
     End Function
 
@@ -1095,15 +1150,22 @@ Public Class UserConnection
         Dim Message As String = ""
         Dim Selection As New PsSelection
 
-        Dim supportingShape As Long
+        Dim supportingShape1 As Long
         Do
-            supportingShape = Selection.PickObject(RSS.RSS("M0000"))
-            If supportingShape <= 0 Then Return 0
-        Loop Until (IsWeldShape(supportingShape))
+            supportingShape1 = Selection.PickObject(RSS.RSS("M0000"))
+            If supportingShape1 <= 0 Then Return 0
+        Loop Until (IsWeldShape(supportingShape1))
+
+        Dim supportingShape2 As Long
+        Do
+            supportingShape2 = Selection.PickObject(RSS.RSS("M0001"))
+            If supportingShape2 <= 0 Then Return 0
+        Loop Until (IsWeldShape(supportingShape2))
+
 
         Dim connectingShape1 As Long
         Do
-            connectingShape1 = Selection.PickObject(RSS.RSS("M0001"))
+            connectingShape1 = Selection.PickObject(RSS.RSS("M0002"))
             If connectingShape1 <= 0 Then Return 0
         Loop Until (IsWeldShape(connectingShape1))
 
@@ -1125,7 +1187,8 @@ Public Class UserConnection
 
         Dim connAdpt As New ConnectionAdapter(ConnectionId)
         connAdpt.SetBuilt(False)
-        connAdpt.AppendAdditionalObjectId(supportingShape)
+        connAdpt.AppendAdditionalObjectId(supportingShape1)
+        connAdpt.AppendAdditionalObjectId(supportingShape2)
         connAdpt.AppendAdditionalObjectId(connectingShape1)
         connAdpt.AppendAdditionalObjectId(connectingShape2)
         connAdpt.CommitAppendObjects()

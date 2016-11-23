@@ -5,13 +5,15 @@
 ''' </summary>
 Public Class ConnectionBuilder
 
-    Public Function getOriginSupportingShapeIdFromAdapter(ByRef adpt As ConnectionAdapter) As Long
+    Public Function getOriginSupportingShapeIdFromAdapter(ByRef adpt As ConnectionAdapter,
+                                                          index As Integer) As Long
         'the first additional object is the selected support shape.
-        If (adpt.AdditionalObjectsCount <> 3) Then
+        If (adpt.AdditionalObjectsCount <> 4 And
+            (index < 0 Or index > 1)) Then
             Debug.Assert(False)
             Return 0
         End If
-        Return adpt.AdditionalObject(0)
+        Return adpt.AdditionalObject(index)
     End Function
 
     Public Function getCreatedSupporingShapeFromAdapter(ByRef adpt As ConnectionAdapter) As Long
@@ -38,12 +40,12 @@ Public Class ConnectionBuilder
     ''' <returns></returns>
     Public Function getConnectingShapeIdFromAdapter(ByRef adpt As ConnectionAdapter, index As Integer) As Long
         'the second and third addtional shape is the two connecting shape selected by the user.
-        If (adpt.AdditionalObjectsCount <> 3) Then
+        If (adpt.AdditionalObjectsCount <> 4) Then
             Debug.Assert(False)
             Return 0
         End If
 
-        If (index < 1 Or index > 2) Then
+        If (index < 2 Or index > 3) Then
             Debug.Assert(False)
             Return 0
         End If
