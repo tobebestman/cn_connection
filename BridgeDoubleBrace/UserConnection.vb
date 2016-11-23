@@ -590,8 +590,17 @@ Public Class UserConnection
                 Return
             End If
 
-            CutSupportShapeSidePlate(connMat1, supportingId1, data, instPt1, instPt2, True)
-            CutSupportShapeSidePlate(connMat2, supportingId2, data, instPt1, instPt2, False)
+            Dim cutIds As List(Of Integer) = CutSupportShapeSidePlate(connMat1, supportingId1, data, instPt1, instPt2, True)
+            If (cutIds.Count = 2) Then
+                data.mFirstLeftCutIndex = IIf(cutIds(0) <> -1, cutIds(0), -1)
+                data.mFirstRightCutIndex = IIf(cutIds(1) <> -1, cutIds(1), -1)
+            End If
+
+            cutIds = CutSupportShapeSidePlate(connMat2, supportingId2, data, instPt1, instPt2, False)
+            If (cutIds.Count = 2) Then
+                data.mSecondLeftCutIndex = IIf(cutIds(0) <> -1, cutIds(0), -1)
+                data.mSecondRightcutIndex = IIf(cutIds(1) <> -1, cutIds(1), -1)
+            End If
 
             Dim firstConnectingCutId As Long = CutShapeInwards(connectingId1, instPt1, data.mConnect1CutBack)
             Dim secondConnectingCutId As Long = CutShapeInwards(connectingId2, instPt2, data.mConnect2CutBack)
@@ -624,6 +633,8 @@ Public Class UserConnection
 
             oConnAdpt.SetBuilt(True)
             oConnAdpt.CommitAppendObjects()
+
+            data.WriteToConnectionId(ConnectionId)
 
             Dim Display As New PsDisplayClassManager
             Display.RefreshScreen()
@@ -935,7 +946,7 @@ Public Class UserConnection
                                          oData As Parameters,
                                          instPt1 As PsPoint,
                                          instPt2 As PsPoint,
-                                         isFirstPair As Boolean) As Long
+                                         isFirstPair As Boolean) As Integer
         Dim oAdpt As New ShapeAdapter(supportId)
         Dim width = oAdpt.Width
         Dim cutHeight = oAdpt.Height + 2 * oData.mPlateThickness
@@ -975,7 +986,10 @@ Public Class UserConnection
         oCut.SetAsPolyCut(oPoly, oStart, zAxis, xAxis, cutHeight)
         oCut.SetObjectId(supportId)
 
-        Dim result As Long = oCut.Apply()
+        Dim result As Long = -1
+        If oCut.Apply() > 0 Then
+            result = oCut.GetModifyIndex()
+        End If
         Return result
     End Function
 
@@ -983,7 +997,7 @@ Public Class UserConnection
                                          oData As Parameters,
                                          instPt1 As PsPoint,
                                          instPt2 As PsPoint,
-                                         isFirstPair As Boolean) As Long
+                                         isFirstPair As Boolean) As Integer
         Dim oAdpt As New ShapeAdapter(supportId)
         Dim width = oAdpt.Width
         Dim cutHeight = oAdpt.Height + 2 * oData.mPlateThickness
@@ -1023,7 +1037,10 @@ Public Class UserConnection
         oCut.SetAsPolyCut(oPoly, oStart, zAxis, -xAxis, cutHeight)
         oCut.SetObjectId(supportId)
 
-        Dim result As Long = oCut.Apply()
+        Dim result As Integer = -1
+        If (oCut.Apply() > 0) Then
+            result = oCut.GetModifyIndex()
+        End If
         Return result
     End Function
 
@@ -1063,7 +1080,6 @@ Public Class UserConnection
     Public Sub CleanI(ByVal ConnectionId As Long, Optional ByVal EraseConn As Boolean = True)
         If ConnectionId <> 0 Then
 
-            'Dim oAdpt As New ConnectionAdapter(ConnectionId)
             'oAdpt.ReadAddtionalObjects()
             'oAdpt.ReadCreatedObjectArray()
             'recoverOriginSupporingShape(oAdpt)
@@ -1075,6 +1091,8 @@ Public Class UserConnection
             Try
                 oTrans.GetObject(ConnectionId, PsOpenMode.kForWrite, oConnection)
                 If oConnection IsNot Nothing Then
+
+                    oConnection = RemoveModifications(oConnection)
 
                     For i As Integer = oConnection.AdditionalEntityCount - 1 To 0 Step -1
                         Dim id As Long = oConnection.AdditionalObjectId(i)
@@ -1116,6 +1134,38 @@ Public Class UserConnection
             End Try
         End If
     End Sub
+
+    Private Shared Function RemoveModifications(oConnection As PsConnection) As PsConnection
+        Dim param As New Parameters
+        param.ReadFromConnection(oConnection)
+
+        Dim support1 As Long = oConnection.AdditionalObjectId(0)
+        Dim support2 As Long = oConnection.AdditionalObjectId(1)
+
+        Dim oModify As New PsEditModification
+
+        If (param.mFirstLeftCutIndex <> -1) Then
+            oModify.SetObjectId(support1)
+            oModify.DeletePolyCut(param.mFirstLeftCutIndex)
+        End If
+
+        If (param.mFirstRightCutIndex <> -1) Then
+            oModify.SetObjectId(support1)
+            oModify.DeletePolyCut(param.mFirstRightCutIndex)
+        End If
+
+        If (param.mSecondLeftCutIndex <> -1) Then
+            oModify.SetObjectId(support2)
+            oModify.DeletePolyCut(param.mSecondLeftCutIndex)
+        End If
+
+        If (param.mSecondRightcutIndex <> -1) Then
+            oModify.SetObjectId(support2)
+            oModify.DeletePolyCut(param.mSecondRightcutIndex)
+        End If
+
+        Return oConnection
+    End Function
 
     Public Function Create() As Long
 

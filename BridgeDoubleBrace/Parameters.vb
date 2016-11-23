@@ -49,6 +49,10 @@ Public Class Parameters
 
     'version 1
     Public mVersionNumber As Integer
+    Public mFirstLeftCutIndex As Integer
+    Public mFirstRightCutIndex As Integer
+    Public mSecondLeftCutIndex As Integer
+    Public mSecondRightcutIndex As Integer
 
     Public mCreateGroup As Boolean
     Public mHasTopColumn As Boolean
@@ -113,6 +117,10 @@ Public Class Parameters
         iDbl = 0 : iNum = 0 : iBln = 0 : iStr = 0
 
         eConnection.Number(iNum) = mVersionNumber : iNum = iNum + 1
+        eConnection.Number(iNum) = mFirstLeftCutIndex : iNum = iNum + 1
+        eConnection.Number(iNum) = mFirstRightCutIndex : iNum = iNum + 1
+        eConnection.Number(iNum) = mSecondLeftCutIndex : iNum = iNum + 1
+        eConnection.Number(iNum) = mSecondRightcutIndex : iNum = iNum + 1
 
         eConnection.Boolean(iBln) = mHasTopColumn : iBln = iBln + 1
 
@@ -148,6 +156,10 @@ Public Class Parameters
         iDbl = 0 : iNum = 0 : iBln = 0 : iStr = 0
 
         mVersionNumber = eConnection.Number(iNum) : iNum = iNum + 1
+        mFirstLeftCutIndex = eConnection.Number(iNum) : iNum = iNum + 1
+        mFirstRightCutIndex = eConnection.Number(iNum) : iNum = iNum + 1
+        mSecondLeftCutIndex = eConnection.Number(iNum) : iNum = iNum + 1
+        mSecondRightcutIndex = eConnection.Number(iNum) : iNum = iNum + 1
 
         mHasTopColumn = eConnection.Boolean(iBln) : iBln = iBln + 1
 
@@ -184,6 +196,10 @@ Public Class Parameters
         Template.DeleteAllStrings()
 
         Template.AppendNumber(mVersionNumber)
+        'Template.AppendNumber(mFirstLeftCutIndex)
+        'Template.AppendNumber(mFirstRightCutIndex)
+        'Template.AppendNumber(mSecondLeftCutIndex)
+        'Template.AppendNumber(mSecondRightcutIndex)
 
         Template.AppendBoolean(mHasTopColumn)
 
@@ -219,6 +235,10 @@ Public Class Parameters
         iDbl = 0 : iNum = 0 : iBln = 0 : iStr = 0
 
         mVersionNumber = Template.Number(iNum) : iNum = iNum + 1
+        'mFirstLeftCutIndex = Template.Number(iNum) : iNum = iNum + 1
+        'mFirstRightCutIndex = Template.Number(iNum) : iNum = iNum + 1
+        'mSecondLeftCutIndex = Template.Number(iNum) : iNum = iNum + 1
+        'mSecondRightcutIndex = Template.Number(iNum) : iNum = iNum + 1
 
         mHasTopColumn = Template.Boolean(iBln) : iBln = iBln + 1
 
