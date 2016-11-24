@@ -614,8 +614,8 @@ Public Class UserConnection
             Dim leftPlateId As Long = CreateLeftPlate(data, supportingId1, connMat1, oPoly)
             Dim rightPlateId As Long = CreateRightPlate(data, supportingId1, connMat1, oPoly)
 
-            'Dim leftPlateId As Long = CreateLeftPlate(supportId, dist, data, connMat)
-            'Dim rightPlateId As Long = CreateRightPlate(supportId, dist, data, connMat)
+            Dim firstConnectPlateId As Long = CreateConnectingPlate(connectingId1, connMat1, 20, 20)
+            Dim secondConnectPlateId As Long = CreateConnectingPlate(connectingId2, connMat2, 20, 20)
 
             oConnAdpt = Nothing
 
@@ -628,8 +628,13 @@ Public Class UserConnection
             oConnAdpt.AppendCreatedObjectArray(0, leftPlateId)
             oConnAdpt.AppendCreatedObjectArray(0, rightPlateId)
 
+            oConnAdpt.AppendCreatedObjectArray(1, firstConnectPlateId)
+            oConnAdpt.AppendCreatedObjectArray(1, secondConnectPlateId)
+
             oConnAdpt.AppendSecondActiveObjectId(leftPlateId)
             oConnAdpt.AppendSecondActiveObjectId(rightPlateId)
+            oConnAdpt.AppendSecondActiveObjectId(firstConnectPlateId)
+            oConnAdpt.AppendSecondActiveObjectId(secondConnectPlateId)
 
             oConnAdpt.SetBuilt(True)
             oConnAdpt.CommitAppendObjects()
@@ -645,6 +650,40 @@ Public Class UserConnection
             MessageBox.Show(ex.Message)
         End Try
     End Sub
+
+    Private Shared Function CreateConnectingPlate(connectId As Long, connMat As PsMatrix,
+                                                  flangeThk As Double, webThk As Double) As Long
+        Dim result As Long = -1
+
+        Dim org As New PsPoint
+        connMat.getOrigin(org)
+
+        Dim adpt As New ShapeAdapter(connectId)
+        Dim ptEnd As PsPoint = adpt.GetEndpointTo(org)
+
+        Dim oMat As New PsMatrix
+        Dim xAxis As New PsVector
+        Dim yAxis As New PsVector
+
+        adpt.MidLineUcs.getZAxis(xAxis)
+        adpt.MidLineUcs.getYAxis(yAxis)
+        oMat.SetCoordinateSystem(MathTool.GetPointBetween(org, ptEnd), xAxis, yAxis)
+
+        Dim length As Double = MathTool.GetDistanceBetween(org, ptEnd)
+        Dim width As Double = adpt.Height - 2 * flangeThk
+
+        Dim oCtor As New PsCreatePlate
+        oCtor.SetToDefaults()
+        oCtor.SetThickness(webThk)
+        oCtor.SetAsRectangularPlate(length, width)
+        oCtor.SetInsertMatrix(oMat)
+        oCtor.SetNormalPosition(VerticalPosition.kMiddle)
+        If oCtor.Create() = True Then
+            result = oCtor.ObjectId
+        End If
+
+        Return result
+    End Function
 
     Private Shared Function CreateLeftPlate(data As Parameters, supportId As Long, connMat As PsMatrix, oPoly As PsPolygon) As Long
         Dim oCreater As New PsCreatePlate
@@ -1108,11 +1147,10 @@ Public Class UserConnection
                         oConnection.RemoveArrayCreatedObjectId(0, i)
                     Next
 
-                    ''now remove the new created top/bottom plate
-                    'For i As Integer = oConnection.ArrayCreatedEntityCount(1) - 1 To 0 Step -1
-                    '    oConnection.RemoveArrayCreatedObjectId(1, i)
-                    'Next
-
+                    'now remove the new created connecting plate
+                    For i As Integer = oConnection.ArrayCreatedEntityCount(1) - 1 To 0 Step -1
+                        oConnection.RemoveArrayCreatedObjectId(1, i)
+                    Next
 
                     'For i As Integer = oConnection.ArrayCreatedEntityCount(2) - 1 To 0 Step -1
                     '    oConnection.RemoveArrayCreatedObjectId(2, i)
