@@ -280,55 +280,6 @@ Public Class UserConnection
         Dim result As Long = oCut.Apply
         Return result
     End Function
-
-    Private Function CreateTopPlate(supportId As Long, splitDist As Double, oData As Parameters, oUcsMat As PsMatrix) As Long
-        Dim shpApt As New ShapeAdapter(supportId)
-        Dim plateWidth = shpApt.Width
-        Dim plateThickness = oData.mPlateThickness
-        Dim vertPos As VerticalPosition = VerticalPosition.kDown
-        Dim plateLength = oData.mSupport1CutBack + oData.mSupport2CutBack + splitDist
-        Dim oMat As New PsMatrix
-        Dim yAxis As New PsVector
-        Dim xAxis As New PsVector
-        oUcsMat.getYAxis(yAxis)
-
-        Dim org As New PsPoint
-        oUcsMat.getOrigin(org)
-
-        org = MathTool.GetPointInDirection(org, yAxis, shpApt.Height / 2)
-        oUcsMat.getZAxis(yAxis)
-        org = MathTool.GetPointInDirection(org, yAxis, (plateLength / 2 - oData.mSupport1CutBack))
-        oUcsMat.getXAxis(xAxis)
-        oUcsMat.getZAxis(yAxis)
-        oMat.SetCoordinateSystem(org, xAxis, yAxis)
-        Return CreatePlate(plateWidth, plateLength, plateThickness,
-                           0, 0, vertPos, oMat)
-    End Function
-
-    Private Function CreateBottomPlate(supportId As Long, splitDist As Double, oData As Parameters, oUcsMat As PsMatrix) As Long
-        Dim shpApt As New ShapeAdapter(supportId)
-        Dim plateWidth = shpApt.Width
-        Dim plateThickness = oData.mPlateThickness
-        Dim vertPos As VerticalPosition = VerticalPosition.kTop
-        Dim plateLength = oData.mSupport1CutBack + oData.mSupport2CutBack + splitDist
-        Dim oMat As New PsMatrix
-        Dim yAxis As New PsVector
-        Dim xAxis As New PsVector
-        oUcsMat.getYAxis(yAxis)
-
-        Dim org As New PsPoint
-        oUcsMat.getOrigin(org)
-        org = MathTool.GetPointInDirection(org, yAxis, -shpApt.Height / 2)
-        oUcsMat.getZAxis(yAxis)
-        org = MathTool.GetPointInDirection(org, yAxis, (plateLength / 2 - oData.mSupport1CutBack))
-
-        oUcsMat.getXAxis(xAxis)
-        oUcsMat.getZAxis(yAxis)
-        oMat.SetCoordinateSystem(org, xAxis, yAxis)
-        Return CreatePlate(plateWidth, plateLength, plateThickness,
-                           0, 0, vertPos, oMat)
-    End Function
-
     Private Function GetDriectConnectedPlateBoundaryBetweenLines(pts1 As PsPoint, pte1 As PsPoint,
                                                         cut1 As Double, w1 As Double,
                                                         pts2 As PsPoint, pte2 As PsPoint,
@@ -471,56 +422,6 @@ Public Class UserConnection
         Debug.Assert(firstPart.Count = 6)
         Return firstPart
     End Function
-
-
-    Private Function CreateLeftPlate(supportId As Long, splitDist As Double, oData As Parameters, oUcsMat As PsMatrix) As Long
-        Dim shpApt As New ShapeAdapter(supportId)
-        Dim plateWidth = shpApt.Height
-        Dim plateThickness = oData.mPlateThickness
-        Dim vertPos As VerticalPosition = VerticalPosition.kTop
-        Dim plateLength = oData.mSupport1CutBack + oData.mSupport2CutBack + splitDist
-        Dim oMat As New PsMatrix
-        Dim yAxis As New PsVector
-        Dim xAxis As New PsVector
-        oUcsMat.getXAxis(xAxis)
-
-        Dim org As New PsPoint
-        oUcsMat.getOrigin(org)
-        org = MathTool.GetPointInDirection(org, xAxis, -shpApt.Width / 2)
-        oUcsMat.getZAxis(yAxis)
-        org = MathTool.GetPointInDirection(org, yAxis, (plateLength / 2 - oData.mSupport1CutBack))
-
-        oUcsMat.getZAxis(xAxis)
-        oUcsMat.getYAxis(yAxis)
-        oMat.SetCoordinateSystem(org, xAxis, yAxis)
-        Return CreatePlate(plateLength, plateWidth, plateThickness,
-                           0, 0, vertPos, oMat)
-    End Function
-
-    Private Function CreateRightPlate(supportId As Long, splitDist As Double, oData As Parameters, oUcsMat As PsMatrix) As Long
-        Dim shpApt As New ShapeAdapter(supportId)
-        Dim plateWidth = shpApt.Height
-        Dim plateThickness = oData.mPlateThickness
-        Dim vertPos As VerticalPosition = VerticalPosition.kDown
-        Dim plateLength = oData.mSupport1CutBack + oData.mSupport2CutBack + splitDist
-        Dim oMat As New PsMatrix
-        Dim yAxis As New PsVector
-        Dim xAxis As New PsVector
-        oUcsMat.getXAxis(xAxis)
-
-        Dim org As New PsPoint
-        oUcsMat.getOrigin(org)
-        org = MathTool.GetPointInDirection(org, xAxis, shpApt.Width / 2)
-        oUcsMat.getZAxis(yAxis)
-        org = MathTool.GetPointInDirection(org, yAxis, (plateLength / 2 - oData.mSupport1CutBack))
-
-        oUcsMat.getZAxis(xAxis)
-        oUcsMat.getYAxis(yAxis)
-        oMat.SetCoordinateSystem(org, xAxis, yAxis)
-        Return CreatePlate(plateLength, plateWidth, plateThickness,
-                           0, 0, vertPos, oMat)
-    End Function
-
 
     Private Function CreatePlate(plateWidth As Double, plateLength As Double,
                                  plateThickness As Double,
@@ -697,7 +598,8 @@ Public Class UserConnection
 
         Dim yAxis As New PsVector
         connMat.getYAxis(yAxis)
-        org = MathTool.GetPointInDirection(org, xAxis, New ShapeAdapter(supportId).Width / 2)
+        org = MathTool.GetPointInDirection(org, xAxis, New ShapeAdapter(supportId).Width / 2 +
+                                           data.mPlateThickness - data.mMainChordPlateThickness)
 
         connMat.getZAxis(xAxis)
         Dim insMat As New PsMatrix()
@@ -726,7 +628,8 @@ Public Class UserConnection
 
         Dim yAxis As New PsVector
         connMat.getYAxis(yAxis)
-        org = MathTool.GetPointInDirection(org, -xAxis, New ShapeAdapter(supportId).Width / 2)
+        org = MathTool.GetPointInDirection(org, -xAxis, New ShapeAdapter(supportId).Width / 2 +
+                                           data.mPlateThickness - data.mMainChordPlateThickness)
 
         connMat.getZAxis(xAxis)
         Dim insMat As New PsMatrix()
@@ -760,9 +663,7 @@ Public Class UserConnection
         'Next
 
         Dim TopHalf As New List(Of PsPoint)
-        If data.mHasTopColumn = False Then
-            GetTopHalfProfileWithoutTopColumn(data, supportId1, supportId2, connMat1, connMat2, instPt1, instPt2, TopHalf)
-        End If
+        GetTopHalfProfileWithoutTopColumn(data, supportId1, supportId2, connMat1, connMat2, instPt1, instPt2, TopHalf)
 
         'For i As Long = 0 To TopHalf.Count - 1
         '    Utility.drawBall(TopHalf(i), 100)
@@ -988,7 +889,7 @@ Public Class UserConnection
                                          isFirstPair As Boolean) As Integer
         Dim oAdpt As New ShapeAdapter(supportId)
         Dim width = oAdpt.Width
-        Dim cutHeight = oAdpt.Height + 2 * oData.mPlateThickness
+        Dim cutHeight = oAdpt.Height + 2 * oData.mMainChordPlateThickness
 
         Dim oStart As New PsPoint
         oMat.getOrigin(oStart)
@@ -1006,13 +907,13 @@ Public Class UserConnection
             oStart = MathTool.GetPointInDirection(oStart, -zAxis, oData.mSupport2CutBack)
         End If
 
-        oStart = MathTool.GetPointInDirection(oStart, xAxis, width / 2 - oData.mPlateThickness)
+        oStart = MathTool.GetPointInDirection(oStart, xAxis, width / 2 - oData.mMainChordPlateThickness)
         oStart = MathTool.GetPointInDirection(oStart, -yAxis, cutHeight / 2)
 
         Dim polyLength As Double = oData.mSupport1CutBack +
                              MathTool.GetDistanceBetween(instPt1, instPt2) +
                              oData.mSupport2CutBack
-        Dim polyWidth As Double = 2 * oData.mPlateThickness
+        Dim polyWidth As Double = 2 * oData.mMainChordPlateThickness
 
         Dim oPoly As New PsPolygon
         oPoly.appendVertex(0, 0, 0)
@@ -1039,7 +940,7 @@ Public Class UserConnection
                                          isFirstPair As Boolean) As Integer
         Dim oAdpt As New ShapeAdapter(supportId)
         Dim width = oAdpt.Width
-        Dim cutHeight = oAdpt.Height + 2 * oData.mPlateThickness
+        Dim cutHeight = oAdpt.Height + 2 * oData.mMainChordPlateThickness
 
         Dim oStart As New PsPoint
         oMat.getOrigin(oStart)
@@ -1057,13 +958,13 @@ Public Class UserConnection
             oStart = MathTool.GetPointInDirection(oStart, -zAxis, oData.mSupport2CutBack)
         End If
 
-        oStart = MathTool.GetPointInDirection(oStart, -xAxis, width / 2 - oData.mPlateThickness)
+        oStart = MathTool.GetPointInDirection(oStart, -xAxis, width / 2 - oData.mMainChordPlateThickness)
         oStart = MathTool.GetPointInDirection(oStart, -yAxis, cutHeight / 2)
 
         Dim polyLength As Double = oData.mSupport1CutBack +
                              MathTool.GetDistanceBetween(instPt1, instPt2) +
                              oData.mSupport2CutBack
-        Dim polyWidth As Double = 2 * oData.mPlateThickness
+        Dim polyWidth As Double = 2 * oData.mMainChordPlateThickness
 
         Dim oPoly As New PsPolygon
         oPoly.appendVertex(0, 0, 0)

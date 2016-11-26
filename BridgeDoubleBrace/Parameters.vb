@@ -43,9 +43,133 @@ Imports PlugInBase
 Imports PlugInBase.PlugInCommon
 Imports PlugInBase.PlugInCommon.CommonFunctions
 Imports PSN_SubstationShared.UnitConvert
+Imports PSN_BridgeDoubleBrace
+
+Public Class ConnectPlateParameter
+    Implements IParameters, ISetToDefauts
+    Public sideDistance As Double
+    Public radius As Double
+    Public gap As Double
+    Public length As Double
+    Public width As Double
+    Public thickness As Double
+    Public angle As Double
+    Public innerWebHeight As Double
+    Public innerWebThickness As Double
+    Public innerWebCount As Integer
+    Public innerWebDist As Double
+
+    Private Sub writeConnectionPlate(ByRef plateParam As ConnectPlateParameter,
+                                     ByRef eConnection As PsConnection,
+                                  ByRef iDbl As Integer,
+                                  ByRef iNum As Integer,
+                                  ByRef iBln As Integer,
+                                  ByRef iStr As Integer)
+        eConnection.Double(iDbl) = plateParam.sideDistance : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = plateParam.radius : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = plateParam.gap : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = plateParam.length : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = plateParam.width : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = plateParam.thickness : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = plateParam.angle : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = plateParam.innerWebHeight : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = plateParam.innerWebThickness : iDbl = iDbl + 1
+        eConnection.Number(iNum) = plateParam.innerWebCount : iNum = iNum + 1
+        eConnection.Double(iDbl) = plateParam.innerWebDist : iDbl = iDbl + 1
+    End Sub
+
+    Private Sub readConnectPlate(ByRef plateParam As ConnectPlateParameter,
+                                 eConnection As PsConnection,
+                                   ByRef iDbl As Integer,
+                                   ByRef iNum As Integer,
+                                   ByRef iBln As Integer,
+                                   ByRef iStr As Integer)
+        plateParam.sideDistance = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        plateParam.radius = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        plateParam.gap = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        plateParam.length = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        plateParam.width = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        plateParam.thickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        plateParam.angle = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        plateParam.innerWebHeight = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        plateParam.innerWebThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        plateParam.innerWebCount = eConnection.Number(iNum) : iNum = iNum + 1
+        plateParam.innerWebDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
+    End Sub
+
+
+    Private Sub writeConnectPlate(ByRef plateParam As ConnectPlateParameter,
+                                 ByRef Template As PsTemplateManager)
+        Template.AppendDouble(plateParam.sideDistance)
+        Template.AppendDouble(plateParam.radius)
+        Template.AppendDouble(plateParam.gap)
+        Template.AppendDouble(plateParam.length)
+        Template.AppendDouble(plateParam.width)
+        Template.AppendDouble(plateParam.thickness)
+        Template.AppendDouble(plateParam.angle)
+        Template.AppendDouble(plateParam.innerWebHeight)
+        Template.AppendDouble(plateParam.innerWebThickness)
+        Template.AppendNumber(plateParam.innerWebCount)
+        Template.AppendDouble(plateParam.innerWebDist)
+    End Sub
+
+    Private Sub readConnectPlate(ByRef plateParam As ConnectPlateParameter,
+                                 Template As PsTemplateManager,
+                                 ByRef iDbl As Integer,
+                                 ByRef iNum As Integer,
+                                 ByRef iBln As Integer,
+                                 ByRef iStr As Integer)
+        plateParam.sideDistance = Template.Double(iDbl) : iDbl = iDbl + 1
+        plateParam.radius = Template.Double(iDbl) : iDbl = iDbl + 1
+        plateParam.gap = Template.Double(iDbl) : iDbl = iDbl + 1
+        plateParam.length = Template.Double(iDbl) : iDbl = iDbl + 1
+        plateParam.width = Template.Double(iDbl) : iDbl = iDbl + 1
+        plateParam.thickness = Template.Double(iDbl) : iDbl = iDbl + 1
+        plateParam.angle = Template.Double(iDbl) : iDbl = iDbl + 1
+        plateParam.innerWebHeight = Template.Double(iDbl) : iDbl = iDbl + 1
+        plateParam.innerWebThickness = Template.Double(iDbl) : iDbl = iDbl + 1
+        plateParam.innerWebCount = Template.Number(iNum) : iNum = iNum + 1
+        plateParam.innerWebDist = Template.Double(iDbl) : iDbl = iDbl + 1
+    End Sub
+    Public Sub ReadFromConnection(eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromConnection
+        readConnectPlate(Me, eConnection, iDbl, iNum, iBln, iStr)
+    End Sub
+
+    Public Sub ReadFromTemplate(Template As PsTemplateManager, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromTemplate
+        readConnectPlate(Me, Template, iDbl, iNum, iBln, iStr)
+    End Sub
+
+    Public Sub WriteToConnection(ByRef eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.WriteToConnection
+        writeConnectionPlate(Me, eConnection, iDbl, iNum, iBln, iStr)
+    End Sub
+
+    Public Sub WriteToTemplate(ByRef Template As PsTemplateManager) Implements IParameters.WriteToTemplate
+        writeConnectPlate(Me, Template)
+    End Sub
+
+    Public Sub SetToImperialDefaults() Implements ISetToDefauts.SetToImperialDefaults
+        Throw New NotImplementedException()
+    End Sub
+
+    Public Sub SetToMetricDefaults() Implements ISetToDefauts.SetToMetricDefaults
+        sideDistance = 30
+        radius = 1000
+        gap = 20
+        length = 1400
+        width = 2000
+        thickness = 36
+        angle = 45
+        innerWebHeight = 250
+        innerWebThickness = 20
+        innerWebCount = 2
+        innerWebDist = 675
+    End Sub
+End Class
 
 
 Public Class Parameters
+    Implements IParameters
+    Implements ISetToDefauts
 
     'version 1
     Public mVersionNumber As Integer
@@ -55,7 +179,6 @@ Public Class Parameters
     Public mSecondRightcutIndex As Integer
 
     Public mCreateGroup As Boolean
-    Public mHasTopColumn As Boolean
 
     Public mSupport1CutBack As Double
     Public mSupport2CutBack As Double
@@ -70,18 +193,13 @@ Public Class Parameters
     Public mBottomAngle3 As Double
     Public mBottomAngle4 As Double
 
-    Public mTopAngle1 As Double
-    Public mTopAngle2 As Double
-
-    Public mTopColumnWidth As Double
-    Public mTopColumnDist As Double
-
     Public mBottomFillet1 As Double
     Public mBottomFillet2 As Double
 
-    Public mTopFillet1 As Double
-    Public mTopFillet2 As Double
+    Public mMainChordPlateThickness As Double
 
+    Public mConnectPlate1 As ConnectPlateParameter
+    Public mConnectPlate2 As ConnectPlateParameter
 
     Public Sub WriteToConnectionId(ByVal ConnectionId As Long)
         Dim oTrans As New PsTransaction
@@ -110,19 +228,28 @@ Public Class Parameters
         End Try
     End Sub
 
-    Public Sub WriteToConnection(ByRef eConnection As PsConnection)
+    Private Sub WriteToConnection(ByRef eConnection As PsConnection)
         If eConnection Is Nothing Then Return
 
         Dim iDbl, iNum, iBln, iStr As Integer
         iDbl = 0 : iNum = 0 : iBln = 0 : iStr = 0
 
+        WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
+
+        mConnectPlate1.WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
+
+    End Sub
+
+    Public Sub WriteToConnection(ByRef eConnection As PsConnection,
+                                  ByRef iDbl As Integer,
+                                  ByRef iNum As Integer,
+                                  ByRef iBln As Integer,
+                                  ByRef iStr As Integer) Implements IParameters.WriteToConnection
         eConnection.Number(iNum) = mVersionNumber : iNum = iNum + 1
         eConnection.Number(iNum) = mFirstLeftCutIndex : iNum = iNum + 1
         eConnection.Number(iNum) = mFirstRightCutIndex : iNum = iNum + 1
         eConnection.Number(iNum) = mSecondLeftCutIndex : iNum = iNum + 1
         eConnection.Number(iNum) = mSecondRightcutIndex : iNum = iNum + 1
-
-        eConnection.Boolean(iBln) = mHasTopColumn : iBln = iBln + 1
 
         eConnection.Double(iDbl) = mSupport1CutBack : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mSupport2CutBack : iDbl = iDbl + 1
@@ -136,17 +263,10 @@ Public Class Parameters
         eConnection.Double(iDbl) = mBottomAngle3 : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mBottomAngle4 : iDbl = iDbl + 1
 
-        eConnection.Double(iDbl) = mTopAngle1 : iDbl = iDbl + 1
-        eConnection.Double(iDbl) = mTopAngle2 : iDbl = iDbl + 1
-
-        eConnection.Double(iDbl) = mTopColumnWidth : iDbl = iDbl + 1
-        eConnection.Double(iDbl) = mTopColumnDist : iDbl = iDbl + 1
-
         eConnection.Double(iDbl) = mBottomFillet1 : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mBottomFillet2 : iDbl = iDbl + 1
-        eConnection.Double(iDbl) = mTopFillet1 : iDbl = iDbl + 1
-        eConnection.Double(iDbl) = mTopFillet2 : iDbl = iDbl + 1
 
+        eConnection.Double(iDbl) = mMainChordPlateThickness : iDbl = iDbl + 1
     End Sub
 
     Public Sub ReadFromConnection(ByRef eConnection As PsConnection, Optional ByVal forClone As Boolean = False)
@@ -155,13 +275,21 @@ Public Class Parameters
         Dim iDbl, iNum, iBln, iStr As Integer
         iDbl = 0 : iNum = 0 : iBln = 0 : iStr = 0
 
+        ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
+        mConnectPlate1.ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
+
+    End Sub
+
+    Public Sub ReadFromConnection(eConnection As PsConnection,
+                                   ByRef iDbl As Integer,
+                                   ByRef iNum As Integer,
+                                   ByRef iBln As Integer,
+                                   ByRef iStr As Integer) Implements IParameters.ReadFromConnection
         mVersionNumber = eConnection.Number(iNum) : iNum = iNum + 1
         mFirstLeftCutIndex = eConnection.Number(iNum) : iNum = iNum + 1
         mFirstRightCutIndex = eConnection.Number(iNum) : iNum = iNum + 1
         mSecondLeftCutIndex = eConnection.Number(iNum) : iNum = iNum + 1
         mSecondRightcutIndex = eConnection.Number(iNum) : iNum = iNum + 1
-
-        mHasTopColumn = eConnection.Boolean(iBln) : iBln = iBln + 1
 
         mSupport1CutBack = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mSupport2CutBack = eConnection.Double(iDbl) : iDbl = iDbl + 1
@@ -175,21 +303,15 @@ Public Class Parameters
         mBottomAngle3 = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mBottomAngle4 = eConnection.Double(iDbl) : iDbl = iDbl + 1
 
-        mTopAngle1 = eConnection.Double(iDbl) : iDbl = iDbl + 1
-        mTopAngle2 = eConnection.Double(iDbl) : iDbl = iDbl + 1
-
-        mTopColumnWidth = eConnection.Double(iDbl) : iDbl = iDbl + 1
-        mTopColumnDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
-
         mBottomFillet1 = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mBottomFillet2 = eConnection.Double(iDbl) : iDbl = iDbl + 1
-        mTopFillet1 = eConnection.Double(iDbl) : iDbl = iDbl + 1
-        mTopFillet2 = eConnection.Double(iDbl) : iDbl = iDbl + 1
 
+        mMainChordPlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
     End Sub
 
-    Public Sub WriteToTemplate(ByRef Template As PsTemplateManager)
 
+
+    Public Sub WriteToTemplate(ByRef Template As PsTemplateManager) Implements IParameters.WriteToTemplate
         Template.DeleteAllBooleans()
         Template.DeleteAllDoubles()
         Template.DeleteAllNumbers()
@@ -201,7 +323,6 @@ Public Class Parameters
         'Template.AppendNumber(mSecondLeftCutIndex)
         'Template.AppendNumber(mSecondRightcutIndex)
 
-        Template.AppendBoolean(mHasTopColumn)
 
         Template.AppendDouble(mSupport1CutBack)
         Template.AppendDouble(mSupport2CutBack)
@@ -215,16 +336,12 @@ Public Class Parameters
         Template.AppendDouble(mBottomAngle3)
         Template.AppendDouble(mBottomAngle3)
 
-        Template.AppendDouble(mTopAngle1)
-        Template.AppendDouble(mTopAngle2)
-
-        Template.AppendDouble(mTopColumnWidth)
-        Template.AppendDouble(mTopColumnDist)
-
         Template.AppendDouble(mBottomFillet1)
         Template.AppendDouble(mBottomFillet2)
-        Template.AppendDouble(mTopFillet1)
-        Template.AppendDouble(mTopFillet2)
+
+        Template.AppendDouble(mMainChordPlateThickness)
+
+        mConnectPlate1.WriteToTemplate(Template)
 
     End Sub
 
@@ -233,14 +350,22 @@ Public Class Parameters
 
         Dim iDbl, iNum, iBln, iStr As Integer
         iDbl = 0 : iNum = 0 : iBln = 0 : iStr = 0
+        ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
+        mConnectPlate1.ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
 
+    End Sub
+
+    Public Sub ReadFromTemplate(Template As PsTemplateManager,
+                                 ByRef iDbl As Integer,
+                                 ByRef iNum As Integer,
+                                 ByRef iBln As Integer,
+                                 ByRef iStr As Integer) Implements IParameters.ReadFromTemplate
         mVersionNumber = Template.Number(iNum) : iNum = iNum + 1
         'mFirstLeftCutIndex = Template.Number(iNum) : iNum = iNum + 1
         'mFirstRightCutIndex = Template.Number(iNum) : iNum = iNum + 1
         'mSecondLeftCutIndex = Template.Number(iNum) : iNum = iNum + 1
         'mSecondRightcutIndex = Template.Number(iNum) : iNum = iNum + 1
 
-        mHasTopColumn = Template.Boolean(iBln) : iBln = iBln + 1
 
         mSupport1CutBack = Template.Double(iDbl) : iDbl = iDbl + 1
         mSupport2CutBack = Template.Double(iDbl) : iDbl = iDbl + 1
@@ -254,21 +379,18 @@ Public Class Parameters
         mBottomAngle3 = Template.Double(iDbl) : iDbl = iDbl + 1
         mBottomAngle4 = Template.Double(iDbl) : iDbl = iDbl + 1
 
-        mTopAngle1 = Template.Double(iDbl) : iDbl = iDbl + 1
-        mTopAngle2 = Template.Double(iDbl) : iDbl = iDbl + 1
-
-        mTopColumnWidth = Template.Double(iDbl) : iDbl = iDbl + 1
-        mTopColumnDist = Template.Double(iDbl) : iDbl = iDbl + 1
-
         mBottomFillet1 = Template.Double(iDbl) : iDbl = iDbl + 1
         mBottomFillet2 = Template.Double(iDbl) : iDbl = iDbl + 1
-        mTopFillet1 = Template.Double(iDbl) : iDbl = iDbl + 1
-        mTopFillet2 = Template.Double(iDbl) : iDbl = iDbl + 1
 
+        mMainChordPlateThickness = Template.Double(iDbl) : iDbl = iDbl + 1
     End Sub
+
 
     Public Sub New()
         MyBase.New()
+
+        mConnectPlate1 = New ConnectPlateParameter()
+
     End Sub
 
     Protected Overrides Sub Finalize()
@@ -281,59 +403,56 @@ Public Class Parameters
 
         mVersionNumber = PLUGIN_VERSION
 
-        mHasTopColumn = False
-
-        If Measurement = 0 Then
-            mSupport1CutBack = 20
-            mSupport2CutBack = 30
-
-            mConnect1CutBack = 10
-            mConnect2CutBack = 10
-
-            mPlateThickness = 2
-
-            mBottomAngle1 = 5
-            mBottomAngle2 = 5
-            mBottomAngle3 = 5
-            mBottomAngle4 = 5
-
-            mTopAngle1 = 5
-            mTopAngle2 = 5
-
-            mTopColumnWidth = 30
-            mTopColumnDist = 30
-
-            mBottomFillet1 = 5
-            mBottomFillet2 = 5
-            mTopFillet1 = 5
-            mTopFillet2 = 5
-
+        If Measurement = 1 Then
+            SetToMetricDefaults()
         Else
-            mSupport1CutBack = 1800
-            mSupport2CutBack = 1600
-
-            mConnect1CutBack = 2400
-            mConnect2CutBack = 2400
-
-            mPlateThickness = 52
-
-            mBottomAngle1 = 5
-            mBottomAngle2 = 5
-            mBottomAngle3 = 5
-            mBottomAngle4 = 5
-
-            mTopAngle1 = 5
-            mTopAngle2 = 5
-
-            mTopColumnWidth = 2400
-            mTopColumnDist = 1800
-
-            mBottomFillet1 = 50
-            mBottomFillet2 = 50
-            mTopFillet1 = 50
-            mTopFillet2 = 50
+            SetToImperialDefaults()
 
         End If
 
+    End Sub
+
+    Public Sub SetToMetricDefaults() Implements ISetToDefauts.SetToMetricDefaults
+        mSupport1CutBack = 1800
+        mSupport2CutBack = 1600
+
+        mConnect1CutBack = 2400
+        mConnect2CutBack = 2400
+
+        mPlateThickness = 104
+
+        mBottomAngle1 = 5
+        mBottomAngle2 = 5
+        mBottomAngle3 = 5
+        mBottomAngle4 = 5
+
+        mBottomFillet1 = 50
+        mBottomFillet2 = 50
+
+        mMainChordPlateThickness = 52
+
+        mConnectPlate1.SetToMetricDefaults()
+    End Sub
+
+    Public Sub SetToImperialDefaults() Implements ISetToDefauts.SetToImperialDefaults
+        mSupport1CutBack = 20
+        mSupport2CutBack = 30
+
+        mConnect1CutBack = 10
+        mConnect2CutBack = 10
+
+        mPlateThickness = 20
+
+        mBottomAngle1 = 5
+        mBottomAngle2 = 5
+        mBottomAngle3 = 5
+        mBottomAngle4 = 5
+
+        mBottomFillet1 = 5
+        mBottomFillet2 = 5
+
+        mMainChordPlateThickness = 2
+
+        mConnectPlate1.SetToImperialDefaults()
     End Sub
 End Class

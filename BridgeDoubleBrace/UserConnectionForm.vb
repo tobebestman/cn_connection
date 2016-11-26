@@ -244,8 +244,6 @@ Friend Class UserConnectionForm
 
     Private Sub ReadFromDialog(ByRef Data As Parameters)
 
-        Data.mHasTopColumn = chkHasTopColumn.Checked
-
         Data.mPlateThickness = UIConverter.ConvertToNumeric(txtPlateThickness.Text)
 
         Data.mSupport1CutBack = UIConverter.ConvertToNumeric(txtSupport1CutBack.Text)
@@ -259,23 +257,26 @@ Friend Class UserConnectionForm
         Data.mBottomAngle3 = UIConverter.ConvertAngleToNumeric(txtAngle3.Text)
         Data.mBottomAngle4 = UIConverter.ConvertAngleToNumeric(txtAngle4.Text)
 
-        Data.mTopAngle1 = UIConverter.ConvertAngleToNumeric(txtTopAngle1.Text)
-        Data.mTopAngle2 = UIConverter.ConvertAngleToNumeric(txtTopAngle2.Text)
-
         Data.mBottomFillet1 = UIConverter.ConvertToNumeric(txtFillet1.Text)
         Data.mBottomFillet2 = UIConverter.ConvertToNumeric(txtFillet2.Text)
 
-        Data.mTopFillet1 = UIConverter.ConvertToNumeric(txtTopFillet1.Text)
-        Data.mTopFillet2 = UIConverter.ConvertToNumeric(txtTopFillet2.Text)
+        Data.mMainChordPlateThickness = UIConverter.ConvertToNumeric(txtMainChordPlateThickness.Text)
 
-        Data.mTopColumnWidth = UIConverter.ConvertToNumeric(txtTopColumnWidth.Text)
-        Data.mTopColumnDist = UIConverter.ConvertToNumeric(txtTopColumnDist.Text)
+        Data.mConnectPlate1.sideDistance = UIConverter.ConvertToNumeric(txtConnect1SideDistance.Text)
+        Data.mConnectPlate1.radius = UIConverter.ConvertToNumeric(txtConnect1Radius.Text)
+        Data.mConnectPlate1.gap = UIConverter.ConvertToNumeric(txtConnect1Gap.Text)
+        Data.mConnectPlate1.length = UIConverter.ConvertToNumeric(txtConnect1Length.Text)
+        Data.mConnectPlate1.width = UIConverter.ConvertToNumeric(txtConnect1Width.Text)
+        Data.mConnectPlate1.thickness = UIConverter.ConvertToNumeric(txtConnect1Thickness.Text)
+        Data.mConnectPlate1.angle = UIConverter.ConvertAngleToNumeric(txtConnect1Angle.Text)
+        Data.mConnectPlate1.innerWebHeight = UIConverter.ConvertToNumeric(txtConnect1InnerWebHeight.Text)
+        Data.mConnectPlate1.innerWebThickness = UIConverter.ConvertToNumeric(txtConnect1innerWebThickness.Text)
+        Data.mConnectPlate1.innerWebCount = UIConverter.ConvertToNumeric(txtConnect1innerWebCount.Text)
+        Data.mConnectPlate1.innerWebDist = UIConverter.ConvertToNumeric(txtConnect1innerWebDist.Text)
 
     End Sub
 
     Private Sub WriteToDialog(ByRef Data As Parameters)
-
-        chkHasTopColumn.Checked = Data.mHasTopColumn
 
         txtPlateThickness.Text = UIConverter.ConvertToText(Data.mPlateThickness)
 
@@ -290,17 +291,23 @@ Friend Class UserConnectionForm
         txtAngle3.Text = UIConverter.ConvertAngleToText(Data.mBottomAngle3)
         txtAngle4.Text = UIConverter.ConvertAngleToText(Data.mBottomAngle4)
 
-        txtTopAngle1.Text = UIConverter.ConvertAngleToText(Data.mTopAngle1)
-        txtTopAngle2.Text = UIConverter.ConvertAngleToText(Data.mTopAngle2)
-
         txtFillet1.Text = UIConverter.ConvertToText(Data.mBottomFillet1)
         txtFillet2.Text = UIConverter.ConvertToText(Data.mBottomFillet2)
 
-        txtTopFillet1.Text = UIConverter.ConvertToText(Data.mTopFillet1)
-        txtTopFillet2.Text = UIConverter.ConvertToText(Data.mTopFillet2)
+        txtMainChordPlateThickness.Text = UIConverter.ConvertToText(Data.mMainChordPlateThickness)
 
-        txtTopColumnWidth.Text = UIConverter.ConvertToText(Data.mTopColumnWidth)
-        txtTopColumnDist.Text = UIConverter.ConvertToText(Data.mTopColumnDist)
+        txtConnect1SideDistance.Text = UIConverter.ConvertToText(Data.mConnectPlate1.sideDistance)
+        txtConnect1Radius.Text = UIConverter.ConvertToText(Data.mConnectPlate1.radius)
+        txtConnect1Gap.Text = UIConverter.ConvertToText(Data.mConnectPlate1.gap)
+        txtConnect1Length.Text = UIConverter.ConvertToText(Data.mConnectPlate1.length)
+        txtConnect1Width.Text = UIConverter.ConvertToText(Data.mConnectPlate1.width)
+        txtConnect1Thickness.Text = UIConverter.ConvertToText(Data.mConnectPlate1.thickness)
+        txtConnect1Angle.Text = UIConverter.ConvertAngleToText(Data.mConnectPlate1.angle)
+        txtConnect1InnerWebHeight.Text = UIConverter.ConvertToText(Data.mConnectPlate1.innerWebHeight)
+        txtConnect1innerWebThickness.Text = UIConverter.ConvertToText(Data.mConnectPlate1.innerWebThickness)
+        txtConnect1innerWebCount.Text = UIConverter.ConvertToText(Data.mConnectPlate1.innerWebCount)
+        txtConnect1innerWebDist.Text = UIConverter.ConvertToText(Data.mConnectPlate1.innerWebDist)
+
 
     End Sub
 
@@ -499,9 +506,7 @@ Friend Class UserConnectionForm
     Handles txtPlateThickness.Leave,
             txtConnectCutBack1.Leave, txtConnectCutBack2.Leave,
             txtSupport1CutBack.Leave, txtSupport2CutBack.Leave,
-            txtFillet1.Leave, txtFillet2.Leave,
-            txtTopFillet2.Leave, txtTopFillet1.Leave, txtTopColumnWidth.Leave,
-            txtTopColumnDist.Leave
+            txtFillet1.Leave, txtFillet2.Leave
 
         eventSender.Text = oCheckInput.CheckPositive(eventSender.Text)
         If oCheckInput.OldValue <> eventSender.Text Then
@@ -510,8 +515,8 @@ Friend Class UserConnectionForm
 
     End Sub
 
-    Private Sub txtAngle3_Leave(sender As Object, e As EventArgs) Handles txtTopAngle2.Leave,
-        txtTopAngle1.Leave, txtAngle4.Leave, txtAngle3.Leave, txtAngle2.Leave, txtAngle1.Leave
+    Private Sub txtAngle3_Leave(sender As Object, e As EventArgs) Handles _
+        txtAngle4.Leave, txtAngle3.Leave, txtAngle2.Leave, txtAngle1.Leave
         sender.text = oCheckInput.CheckAngular(sender.text)
         If (oCheckInput.OldValue <> sender.text) Then
             UpdateConnection()

@@ -171,6 +171,7 @@ Module Utility
         Dim bolts As New PsCreateBolt
         If bolts.BoltTypeCount > 0 Then DefaultBoltStyle = bolts.BoltTypeName(0)
         bolts = Nothing
+        Return ""
     End Function
 
     Public Sub DisplayBoltTypeList(ByRef cboControl As System.Windows.Forms.ComboBox, ByRef DefaultName As String)

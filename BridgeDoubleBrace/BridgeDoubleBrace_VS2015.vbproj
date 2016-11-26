@@ -113,6 +113,8 @@
     <Compile Include="ConnectionBuilder.vb" />
     <Compile Include="Constants.vb" />
     <Compile Include="GeoHelper.vb" />
+    <Compile Include="IParameters.vb" />
+    <Compile Include="ISetToDefauts.vb" />
     <Compile Include="KeyinCommands.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
