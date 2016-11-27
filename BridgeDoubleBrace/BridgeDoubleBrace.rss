@@ -60,7 +60,7 @@
 @D0404,"Connect Cut back 2",
 @D0405,"Main Chord Thickness",
 
-@D0500,"Connect Plate",
+@D0500,"Connect Plate 1",
 @D0501,"Dist",
 @D0502,"Radius",
 @D0503,"Gap",
@@ -73,9 +73,18 @@
 @D0510,"Web Count",
 @D0511,"Web Side Dist",
 
-
-@D0600,"Group",
-@D0601,"Create Group",
+@D0600,"Connect Plate 2",
+@D0601,"Dist",
+@D0602,"Radius",
+@D0603,"Gap",
+@D0604,"Length",
+@D0605,"Width",
+@D0606,"Thickness",
+@D0607,"Angle",
+@D0608,"Web Height",
+@D0609,"Web Thickness",
+@D0610,"Web Count",
+@D0611,"Web Side Dist",,
 
 @D0700,"Assignment",
 @D0701,"Element",

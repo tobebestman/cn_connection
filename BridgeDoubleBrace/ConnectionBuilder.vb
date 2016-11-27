@@ -16,22 +16,6 @@ Public Class ConnectionBuilder
         Return adpt.AdditionalObject(index)
     End Function
 
-    Public Function getCreatedSupporingShapeFromAdapter(ByRef adpt As ConnectionAdapter) As Long
-        'the first shanpe in the first created object array is the "new" suppor shape
-        'get from the split operation
-        If (adpt.CreatedObjectArrayCount < 1) Then
-            Debug.Assert(False)
-            Return 0
-        End If
-
-        If (adpt.CreatedObjectArrayEntityCount(0) <> 1) Then
-            Debug.Assert(False)
-            Return 0
-        End If
-
-        Return adpt.CreatedObjectArrayEntity(0, 0)
-    End Function
-
     ''' <summary>
     ''' index can only be 1, 2
     ''' </summary>
@@ -53,3 +37,5 @@ Public Class ConnectionBuilder
     End Function
 
 End Class
+
+

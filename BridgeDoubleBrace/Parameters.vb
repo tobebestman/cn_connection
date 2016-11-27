@@ -237,6 +237,7 @@ Public Class Parameters
         WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
 
         mConnectPlate1.WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
+        mConnectPlate2.WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
 
     End Sub
 
@@ -276,7 +277,9 @@ Public Class Parameters
         iDbl = 0 : iNum = 0 : iBln = 0 : iStr = 0
 
         ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
+
         mConnectPlate1.ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
+        mConnectPlate2.ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
 
     End Sub
 
@@ -342,6 +345,7 @@ Public Class Parameters
         Template.AppendDouble(mMainChordPlateThickness)
 
         mConnectPlate1.WriteToTemplate(Template)
+        mConnectPlate2.WriteToTemplate(Template)
 
     End Sub
 
@@ -351,7 +355,9 @@ Public Class Parameters
         Dim iDbl, iNum, iBln, iStr As Integer
         iDbl = 0 : iNum = 0 : iBln = 0 : iStr = 0
         ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
+
         mConnectPlate1.ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
+        mConnectPlate2.ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
 
     End Sub
 
@@ -390,6 +396,7 @@ Public Class Parameters
         MyBase.New()
 
         mConnectPlate1 = New ConnectPlateParameter()
+        mConnectPlate2 = New ConnectPlateParameter()
 
     End Sub
 
@@ -432,6 +439,8 @@ Public Class Parameters
         mMainChordPlateThickness = 52
 
         mConnectPlate1.SetToMetricDefaults()
+        mConnectPlate2.SetToMetricDefaults()
+
     End Sub
 
     Public Sub SetToImperialDefaults() Implements ISetToDefauts.SetToImperialDefaults
@@ -454,5 +463,7 @@ Public Class Parameters
         mMainChordPlateThickness = 2
 
         mConnectPlate1.SetToImperialDefaults()
+        mConnectPlate2.SetToImperialDefaults()
+
     End Sub
 End Class

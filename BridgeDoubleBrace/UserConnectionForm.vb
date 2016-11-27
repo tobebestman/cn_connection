@@ -274,6 +274,17 @@ Friend Class UserConnectionForm
         Data.mConnectPlate1.innerWebCount = UIConverter.ConvertToNumeric(txtConnect1innerWebCount.Text)
         Data.mConnectPlate1.innerWebDist = UIConverter.ConvertToNumeric(txtConnect1innerWebDist.Text)
 
+        Data.mConnectPlate2.sideDistance = UIConverter.ConvertToNumeric(txtConnect2SideDistance.Text)
+        Data.mConnectPlate2.radius = UIConverter.ConvertToNumeric(txtConnect2Radius.Text)
+        Data.mConnectPlate2.gap = UIConverter.ConvertToNumeric(txtConnect2Gap.Text)
+        Data.mConnectPlate2.length = UIConverter.ConvertToNumeric(txtConnect2Length.Text)
+        Data.mConnectPlate2.width = UIConverter.ConvertToNumeric(txtConnect2Width.Text)
+        Data.mConnectPlate2.thickness = UIConverter.ConvertToNumeric(txtConnect2Thickness.Text)
+        Data.mConnectPlate2.angle = UIConverter.ConvertAngleToNumeric(txtConnect2Angle.Text)
+        Data.mConnectPlate2.innerWebHeight = UIConverter.ConvertToNumeric(txtConnect2InnerWebHeight.Text)
+        Data.mConnectPlate2.innerWebThickness = UIConverter.ConvertToNumeric(txtConnect2innerWebThickness.Text)
+        Data.mConnectPlate2.innerWebCount = UIConverter.ConvertToNumeric(txtConnect2innerWebCount.Text)
+        Data.mConnectPlate2.innerWebDist = UIConverter.ConvertToNumeric(txtConnect2innerWebDist.Text)
     End Sub
 
     Private Sub WriteToDialog(ByRef Data As Parameters)
@@ -308,7 +319,17 @@ Friend Class UserConnectionForm
         txtConnect1innerWebCount.Text = UIConverter.ConvertToText(Data.mConnectPlate1.innerWebCount)
         txtConnect1innerWebDist.Text = UIConverter.ConvertToText(Data.mConnectPlate1.innerWebDist)
 
-
+        txtConnect2SideDistance.Text = UIConverter.ConvertToText(Data.mConnectPlate2.sideDistance)
+        txtConnect2Radius.Text = UIConverter.ConvertToText(Data.mConnectPlate2.radius)
+        txtConnect2Gap.Text = UIConverter.ConvertToText(Data.mConnectPlate2.gap)
+        txtConnect2Length.Text = UIConverter.ConvertToText(Data.mConnectPlate2.length)
+        txtConnect2Width.Text = UIConverter.ConvertToText(Data.mConnectPlate2.width)
+        txtConnect2Thickness.Text = UIConverter.ConvertToText(Data.mConnectPlate2.thickness)
+        txtConnect2Angle.Text = UIConverter.ConvertAngleToText(Data.mConnectPlate2.angle)
+        txtConnect2InnerWebHeight.Text = UIConverter.ConvertToText(Data.mConnectPlate2.innerWebHeight)
+        txtConnect2innerWebThickness.Text = UIConverter.ConvertToText(Data.mConnectPlate2.innerWebThickness)
+        txtConnect2innerWebCount.Text = UIConverter.ConvertToText(Data.mConnectPlate2.innerWebCount)
+        txtConnect2innerWebDist.Text = UIConverter.ConvertToText(Data.mConnectPlate2.innerWebDist)
     End Sub
 
     Public Sub EditData(ByRef ConnId As Long)
@@ -506,20 +527,24 @@ Friend Class UserConnectionForm
     Handles txtPlateThickness.Leave,
             txtConnectCutBack1.Leave, txtConnectCutBack2.Leave,
             txtSupport1CutBack.Leave, txtSupport2CutBack.Leave,
-            txtFillet1.Leave, txtFillet2.Leave
+            txtFillet1.Leave, txtFillet2.Leave, txtConnect2Width.Leave, txtConnect2Thickness.Leave, txtConnect2SideDistance.Leave, txtConnect2Radius.Leave, txtConnect2Length.Leave, txtConnect2innerWebThickness.Leave, txtConnect2InnerWebHeight.Leave, txtConnect2innerWebDist.Leave, txtConnect2innerWebCount.Leave, txtConnect2Gap.Leave, txtConnect1Width.Leave, txtConnect1Thickness.Leave, txtConnect1SideDistance.Leave, txtConnect1Radius.Leave, txtConnect1Length.Leave, txtConnect1innerWebThickness.Leave, txtConnect1InnerWebHeight.Leave, txtConnect1innerWebDist.Leave, txtConnect1innerWebCount.Leave, txtConnect1Gap.Leave, TabPage5.Leave
 
+        Dim oldValue As String = eventSender.Text
         eventSender.Text = oCheckInput.CheckPositive(eventSender.Text)
-        If oCheckInput.OldValue <> eventSender.Text Then
+        If oldValue <> eventSender.Text Then
             UpdateConnection()
         End If
 
     End Sub
 
     Private Sub txtAngle3_Leave(sender As Object, e As EventArgs) Handles _
-        txtAngle4.Leave, txtAngle3.Leave, txtAngle2.Leave, txtAngle1.Leave
+        txtAngle4.Leave, txtAngle3.Leave, txtAngle2.Leave, txtAngle1.Leave, txtConnect2Angle.Leave, txtConnect1Angle.Leave
+
+        Dim oldValue As String = sender.Text
         sender.text = oCheckInput.CheckAngular(sender.text)
-        If (oCheckInput.OldValue <> sender.text) Then
+        If (oldValue <> sender.text) Then
             UpdateConnection()
         End If
+
     End Sub
 End Class
