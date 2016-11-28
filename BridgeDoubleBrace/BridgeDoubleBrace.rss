@@ -22,11 +22,17 @@
 @D0109,"Angle 4",
 @D0110,"Bottom"
 
-@D0111,"Has top column"
+@D0111,"Hole Group 1",
 
-@D0112,"Top"
-@D0113,"Width"
-@D0114,"Dist"
+@D0112,"Hor Side Dist",
+@D0113,"Hor Dist"
+@D0114,"Hor Count"
+
+@D0115,"Ver Side Dist",
+@D0116,"Ver Dist"
+@D0117,"Ver Count"
+
+@D0118,"Hole Group 2",
 
 @D0200,"Hole",
 @D0201,"Distribution in Shape Direction",
@@ -58,7 +64,9 @@
 @D0402,"Support Cut back 2",
 @D0403,"Connect Cut back 1",
 @D0404,"Connect Cut back 2",
-@D0405,"Main Chord Thickness",
+@D0405,"Main Chord Thk",
+@D0406,"Connect Web Thk 1"
+@D0407,"Connect Web Thk 2"
 
 @D0500,"Connect Plate 1",
 @D0501,"Dist",

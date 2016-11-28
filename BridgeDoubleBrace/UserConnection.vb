@@ -623,7 +623,7 @@ Public Class UserConnection
             cutMat.SetCoordinateSystem(cutOrg, cutX, cutY)
 
             Dim cutPoly As PsPolygon = CutArcPolygon()
-            cutPoly.DrawAsPolyline(0, 0, 2)
+            'cutPoly.DrawAsPolyline(0, 0, 2)
 
             Dim cutId As Integer = DoPolyCut(mainPlate, 4 * param.innerWebHeight,
                        MathTool.GetPointInDirection(cutOrg, -cutZ, 2 * param.innerWebHeight),
@@ -1126,14 +1126,13 @@ Public Class UserConnection
 
                     oConnection = RemoveModifications(oConnection)
 
-                    For i As Integer = oConnection.AdditionalEntityCount - 1 To 0 Step -1
-                        Dim id As Long = oConnection.AdditionalObjectId(i)
-                        oEdit.SetObjectId(id)
-                        oEdit.DeleteAllCutPlanes()
-                    Next
+                    'For i As Integer = oConnection.AdditionalEntityCount - 1 To 0 Step -1
+                    '    Dim id As Long = oConnection.AdditionalObjectId(i)
+                    '    oEdit.SetObjectId(id)
+                    '    oEdit.DeleteAllCutPlanes()
+                    'Next
 
                     oConnection.RemoveAllAdditionalEntity(False)
-
 
                     'now remove the new created left/right plate
                     For i As Integer = oConnection.ArrayCreatedEntityCount(0) - 1 To 0 Step -1

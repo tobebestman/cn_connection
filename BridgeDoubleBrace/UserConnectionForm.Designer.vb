@@ -59,7 +59,15 @@
         Me.Picture2 = New System.Windows.Forms.PictureBox()
         Me.picBitmap = New System.Windows.Forms.PictureBox()
         Me.TabStrip1 = New System.Windows.Forms.TabControl()
-        Me.TabPage2 = New System.Windows.Forms.TabPage()
+        Me.TabPageGeneral = New System.Windows.Forms.TabPage()
+        Me.Label34 = New System.Windows.Forms.Label()
+        Me.txtConnect1WebThickness = New System.Windows.Forms.TextBox()
+        Me.Label35 = New System.Windows.Forms.Label()
+        Me.txtConnect2WebThickness = New System.Windows.Forms.TextBox()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.txtConnect1Gap = New System.Windows.Forms.TextBox()
+        Me.Label31 = New System.Windows.Forms.Label()
+        Me.txtConnect2Gap = New System.Windows.Forms.TextBox()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.txtMainChordPlateThickness = New System.Windows.Forms.TextBox()
         Me.Label8 = New System.Windows.Forms.Label()
@@ -70,8 +78,35 @@
         Me.txtConnectCutBack2 = New System.Windows.Forms.TextBox()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.txtConnectCutBack1 = New System.Windows.Forms.TextBox()
-        Me.TabPage1 = New System.Windows.Forms.TabPage()
+        Me.TabPageSidePlate = New System.Windows.Forms.TabPage()
         Me._TabFrames_0 = New System.Windows.Forms.GroupBox()
+        Me.TabControl1 = New System.Windows.Forms.TabControl()
+        Me.TabPageHoleGroup1 = New System.Windows.Forms.TabPage()
+        Me.Label36 = New System.Windows.Forms.Label()
+        Me.txtVerHoleCount1 = New System.Windows.Forms.TextBox()
+        Me.Label37 = New System.Windows.Forms.Label()
+        Me.txtHorHoleCount1 = New System.Windows.Forms.TextBox()
+        Me.Label38 = New System.Windows.Forms.Label()
+        Me.txtVerDist1 = New System.Windows.Forms.TextBox()
+        Me.Label39 = New System.Windows.Forms.Label()
+        Me.txtVerSideDist1 = New System.Windows.Forms.TextBox()
+        Me.Label40 = New System.Windows.Forms.Label()
+        Me.txtHorDist1 = New System.Windows.Forms.TextBox()
+        Me.Label41 = New System.Windows.Forms.Label()
+        Me.txtHorSideDist1 = New System.Windows.Forms.TextBox()
+        Me.TabPageHoleGroup2 = New System.Windows.Forms.TabPage()
+        Me.Label42 = New System.Windows.Forms.Label()
+        Me.txtVerHoleCount2 = New System.Windows.Forms.TextBox()
+        Me.Label43 = New System.Windows.Forms.Label()
+        Me.txtHorHoleCount2 = New System.Windows.Forms.TextBox()
+        Me.Label44 = New System.Windows.Forms.Label()
+        Me.txtVerDist2 = New System.Windows.Forms.TextBox()
+        Me.Label45 = New System.Windows.Forms.Label()
+        Me.txtVerSideDist2 = New System.Windows.Forms.TextBox()
+        Me.Label46 = New System.Windows.Forms.Label()
+        Me.txtHorDist2 = New System.Windows.Forms.TextBox()
+        Me.Label47 = New System.Windows.Forms.Label()
+        Me.txtHorSideDist2 = New System.Windows.Forms.TextBox()
         Me.GroupBottom = New System.Windows.Forms.GroupBox()
         Me.Label10 = New System.Windows.Forms.Label()
         Me.txtAngle4 = New System.Windows.Forms.TextBox()
@@ -87,7 +122,7 @@
         Me.txtFillet1 = New System.Windows.Forms.TextBox()
         Me.lblThick = New System.Windows.Forms.Label()
         Me.txtPlateThickness = New System.Windows.Forms.TextBox()
-        Me.TabPage4 = New System.Windows.Forms.TabPage()
+        Me.TabPageConnPlate1 = New System.Windows.Forms.TabPage()
         Me.Label22 = New System.Windows.Forms.Label()
         Me.txtConnect1Thickness = New System.Windows.Forms.TextBox()
         Me.Label21 = New System.Windows.Forms.Label()
@@ -104,13 +139,11 @@
         Me.txtConnect1Width = New System.Windows.Forms.TextBox()
         Me.Label15 = New System.Windows.Forms.Label()
         Me.txtConnect1Length = New System.Windows.Forms.TextBox()
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.txtConnect1Gap = New System.Windows.Forms.TextBox()
         Me.Label13 = New System.Windows.Forms.Label()
         Me.txtConnect1Radius = New System.Windows.Forms.TextBox()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.txtConnect1SideDistance = New System.Windows.Forms.TextBox()
-        Me.TabPage5 = New System.Windows.Forms.TabPage()
+        Me.TabPageConnPlate2 = New System.Windows.Forms.TabPage()
         Me.Label23 = New System.Windows.Forms.Label()
         Me.txtConnect2Thickness = New System.Windows.Forms.TextBox()
         Me.Label24 = New System.Windows.Forms.Label()
@@ -127,19 +160,10 @@
         Me.txtConnect2Width = New System.Windows.Forms.TextBox()
         Me.Label30 = New System.Windows.Forms.Label()
         Me.txtConnect2Length = New System.Windows.Forms.TextBox()
-        Me.Label31 = New System.Windows.Forms.Label()
-        Me.txtConnect2Gap = New System.Windows.Forms.TextBox()
         Me.Label32 = New System.Windows.Forms.Label()
         Me.txtConnect2Radius = New System.Windows.Forms.TextBox()
         Me.Label33 = New System.Windows.Forms.Label()
         Me.txtConnect2SideDistance = New System.Windows.Forms.TextBox()
-        Me.TabPage3 = New System.Windows.Forms.TabPage()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
-        Me.TabPage7 = New System.Windows.Forms.TabPage()
-        Me.groupBolt = New System.Windows.Forms.GroupBox()
-        Me.lblBoltStyle = New System.Windows.Forms.Label()
-        Me.chkTurnBolts = New System.Windows.Forms.CheckBox()
-        Me.cbBoltStyle = New System.Windows.Forms.ComboBox()
         Me.cmdRollover = New System.Windows.Forms.Button()
         Me.imgBitmaps = New System.Windows.Forms.ImageList(Me.components)
         Me.imgIcons = New System.Windows.Forms.ImageList(Me.components)
@@ -151,15 +175,15 @@
         CType(Me.Picture2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picBitmap, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabStrip1.SuspendLayout()
-        Me.TabPage2.SuspendLayout()
-        Me.TabPage1.SuspendLayout()
+        Me.TabPageGeneral.SuspendLayout()
+        Me.TabPageSidePlate.SuspendLayout()
         Me._TabFrames_0.SuspendLayout()
+        Me.TabControl1.SuspendLayout()
+        Me.TabPageHoleGroup1.SuspendLayout()
+        Me.TabPageHoleGroup2.SuspendLayout()
         Me.GroupBottom.SuspendLayout()
-        Me.TabPage4.SuspendLayout()
-        Me.TabPage5.SuspendLayout()
-        Me.TabPage3.SuspendLayout()
-        Me.TabPage7.SuspendLayout()
-        Me.groupBolt.SuspendLayout()
+        Me.TabPageConnPlate1.SuspendLayout()
+        Me.TabPageConnPlate2.SuspendLayout()
         Me.SuspendLayout()
         '
         'cmdGetLengthFromLine
@@ -320,38 +344,156 @@
         '
         'TabStrip1
         '
-        Me.TabStrip1.Controls.Add(Me.TabPage2)
-        Me.TabStrip1.Controls.Add(Me.TabPage1)
-        Me.TabStrip1.Controls.Add(Me.TabPage4)
-        Me.TabStrip1.Controls.Add(Me.TabPage5)
-        Me.TabStrip1.Controls.Add(Me.TabPage3)
-        Me.TabStrip1.Controls.Add(Me.TabPage7)
-        Me.TabStrip1.Location = New System.Drawing.Point(4, 1)
+        Me.TabStrip1.Controls.Add(Me.TabPageGeneral)
+        Me.TabStrip1.Controls.Add(Me.TabPageSidePlate)
+        Me.TabStrip1.Controls.Add(Me.TabPageConnPlate1)
+        Me.TabStrip1.Controls.Add(Me.TabPageConnPlate2)
+        Me.TabStrip1.Location = New System.Drawing.Point(4, 9)
         Me.TabStrip1.Margin = New System.Windows.Forms.Padding(2)
         Me.TabStrip1.Name = "TabStrip1"
         Me.TabStrip1.SelectedIndex = 0
         Me.TabStrip1.Size = New System.Drawing.Size(416, 307)
         Me.TabStrip1.TabIndex = 0
         '
-        'TabPage2
+        'TabPageGeneral
         '
-        Me.TabPage2.Controls.Add(Me.Label9)
-        Me.TabPage2.Controls.Add(Me.txtMainChordPlateThickness)
-        Me.TabPage2.Controls.Add(Me.Label8)
-        Me.TabPage2.Controls.Add(Me.txtSupport2CutBack)
-        Me.TabPage2.Controls.Add(Me.Label7)
-        Me.TabPage2.Controls.Add(Me.txtSupport1CutBack)
-        Me.TabPage2.Controls.Add(Me.Label3)
-        Me.TabPage2.Controls.Add(Me.txtConnectCutBack2)
-        Me.TabPage2.Controls.Add(Me.Label4)
-        Me.TabPage2.Controls.Add(Me.txtConnectCutBack1)
-        Me.TabPage2.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage2.Name = "TabPage2"
-        Me.TabPage2.Padding = New System.Windows.Forms.Padding(3)
-        Me.TabPage2.Size = New System.Drawing.Size(408, 281)
-        Me.TabPage2.TabIndex = 11
-        Me.TabPage2.Text = "D400'CutBack"
-        Me.TabPage2.UseVisualStyleBackColor = True
+        Me.TabPageGeneral.Controls.Add(Me.Label34)
+        Me.TabPageGeneral.Controls.Add(Me.txtConnect1WebThickness)
+        Me.TabPageGeneral.Controls.Add(Me.Label35)
+        Me.TabPageGeneral.Controls.Add(Me.txtConnect2WebThickness)
+        Me.TabPageGeneral.Controls.Add(Me.Label14)
+        Me.TabPageGeneral.Controls.Add(Me.txtConnect1Gap)
+        Me.TabPageGeneral.Controls.Add(Me.Label31)
+        Me.TabPageGeneral.Controls.Add(Me.txtConnect2Gap)
+        Me.TabPageGeneral.Controls.Add(Me.Label9)
+        Me.TabPageGeneral.Controls.Add(Me.txtMainChordPlateThickness)
+        Me.TabPageGeneral.Controls.Add(Me.Label8)
+        Me.TabPageGeneral.Controls.Add(Me.txtSupport2CutBack)
+        Me.TabPageGeneral.Controls.Add(Me.Label7)
+        Me.TabPageGeneral.Controls.Add(Me.txtSupport1CutBack)
+        Me.TabPageGeneral.Controls.Add(Me.Label3)
+        Me.TabPageGeneral.Controls.Add(Me.txtConnectCutBack2)
+        Me.TabPageGeneral.Controls.Add(Me.Label4)
+        Me.TabPageGeneral.Controls.Add(Me.txtConnectCutBack1)
+        Me.TabPageGeneral.Location = New System.Drawing.Point(4, 22)
+        Me.TabPageGeneral.Name = "TabPageGeneral"
+        Me.TabPageGeneral.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPageGeneral.Size = New System.Drawing.Size(408, 281)
+        Me.TabPageGeneral.TabIndex = 11
+        Me.TabPageGeneral.Text = "D400'CutBack"
+        Me.TabPageGeneral.UseVisualStyleBackColor = True
+        '
+        'Label34
+        '
+        Me.Label34.AutoSize = True
+        Me.Label34.BackColor = System.Drawing.Color.Transparent
+        Me.Label34.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label34.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label34.Location = New System.Drawing.Point(202, 76)
+        Me.Label34.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label34.Name = "Label34"
+        Me.Label34.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label34.Size = New System.Drawing.Size(138, 13)
+        Me.Label34.TabIndex = 137
+        Me.Label34.Text = "D0406'Connect Web Thk 1"
+        '
+        'txtConnect1WebThickness
+        '
+        Me.txtConnect1WebThickness.AcceptsReturn = True
+        Me.txtConnect1WebThickness.BackColor = System.Drawing.SystemColors.Window
+        Me.txtConnect1WebThickness.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtConnect1WebThickness.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtConnect1WebThickness.Location = New System.Drawing.Point(315, 72)
+        Me.txtConnect1WebThickness.Margin = New System.Windows.Forms.Padding(2)
+        Me.txtConnect1WebThickness.MaxLength = 0
+        Me.txtConnect1WebThickness.Name = "txtConnect1WebThickness"
+        Me.txtConnect1WebThickness.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtConnect1WebThickness.Size = New System.Drawing.Size(57, 20)
+        Me.txtConnect1WebThickness.TabIndex = 136
+        '
+        'Label35
+        '
+        Me.Label35.AutoSize = True
+        Me.Label35.BackColor = System.Drawing.Color.Transparent
+        Me.Label35.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label35.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label35.Location = New System.Drawing.Point(202, 108)
+        Me.Label35.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label35.Name = "Label35"
+        Me.Label35.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label35.Size = New System.Drawing.Size(138, 13)
+        Me.Label35.TabIndex = 135
+        Me.Label35.Text = "D0406'Connect Web Thk 2"
+        '
+        'txtConnect2WebThickness
+        '
+        Me.txtConnect2WebThickness.AcceptsReturn = True
+        Me.txtConnect2WebThickness.BackColor = System.Drawing.SystemColors.Window
+        Me.txtConnect2WebThickness.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtConnect2WebThickness.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtConnect2WebThickness.Location = New System.Drawing.Point(315, 104)
+        Me.txtConnect2WebThickness.Margin = New System.Windows.Forms.Padding(2)
+        Me.txtConnect2WebThickness.MaxLength = 0
+        Me.txtConnect2WebThickness.Name = "txtConnect2WebThickness"
+        Me.txtConnect2WebThickness.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtConnect2WebThickness.Size = New System.Drawing.Size(57, 20)
+        Me.txtConnect2WebThickness.TabIndex = 134
+        '
+        'Label14
+        '
+        Me.Label14.AutoSize = True
+        Me.Label14.BackColor = System.Drawing.Color.Transparent
+        Me.Label14.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label14.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label14.Location = New System.Drawing.Point(202, 12)
+        Me.Label14.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label14.Name = "Label14"
+        Me.Label14.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label14.Size = New System.Drawing.Size(61, 13)
+        Me.Label14.TabIndex = 133
+        Me.Label14.Text = "D0503'Gap"
+        '
+        'txtConnect1Gap
+        '
+        Me.txtConnect1Gap.AcceptsReturn = True
+        Me.txtConnect1Gap.BackColor = System.Drawing.SystemColors.Window
+        Me.txtConnect1Gap.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtConnect1Gap.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtConnect1Gap.Location = New System.Drawing.Point(315, 8)
+        Me.txtConnect1Gap.Margin = New System.Windows.Forms.Padding(2)
+        Me.txtConnect1Gap.MaxLength = 0
+        Me.txtConnect1Gap.Name = "txtConnect1Gap"
+        Me.txtConnect1Gap.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtConnect1Gap.Size = New System.Drawing.Size(57, 20)
+        Me.txtConnect1Gap.TabIndex = 132
+        '
+        'Label31
+        '
+        Me.Label31.AutoSize = True
+        Me.Label31.BackColor = System.Drawing.Color.Transparent
+        Me.Label31.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label31.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label31.Location = New System.Drawing.Point(202, 44)
+        Me.Label31.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label31.Name = "Label31"
+        Me.Label31.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label31.Size = New System.Drawing.Size(61, 13)
+        Me.Label31.TabIndex = 131
+        Me.Label31.Text = "D0503'Gap"
+        '
+        'txtConnect2Gap
+        '
+        Me.txtConnect2Gap.AcceptsReturn = True
+        Me.txtConnect2Gap.BackColor = System.Drawing.SystemColors.Window
+        Me.txtConnect2Gap.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtConnect2Gap.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtConnect2Gap.Location = New System.Drawing.Point(315, 40)
+        Me.txtConnect2Gap.Margin = New System.Windows.Forms.Padding(2)
+        Me.txtConnect2Gap.MaxLength = 0
+        Me.txtConnect2Gap.Name = "txtConnect2Gap"
+        Me.txtConnect2Gap.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtConnect2Gap.Size = New System.Drawing.Size(57, 20)
+        Me.txtConnect2Gap.TabIndex = 130
         '
         'Label9
         '
@@ -359,13 +501,13 @@
         Me.Label9.BackColor = System.Drawing.Color.Transparent
         Me.Label9.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label9.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label9.Location = New System.Drawing.Point(193, 12)
+        Me.Label9.Location = New System.Drawing.Point(9, 140)
         Me.Label9.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label9.Name = "Label9"
         Me.Label9.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label9.Size = New System.Drawing.Size(147, 13)
+        Me.Label9.Size = New System.Drawing.Size(117, 13)
         Me.Label9.TabIndex = 101
-        Me.Label9.Text = "D0405'Main Chord Thickness"
+        Me.Label9.Text = "D0405'Main Chord Thk"
         '
         'txtMainChordPlateThickness
         '
@@ -373,7 +515,7 @@
         Me.txtMainChordPlateThickness.BackColor = System.Drawing.SystemColors.Window
         Me.txtMainChordPlateThickness.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtMainChordPlateThickness.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtMainChordPlateThickness.Location = New System.Drawing.Point(315, 10)
+        Me.txtMainChordPlateThickness.Location = New System.Drawing.Point(131, 136)
         Me.txtMainChordPlateThickness.Margin = New System.Windows.Forms.Padding(2)
         Me.txtMainChordPlateThickness.MaxLength = 0
         Me.txtMainChordPlateThickness.Name = "txtMainChordPlateThickness"
@@ -401,7 +543,7 @@
         Me.txtSupport2CutBack.BackColor = System.Drawing.SystemColors.Window
         Me.txtSupport2CutBack.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtSupport2CutBack.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSupport2CutBack.Location = New System.Drawing.Point(112, 40)
+        Me.txtSupport2CutBack.Location = New System.Drawing.Point(131, 40)
         Me.txtSupport2CutBack.Margin = New System.Windows.Forms.Padding(2)
         Me.txtSupport2CutBack.MaxLength = 0
         Me.txtSupport2CutBack.Name = "txtSupport2CutBack"
@@ -429,7 +571,7 @@
         Me.txtSupport1CutBack.BackColor = System.Drawing.SystemColors.Window
         Me.txtSupport1CutBack.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtSupport1CutBack.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtSupport1CutBack.Location = New System.Drawing.Point(112, 8)
+        Me.txtSupport1CutBack.Location = New System.Drawing.Point(131, 8)
         Me.txtSupport1CutBack.Margin = New System.Windows.Forms.Padding(2)
         Me.txtSupport1CutBack.MaxLength = 0
         Me.txtSupport1CutBack.Name = "txtSupport1CutBack"
@@ -443,7 +585,7 @@
         Me.Label3.BackColor = System.Drawing.Color.Transparent
         Me.Label3.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label3.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label3.Location = New System.Drawing.Point(7, 107)
+        Me.Label3.Location = New System.Drawing.Point(9, 108)
         Me.Label3.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label3.Name = "Label3"
         Me.Label3.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -457,7 +599,7 @@
         Me.txtConnectCutBack2.BackColor = System.Drawing.SystemColors.Window
         Me.txtConnectCutBack2.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtConnectCutBack2.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtConnectCutBack2.Location = New System.Drawing.Point(112, 103)
+        Me.txtConnectCutBack2.Location = New System.Drawing.Point(131, 104)
         Me.txtConnectCutBack2.Margin = New System.Windows.Forms.Padding(2)
         Me.txtConnectCutBack2.MaxLength = 0
         Me.txtConnectCutBack2.Name = "txtConnectCutBack2"
@@ -471,7 +613,7 @@
         Me.Label4.BackColor = System.Drawing.Color.Transparent
         Me.Label4.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label4.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label4.Location = New System.Drawing.Point(7, 79)
+        Me.Label4.Location = New System.Drawing.Point(7, 76)
         Me.Label4.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label4.Name = "Label4"
         Me.Label4.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -485,7 +627,7 @@
         Me.txtConnectCutBack1.BackColor = System.Drawing.SystemColors.Window
         Me.txtConnectCutBack1.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtConnectCutBack1.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtConnectCutBack1.Location = New System.Drawing.Point(112, 75)
+        Me.txtConnectCutBack1.Location = New System.Drawing.Point(131, 72)
         Me.txtConnectCutBack1.Margin = New System.Windows.Forms.Padding(2)
         Me.txtConnectCutBack1.MaxLength = 0
         Me.txtConnectCutBack1.Name = "txtConnectCutBack1"
@@ -493,20 +635,21 @@
         Me.txtConnectCutBack1.Size = New System.Drawing.Size(57, 20)
         Me.txtConnectCutBack1.TabIndex = 84
         '
-        'TabPage1
+        'TabPageSidePlate
         '
-        Me.TabPage1.Controls.Add(Me._TabFrames_0)
-        Me.TabPage1.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage1.Margin = New System.Windows.Forms.Padding(2)
-        Me.TabPage1.Name = "TabPage1"
-        Me.TabPage1.Size = New System.Drawing.Size(408, 281)
-        Me.TabPage1.TabIndex = 0
-        Me.TabPage1.Text = "D0100'Side Plate"
-        Me.TabPage1.UseVisualStyleBackColor = True
+        Me.TabPageSidePlate.Controls.Add(Me._TabFrames_0)
+        Me.TabPageSidePlate.Location = New System.Drawing.Point(4, 22)
+        Me.TabPageSidePlate.Margin = New System.Windows.Forms.Padding(2)
+        Me.TabPageSidePlate.Name = "TabPageSidePlate"
+        Me.TabPageSidePlate.Size = New System.Drawing.Size(408, 281)
+        Me.TabPageSidePlate.TabIndex = 0
+        Me.TabPageSidePlate.Text = "D0100'Side Plate"
+        Me.TabPageSidePlate.UseVisualStyleBackColor = True
         '
         '_TabFrames_0
         '
         Me._TabFrames_0.BackColor = System.Drawing.Color.Transparent
+        Me._TabFrames_0.Controls.Add(Me.TabControl1)
         Me._TabFrames_0.Controls.Add(Me.GroupBottom)
         Me._TabFrames_0.Controls.Add(Me.lblThick)
         Me._TabFrames_0.Controls.Add(Me.txtPlateThickness)
@@ -520,6 +663,396 @@
         Me._TabFrames_0.Size = New System.Drawing.Size(408, 281)
         Me._TabFrames_0.TabIndex = 12
         Me._TabFrames_0.TabStop = False
+        '
+        'TabControl1
+        '
+        Me.TabControl1.Controls.Add(Me.TabPageHoleGroup1)
+        Me.TabControl1.Controls.Add(Me.TabPageHoleGroup2)
+        Me.TabControl1.Location = New System.Drawing.Point(5, 139)
+        Me.TabControl1.Name = "TabControl1"
+        Me.TabControl1.SelectedIndex = 0
+        Me.TabControl1.Size = New System.Drawing.Size(398, 137)
+        Me.TabControl1.TabIndex = 13
+        '
+        'TabPageHoleGroup1
+        '
+        Me.TabPageHoleGroup1.Controls.Add(Me.Label36)
+        Me.TabPageHoleGroup1.Controls.Add(Me.txtVerHoleCount1)
+        Me.TabPageHoleGroup1.Controls.Add(Me.Label37)
+        Me.TabPageHoleGroup1.Controls.Add(Me.txtHorHoleCount1)
+        Me.TabPageHoleGroup1.Controls.Add(Me.Label38)
+        Me.TabPageHoleGroup1.Controls.Add(Me.txtVerDist1)
+        Me.TabPageHoleGroup1.Controls.Add(Me.Label39)
+        Me.TabPageHoleGroup1.Controls.Add(Me.txtVerSideDist1)
+        Me.TabPageHoleGroup1.Controls.Add(Me.Label40)
+        Me.TabPageHoleGroup1.Controls.Add(Me.txtHorDist1)
+        Me.TabPageHoleGroup1.Controls.Add(Me.Label41)
+        Me.TabPageHoleGroup1.Controls.Add(Me.txtHorSideDist1)
+        Me.TabPageHoleGroup1.Location = New System.Drawing.Point(4, 22)
+        Me.TabPageHoleGroup1.Name = "TabPageHoleGroup1"
+        Me.TabPageHoleGroup1.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPageHoleGroup1.Size = New System.Drawing.Size(390, 111)
+        Me.TabPageHoleGroup1.TabIndex = 0
+        Me.TabPageHoleGroup1.Text = "D0111'Hole Group 1"
+        Me.TabPageHoleGroup1.UseVisualStyleBackColor = True
+        '
+        'Label36
+        '
+        Me.Label36.AutoSize = True
+        Me.Label36.BackColor = System.Drawing.Color.Transparent
+        Me.Label36.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label36.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label36.Location = New System.Drawing.Point(198, 76)
+        Me.Label36.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label36.Name = "Label36"
+        Me.Label36.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label36.Size = New System.Drawing.Size(88, 13)
+        Me.Label36.TabIndex = 137
+        Me.Label36.Text = "D0117'Ver Count"
+        '
+        'txtVerHoleCount1
+        '
+        Me.txtVerHoleCount1.AcceptsReturn = True
+        Me.txtVerHoleCount1.BackColor = System.Drawing.SystemColors.Window
+        Me.txtVerHoleCount1.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtVerHoleCount1.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtVerHoleCount1.Location = New System.Drawing.Point(299, 72)
+        Me.txtVerHoleCount1.Margin = New System.Windows.Forms.Padding(2)
+        Me.txtVerHoleCount1.MaxLength = 0
+        Me.txtVerHoleCount1.Name = "txtVerHoleCount1"
+        Me.txtVerHoleCount1.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtVerHoleCount1.Size = New System.Drawing.Size(57, 20)
+        Me.txtVerHoleCount1.TabIndex = 136
+        '
+        'Label37
+        '
+        Me.Label37.AutoSize = True
+        Me.Label37.BackColor = System.Drawing.Color.Transparent
+        Me.Label37.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label37.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label37.Location = New System.Drawing.Point(27, 76)
+        Me.Label37.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label37.Name = "Label37"
+        Me.Label37.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label37.Size = New System.Drawing.Size(89, 13)
+        Me.Label37.TabIndex = 135
+        Me.Label37.Text = "D0114'Hor Count"
+        '
+        'txtHorHoleCount1
+        '
+        Me.txtHorHoleCount1.AcceptsReturn = True
+        Me.txtHorHoleCount1.BackColor = System.Drawing.SystemColors.Window
+        Me.txtHorHoleCount1.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtHorHoleCount1.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtHorHoleCount1.Location = New System.Drawing.Point(128, 72)
+        Me.txtHorHoleCount1.Margin = New System.Windows.Forms.Padding(2)
+        Me.txtHorHoleCount1.MaxLength = 0
+        Me.txtHorHoleCount1.Name = "txtHorHoleCount1"
+        Me.txtHorHoleCount1.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtHorHoleCount1.Size = New System.Drawing.Size(57, 20)
+        Me.txtHorHoleCount1.TabIndex = 134
+        '
+        'Label38
+        '
+        Me.Label38.AutoSize = True
+        Me.Label38.BackColor = System.Drawing.Color.Transparent
+        Me.Label38.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label38.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label38.Location = New System.Drawing.Point(198, 49)
+        Me.Label38.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label38.Name = "Label38"
+        Me.Label38.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label38.Size = New System.Drawing.Size(78, 13)
+        Me.Label38.TabIndex = 133
+        Me.Label38.Text = "D0116'Ver Dist"
+        '
+        'txtVerDist1
+        '
+        Me.txtVerDist1.AcceptsReturn = True
+        Me.txtVerDist1.BackColor = System.Drawing.SystemColors.Window
+        Me.txtVerDist1.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtVerDist1.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtVerDist1.Location = New System.Drawing.Point(299, 45)
+        Me.txtVerDist1.Margin = New System.Windows.Forms.Padding(2)
+        Me.txtVerDist1.MaxLength = 0
+        Me.txtVerDist1.Name = "txtVerDist1"
+        Me.txtVerDist1.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtVerDist1.Size = New System.Drawing.Size(57, 20)
+        Me.txtVerDist1.TabIndex = 132
+        '
+        'Label39
+        '
+        Me.Label39.AutoSize = True
+        Me.Label39.BackColor = System.Drawing.Color.Transparent
+        Me.Label39.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label39.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label39.Location = New System.Drawing.Point(198, 22)
+        Me.Label39.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label39.Name = "Label39"
+        Me.Label39.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label39.Size = New System.Drawing.Size(102, 13)
+        Me.Label39.TabIndex = 131
+        Me.Label39.Text = "D0115'Ver Side Dist"
+        '
+        'txtVerSideDist1
+        '
+        Me.txtVerSideDist1.AcceptsReturn = True
+        Me.txtVerSideDist1.BackColor = System.Drawing.SystemColors.Window
+        Me.txtVerSideDist1.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtVerSideDist1.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtVerSideDist1.Location = New System.Drawing.Point(299, 18)
+        Me.txtVerSideDist1.Margin = New System.Windows.Forms.Padding(2)
+        Me.txtVerSideDist1.MaxLength = 0
+        Me.txtVerSideDist1.Name = "txtVerSideDist1"
+        Me.txtVerSideDist1.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtVerSideDist1.Size = New System.Drawing.Size(57, 20)
+        Me.txtVerSideDist1.TabIndex = 130
+        '
+        'Label40
+        '
+        Me.Label40.AutoSize = True
+        Me.Label40.BackColor = System.Drawing.Color.Transparent
+        Me.Label40.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label40.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label40.Location = New System.Drawing.Point(27, 49)
+        Me.Label40.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label40.Name = "Label40"
+        Me.Label40.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label40.Size = New System.Drawing.Size(79, 13)
+        Me.Label40.TabIndex = 129
+        Me.Label40.Text = "D0113'Hor Dist"
+        '
+        'txtHorDist1
+        '
+        Me.txtHorDist1.AcceptsReturn = True
+        Me.txtHorDist1.BackColor = System.Drawing.SystemColors.Window
+        Me.txtHorDist1.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtHorDist1.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtHorDist1.Location = New System.Drawing.Point(128, 45)
+        Me.txtHorDist1.Margin = New System.Windows.Forms.Padding(2)
+        Me.txtHorDist1.MaxLength = 0
+        Me.txtHorDist1.Name = "txtHorDist1"
+        Me.txtHorDist1.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtHorDist1.Size = New System.Drawing.Size(57, 20)
+        Me.txtHorDist1.TabIndex = 128
+        '
+        'Label41
+        '
+        Me.Label41.AutoSize = True
+        Me.Label41.BackColor = System.Drawing.Color.Transparent
+        Me.Label41.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label41.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label41.Location = New System.Drawing.Point(27, 22)
+        Me.Label41.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label41.Name = "Label41"
+        Me.Label41.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label41.Size = New System.Drawing.Size(103, 13)
+        Me.Label41.TabIndex = 127
+        Me.Label41.Text = "D0112'Hor Side Dist"
+        '
+        'txtHorSideDist1
+        '
+        Me.txtHorSideDist1.AcceptsReturn = True
+        Me.txtHorSideDist1.BackColor = System.Drawing.SystemColors.Window
+        Me.txtHorSideDist1.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtHorSideDist1.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtHorSideDist1.Location = New System.Drawing.Point(128, 18)
+        Me.txtHorSideDist1.Margin = New System.Windows.Forms.Padding(2)
+        Me.txtHorSideDist1.MaxLength = 0
+        Me.txtHorSideDist1.Name = "txtHorSideDist1"
+        Me.txtHorSideDist1.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtHorSideDist1.Size = New System.Drawing.Size(57, 20)
+        Me.txtHorSideDist1.TabIndex = 126
+        '
+        'TabPageHoleGroup2
+        '
+        Me.TabPageHoleGroup2.Controls.Add(Me.Label42)
+        Me.TabPageHoleGroup2.Controls.Add(Me.txtVerHoleCount2)
+        Me.TabPageHoleGroup2.Controls.Add(Me.Label43)
+        Me.TabPageHoleGroup2.Controls.Add(Me.txtHorHoleCount2)
+        Me.TabPageHoleGroup2.Controls.Add(Me.Label44)
+        Me.TabPageHoleGroup2.Controls.Add(Me.txtVerDist2)
+        Me.TabPageHoleGroup2.Controls.Add(Me.Label45)
+        Me.TabPageHoleGroup2.Controls.Add(Me.txtVerSideDist2)
+        Me.TabPageHoleGroup2.Controls.Add(Me.Label46)
+        Me.TabPageHoleGroup2.Controls.Add(Me.txtHorDist2)
+        Me.TabPageHoleGroup2.Controls.Add(Me.Label47)
+        Me.TabPageHoleGroup2.Controls.Add(Me.txtHorSideDist2)
+        Me.TabPageHoleGroup2.Location = New System.Drawing.Point(4, 22)
+        Me.TabPageHoleGroup2.Name = "TabPageHoleGroup2"
+        Me.TabPageHoleGroup2.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPageHoleGroup2.Size = New System.Drawing.Size(390, 111)
+        Me.TabPageHoleGroup2.TabIndex = 1
+        Me.TabPageHoleGroup2.Text = "D0118'Hole Group 1"
+        Me.TabPageHoleGroup2.UseVisualStyleBackColor = True
+        '
+        'Label42
+        '
+        Me.Label42.AutoSize = True
+        Me.Label42.BackColor = System.Drawing.Color.Transparent
+        Me.Label42.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label42.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label42.Location = New System.Drawing.Point(198, 76)
+        Me.Label42.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label42.Name = "Label42"
+        Me.Label42.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label42.Size = New System.Drawing.Size(88, 13)
+        Me.Label42.TabIndex = 149
+        Me.Label42.Text = "D0117'Ver Count"
+        '
+        'txtVerHoleCount2
+        '
+        Me.txtVerHoleCount2.AcceptsReturn = True
+        Me.txtVerHoleCount2.BackColor = System.Drawing.SystemColors.Window
+        Me.txtVerHoleCount2.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtVerHoleCount2.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtVerHoleCount2.Location = New System.Drawing.Point(299, 72)
+        Me.txtVerHoleCount2.Margin = New System.Windows.Forms.Padding(2)
+        Me.txtVerHoleCount2.MaxLength = 0
+        Me.txtVerHoleCount2.Name = "txtVerHoleCount2"
+        Me.txtVerHoleCount2.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtVerHoleCount2.Size = New System.Drawing.Size(57, 20)
+        Me.txtVerHoleCount2.TabIndex = 148
+        '
+        'Label43
+        '
+        Me.Label43.AutoSize = True
+        Me.Label43.BackColor = System.Drawing.Color.Transparent
+        Me.Label43.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label43.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label43.Location = New System.Drawing.Point(27, 76)
+        Me.Label43.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label43.Name = "Label43"
+        Me.Label43.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label43.Size = New System.Drawing.Size(89, 13)
+        Me.Label43.TabIndex = 147
+        Me.Label43.Text = "D0114'Hor Count"
+        '
+        'txtHorHoleCount2
+        '
+        Me.txtHorHoleCount2.AcceptsReturn = True
+        Me.txtHorHoleCount2.BackColor = System.Drawing.SystemColors.Window
+        Me.txtHorHoleCount2.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtHorHoleCount2.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtHorHoleCount2.Location = New System.Drawing.Point(128, 72)
+        Me.txtHorHoleCount2.Margin = New System.Windows.Forms.Padding(2)
+        Me.txtHorHoleCount2.MaxLength = 0
+        Me.txtHorHoleCount2.Name = "txtHorHoleCount2"
+        Me.txtHorHoleCount2.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtHorHoleCount2.Size = New System.Drawing.Size(57, 20)
+        Me.txtHorHoleCount2.TabIndex = 146
+        '
+        'Label44
+        '
+        Me.Label44.AutoSize = True
+        Me.Label44.BackColor = System.Drawing.Color.Transparent
+        Me.Label44.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label44.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label44.Location = New System.Drawing.Point(198, 49)
+        Me.Label44.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label44.Name = "Label44"
+        Me.Label44.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label44.Size = New System.Drawing.Size(78, 13)
+        Me.Label44.TabIndex = 145
+        Me.Label44.Text = "D0116'Ver Dist"
+        '
+        'txtVerDist2
+        '
+        Me.txtVerDist2.AcceptsReturn = True
+        Me.txtVerDist2.BackColor = System.Drawing.SystemColors.Window
+        Me.txtVerDist2.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtVerDist2.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtVerDist2.Location = New System.Drawing.Point(299, 45)
+        Me.txtVerDist2.Margin = New System.Windows.Forms.Padding(2)
+        Me.txtVerDist2.MaxLength = 0
+        Me.txtVerDist2.Name = "txtVerDist2"
+        Me.txtVerDist2.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtVerDist2.Size = New System.Drawing.Size(57, 20)
+        Me.txtVerDist2.TabIndex = 144
+        '
+        'Label45
+        '
+        Me.Label45.AutoSize = True
+        Me.Label45.BackColor = System.Drawing.Color.Transparent
+        Me.Label45.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label45.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label45.Location = New System.Drawing.Point(198, 22)
+        Me.Label45.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label45.Name = "Label45"
+        Me.Label45.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label45.Size = New System.Drawing.Size(102, 13)
+        Me.Label45.TabIndex = 143
+        Me.Label45.Text = "D0115'Ver Side Dist"
+        '
+        'txtVerSideDist2
+        '
+        Me.txtVerSideDist2.AcceptsReturn = True
+        Me.txtVerSideDist2.BackColor = System.Drawing.SystemColors.Window
+        Me.txtVerSideDist2.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtVerSideDist2.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtVerSideDist2.Location = New System.Drawing.Point(299, 18)
+        Me.txtVerSideDist2.Margin = New System.Windows.Forms.Padding(2)
+        Me.txtVerSideDist2.MaxLength = 0
+        Me.txtVerSideDist2.Name = "txtVerSideDist2"
+        Me.txtVerSideDist2.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtVerSideDist2.Size = New System.Drawing.Size(57, 20)
+        Me.txtVerSideDist2.TabIndex = 142
+        '
+        'Label46
+        '
+        Me.Label46.AutoSize = True
+        Me.Label46.BackColor = System.Drawing.Color.Transparent
+        Me.Label46.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label46.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label46.Location = New System.Drawing.Point(27, 49)
+        Me.Label46.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label46.Name = "Label46"
+        Me.Label46.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label46.Size = New System.Drawing.Size(79, 13)
+        Me.Label46.TabIndex = 141
+        Me.Label46.Text = "D0113'Hor Dist"
+        '
+        'txtHorDist2
+        '
+        Me.txtHorDist2.AcceptsReturn = True
+        Me.txtHorDist2.BackColor = System.Drawing.SystemColors.Window
+        Me.txtHorDist2.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtHorDist2.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtHorDist2.Location = New System.Drawing.Point(128, 45)
+        Me.txtHorDist2.Margin = New System.Windows.Forms.Padding(2)
+        Me.txtHorDist2.MaxLength = 0
+        Me.txtHorDist2.Name = "txtHorDist2"
+        Me.txtHorDist2.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtHorDist2.Size = New System.Drawing.Size(57, 20)
+        Me.txtHorDist2.TabIndex = 140
+        '
+        'Label47
+        '
+        Me.Label47.AutoSize = True
+        Me.Label47.BackColor = System.Drawing.Color.Transparent
+        Me.Label47.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label47.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label47.Location = New System.Drawing.Point(27, 22)
+        Me.Label47.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label47.Name = "Label47"
+        Me.Label47.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label47.Size = New System.Drawing.Size(103, 13)
+        Me.Label47.TabIndex = 139
+        Me.Label47.Text = "D0112'Hor Side Dist"
+        '
+        'txtHorSideDist2
+        '
+        Me.txtHorSideDist2.AcceptsReturn = True
+        Me.txtHorSideDist2.BackColor = System.Drawing.SystemColors.Window
+        Me.txtHorSideDist2.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtHorSideDist2.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtHorSideDist2.Location = New System.Drawing.Point(128, 18)
+        Me.txtHorSideDist2.Margin = New System.Windows.Forms.Padding(2)
+        Me.txtHorSideDist2.MaxLength = 0
+        Me.txtHorSideDist2.Name = "txtHorSideDist2"
+        Me.txtHorSideDist2.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtHorSideDist2.Size = New System.Drawing.Size(57, 20)
+        Me.txtHorSideDist2.TabIndex = 138
         '
         'GroupBottom
         '
@@ -535,11 +1068,11 @@
         Me.GroupBottom.Controls.Add(Me.txtAngle1)
         Me.GroupBottom.Controls.Add(Me.Label1)
         Me.GroupBottom.Controls.Add(Me.txtFillet1)
-        Me.GroupBottom.Location = New System.Drawing.Point(15, 39)
+        Me.GroupBottom.Location = New System.Drawing.Point(5, 36)
         Me.GroupBottom.Margin = New System.Windows.Forms.Padding(2)
         Me.GroupBottom.Name = "GroupBottom"
         Me.GroupBottom.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBottom.Size = New System.Drawing.Size(381, 106)
+        Me.GroupBottom.Size = New System.Drawing.Size(399, 98)
         Me.GroupBottom.TabIndex = 100
         Me.GroupBottom.TabStop = False
         Me.GroupBottom.Text = "D0110'Bottom"
@@ -564,7 +1097,7 @@
         Me.txtAngle4.BackColor = System.Drawing.SystemColors.Window
         Me.txtAngle4.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtAngle4.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtAngle4.Location = New System.Drawing.Point(299, 74)
+        Me.txtAngle4.Location = New System.Drawing.Point(299, 72)
         Me.txtAngle4.Margin = New System.Windows.Forms.Padding(2)
         Me.txtAngle4.MaxLength = 0
         Me.txtAngle4.Name = "txtAngle4"
@@ -592,7 +1125,7 @@
         Me.txtAngle3.BackColor = System.Drawing.SystemColors.Window
         Me.txtAngle3.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtAngle3.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtAngle3.Location = New System.Drawing.Point(128, 74)
+        Me.txtAngle3.Location = New System.Drawing.Point(128, 72)
         Me.txtAngle3.Margin = New System.Windows.Forms.Padding(2)
         Me.txtAngle3.MaxLength = 0
         Me.txtAngle3.Name = "txtAngle3"
@@ -620,7 +1153,7 @@
         Me.txtAngle2.BackColor = System.Drawing.SystemColors.Window
         Me.txtAngle2.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtAngle2.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtAngle2.Location = New System.Drawing.Point(299, 47)
+        Me.txtAngle2.Location = New System.Drawing.Point(299, 45)
         Me.txtAngle2.Margin = New System.Windows.Forms.Padding(2)
         Me.txtAngle2.MaxLength = 0
         Me.txtAngle2.Name = "txtAngle2"
@@ -648,7 +1181,7 @@
         Me.txtFillet2.BackColor = System.Drawing.SystemColors.Window
         Me.txtFillet2.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtFillet2.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtFillet2.Location = New System.Drawing.Point(299, 20)
+        Me.txtFillet2.Location = New System.Drawing.Point(299, 18)
         Me.txtFillet2.Margin = New System.Windows.Forms.Padding(2)
         Me.txtFillet2.MaxLength = 0
         Me.txtFillet2.Name = "txtFillet2"
@@ -676,7 +1209,7 @@
         Me.txtAngle1.BackColor = System.Drawing.SystemColors.Window
         Me.txtAngle1.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtAngle1.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtAngle1.Location = New System.Drawing.Point(128, 47)
+        Me.txtAngle1.Location = New System.Drawing.Point(128, 45)
         Me.txtAngle1.Margin = New System.Windows.Forms.Padding(2)
         Me.txtAngle1.MaxLength = 0
         Me.txtAngle1.Name = "txtAngle1"
@@ -704,7 +1237,7 @@
         Me.txtFillet1.BackColor = System.Drawing.SystemColors.Window
         Me.txtFillet1.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtFillet1.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtFillet1.Location = New System.Drawing.Point(128, 20)
+        Me.txtFillet1.Location = New System.Drawing.Point(128, 18)
         Me.txtFillet1.Margin = New System.Windows.Forms.Padding(2)
         Me.txtFillet1.MaxLength = 0
         Me.txtFillet1.Name = "txtFillet1"
@@ -718,7 +1251,7 @@
         Me.lblThick.BackColor = System.Drawing.Color.Transparent
         Me.lblThick.Cursor = System.Windows.Forms.Cursors.Default
         Me.lblThick.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblThick.Location = New System.Drawing.Point(12, 16)
+        Me.lblThick.Location = New System.Drawing.Point(15, 16)
         Me.lblThick.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.lblThick.Name = "lblThick"
         Me.lblThick.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -732,7 +1265,7 @@
         Me.txtPlateThickness.BackColor = System.Drawing.SystemColors.Window
         Me.txtPlateThickness.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtPlateThickness.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtPlateThickness.Location = New System.Drawing.Point(113, 12)
+        Me.txtPlateThickness.Location = New System.Drawing.Point(128, 12)
         Me.txtPlateThickness.Margin = New System.Windows.Forms.Padding(2)
         Me.txtPlateThickness.MaxLength = 0
         Me.txtPlateThickness.Name = "txtPlateThickness"
@@ -740,36 +1273,34 @@
         Me.txtPlateThickness.Size = New System.Drawing.Size(57, 20)
         Me.txtPlateThickness.TabIndex = 76
         '
-        'TabPage4
+        'TabPageConnPlate1
         '
-        Me.TabPage4.Controls.Add(Me.Label22)
-        Me.TabPage4.Controls.Add(Me.txtConnect1Thickness)
-        Me.TabPage4.Controls.Add(Me.Label21)
-        Me.TabPage4.Controls.Add(Me.txtConnect1Angle)
-        Me.TabPage4.Controls.Add(Me.Label20)
-        Me.TabPage4.Controls.Add(Me.txtConnect1innerWebDist)
-        Me.TabPage4.Controls.Add(Me.Label19)
-        Me.TabPage4.Controls.Add(Me.txtConnect1innerWebCount)
-        Me.TabPage4.Controls.Add(Me.Label18)
-        Me.TabPage4.Controls.Add(Me.txtConnect1innerWebThickness)
-        Me.TabPage4.Controls.Add(Me.Label17)
-        Me.TabPage4.Controls.Add(Me.txtConnect1InnerWebHeight)
-        Me.TabPage4.Controls.Add(Me.Label16)
-        Me.TabPage4.Controls.Add(Me.txtConnect1Width)
-        Me.TabPage4.Controls.Add(Me.Label15)
-        Me.TabPage4.Controls.Add(Me.txtConnect1Length)
-        Me.TabPage4.Controls.Add(Me.Label14)
-        Me.TabPage4.Controls.Add(Me.txtConnect1Gap)
-        Me.TabPage4.Controls.Add(Me.Label13)
-        Me.TabPage4.Controls.Add(Me.txtConnect1Radius)
-        Me.TabPage4.Controls.Add(Me.Label11)
-        Me.TabPage4.Controls.Add(Me.txtConnect1SideDistance)
-        Me.TabPage4.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage4.Name = "TabPage4"
-        Me.TabPage4.Size = New System.Drawing.Size(408, 281)
-        Me.TabPage4.TabIndex = 12
-        Me.TabPage4.Text = "D0500'Connect Plate 1"
-        Me.TabPage4.UseVisualStyleBackColor = True
+        Me.TabPageConnPlate1.Controls.Add(Me.Label22)
+        Me.TabPageConnPlate1.Controls.Add(Me.txtConnect1Thickness)
+        Me.TabPageConnPlate1.Controls.Add(Me.Label21)
+        Me.TabPageConnPlate1.Controls.Add(Me.txtConnect1Angle)
+        Me.TabPageConnPlate1.Controls.Add(Me.Label20)
+        Me.TabPageConnPlate1.Controls.Add(Me.txtConnect1innerWebDist)
+        Me.TabPageConnPlate1.Controls.Add(Me.Label19)
+        Me.TabPageConnPlate1.Controls.Add(Me.txtConnect1innerWebCount)
+        Me.TabPageConnPlate1.Controls.Add(Me.Label18)
+        Me.TabPageConnPlate1.Controls.Add(Me.txtConnect1innerWebThickness)
+        Me.TabPageConnPlate1.Controls.Add(Me.Label17)
+        Me.TabPageConnPlate1.Controls.Add(Me.txtConnect1InnerWebHeight)
+        Me.TabPageConnPlate1.Controls.Add(Me.Label16)
+        Me.TabPageConnPlate1.Controls.Add(Me.txtConnect1Width)
+        Me.TabPageConnPlate1.Controls.Add(Me.Label15)
+        Me.TabPageConnPlate1.Controls.Add(Me.txtConnect1Length)
+        Me.TabPageConnPlate1.Controls.Add(Me.Label13)
+        Me.TabPageConnPlate1.Controls.Add(Me.txtConnect1Radius)
+        Me.TabPageConnPlate1.Controls.Add(Me.Label11)
+        Me.TabPageConnPlate1.Controls.Add(Me.txtConnect1SideDistance)
+        Me.TabPageConnPlate1.Location = New System.Drawing.Point(4, 22)
+        Me.TabPageConnPlate1.Name = "TabPageConnPlate1"
+        Me.TabPageConnPlate1.Size = New System.Drawing.Size(408, 281)
+        Me.TabPageConnPlate1.TabIndex = 12
+        Me.TabPageConnPlate1.Text = "D0500'Connect Plate 1"
+        Me.TabPageConnPlate1.UseVisualStyleBackColor = True
         '
         'Label22
         '
@@ -777,7 +1308,7 @@
         Me.Label22.BackColor = System.Drawing.Color.Transparent
         Me.Label22.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label22.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label22.Location = New System.Drawing.Point(9, 176)
+        Me.Label22.Location = New System.Drawing.Point(9, 143)
         Me.Label22.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label22.Name = "Label22"
         Me.Label22.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -791,7 +1322,7 @@
         Me.txtConnect1Thickness.BackColor = System.Drawing.SystemColors.Window
         Me.txtConnect1Thickness.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtConnect1Thickness.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtConnect1Thickness.Location = New System.Drawing.Point(113, 174)
+        Me.txtConnect1Thickness.Location = New System.Drawing.Point(113, 141)
         Me.txtConnect1Thickness.Margin = New System.Windows.Forms.Padding(2)
         Me.txtConnect1Thickness.MaxLength = 0
         Me.txtConnect1Thickness.Name = "txtConnect1Thickness"
@@ -805,7 +1336,7 @@
         Me.Label21.BackColor = System.Drawing.Color.Transparent
         Me.Label21.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label21.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label21.Location = New System.Drawing.Point(9, 211)
+        Me.Label21.Location = New System.Drawing.Point(9, 178)
         Me.Label21.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label21.Name = "Label21"
         Me.Label21.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -819,7 +1350,7 @@
         Me.txtConnect1Angle.BackColor = System.Drawing.SystemColors.Window
         Me.txtConnect1Angle.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtConnect1Angle.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtConnect1Angle.Location = New System.Drawing.Point(113, 209)
+        Me.txtConnect1Angle.Location = New System.Drawing.Point(113, 176)
         Me.txtConnect1Angle.Margin = New System.Windows.Forms.Padding(2)
         Me.txtConnect1Angle.MaxLength = 0
         Me.txtConnect1Angle.Name = "txtConnect1Angle"
@@ -945,7 +1476,7 @@
         Me.Label16.BackColor = System.Drawing.Color.Transparent
         Me.Label16.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label16.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label16.Location = New System.Drawing.Point(9, 139)
+        Me.Label16.Location = New System.Drawing.Point(9, 106)
         Me.Label16.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label16.Name = "Label16"
         Me.Label16.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -959,7 +1490,7 @@
         Me.txtConnect1Width.BackColor = System.Drawing.SystemColors.Window
         Me.txtConnect1Width.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtConnect1Width.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtConnect1Width.Location = New System.Drawing.Point(113, 137)
+        Me.txtConnect1Width.Location = New System.Drawing.Point(113, 104)
         Me.txtConnect1Width.Margin = New System.Windows.Forms.Padding(2)
         Me.txtConnect1Width.MaxLength = 0
         Me.txtConnect1Width.Name = "txtConnect1Width"
@@ -973,7 +1504,7 @@
         Me.Label15.BackColor = System.Drawing.Color.Transparent
         Me.Label15.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label15.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label15.Location = New System.Drawing.Point(9, 106)
+        Me.Label15.Location = New System.Drawing.Point(9, 73)
         Me.Label15.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label15.Name = "Label15"
         Me.Label15.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -987,41 +1518,13 @@
         Me.txtConnect1Length.BackColor = System.Drawing.SystemColors.Window
         Me.txtConnect1Length.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtConnect1Length.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtConnect1Length.Location = New System.Drawing.Point(113, 104)
+        Me.txtConnect1Length.Location = New System.Drawing.Point(113, 71)
         Me.txtConnect1Length.Margin = New System.Windows.Forms.Padding(2)
         Me.txtConnect1Length.MaxLength = 0
         Me.txtConnect1Length.Name = "txtConnect1Length"
         Me.txtConnect1Length.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.txtConnect1Length.Size = New System.Drawing.Size(57, 20)
         Me.txtConnect1Length.TabIndex = 108
-        '
-        'Label14
-        '
-        Me.Label14.AutoSize = True
-        Me.Label14.BackColor = System.Drawing.Color.Transparent
-        Me.Label14.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label14.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label14.Location = New System.Drawing.Point(9, 71)
-        Me.Label14.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.Label14.Name = "Label14"
-        Me.Label14.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label14.Size = New System.Drawing.Size(61, 13)
-        Me.Label14.TabIndex = 107
-        Me.Label14.Text = "D0503'Gap"
-        '
-        'txtConnect1Gap
-        '
-        Me.txtConnect1Gap.AcceptsReturn = True
-        Me.txtConnect1Gap.BackColor = System.Drawing.SystemColors.Window
-        Me.txtConnect1Gap.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.txtConnect1Gap.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtConnect1Gap.Location = New System.Drawing.Point(113, 70)
-        Me.txtConnect1Gap.Margin = New System.Windows.Forms.Padding(2)
-        Me.txtConnect1Gap.MaxLength = 0
-        Me.txtConnect1Gap.Name = "txtConnect1Gap"
-        Me.txtConnect1Gap.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtConnect1Gap.Size = New System.Drawing.Size(57, 20)
-        Me.txtConnect1Gap.TabIndex = 106
         '
         'Label13
         '
@@ -1079,36 +1582,34 @@
         Me.txtConnect1SideDistance.Size = New System.Drawing.Size(57, 20)
         Me.txtConnect1SideDistance.TabIndex = 102
         '
-        'TabPage5
+        'TabPageConnPlate2
         '
-        Me.TabPage5.Controls.Add(Me.Label23)
-        Me.TabPage5.Controls.Add(Me.txtConnect2Thickness)
-        Me.TabPage5.Controls.Add(Me.Label24)
-        Me.TabPage5.Controls.Add(Me.txtConnect2Angle)
-        Me.TabPage5.Controls.Add(Me.Label25)
-        Me.TabPage5.Controls.Add(Me.txtConnect2innerWebDist)
-        Me.TabPage5.Controls.Add(Me.Label26)
-        Me.TabPage5.Controls.Add(Me.txtConnect2innerWebCount)
-        Me.TabPage5.Controls.Add(Me.Label27)
-        Me.TabPage5.Controls.Add(Me.txtConnect2innerWebThickness)
-        Me.TabPage5.Controls.Add(Me.Label28)
-        Me.TabPage5.Controls.Add(Me.txtConnect2InnerWebHeight)
-        Me.TabPage5.Controls.Add(Me.Label29)
-        Me.TabPage5.Controls.Add(Me.txtConnect2Width)
-        Me.TabPage5.Controls.Add(Me.Label30)
-        Me.TabPage5.Controls.Add(Me.txtConnect2Length)
-        Me.TabPage5.Controls.Add(Me.Label31)
-        Me.TabPage5.Controls.Add(Me.txtConnect2Gap)
-        Me.TabPage5.Controls.Add(Me.Label32)
-        Me.TabPage5.Controls.Add(Me.txtConnect2Radius)
-        Me.TabPage5.Controls.Add(Me.Label33)
-        Me.TabPage5.Controls.Add(Me.txtConnect2SideDistance)
-        Me.TabPage5.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage5.Name = "TabPage5"
-        Me.TabPage5.Size = New System.Drawing.Size(408, 281)
-        Me.TabPage5.TabIndex = 13
-        Me.TabPage5.Text = "D0600'Connect Plate 2"
-        Me.TabPage5.UseVisualStyleBackColor = True
+        Me.TabPageConnPlate2.Controls.Add(Me.Label23)
+        Me.TabPageConnPlate2.Controls.Add(Me.txtConnect2Thickness)
+        Me.TabPageConnPlate2.Controls.Add(Me.Label24)
+        Me.TabPageConnPlate2.Controls.Add(Me.txtConnect2Angle)
+        Me.TabPageConnPlate2.Controls.Add(Me.Label25)
+        Me.TabPageConnPlate2.Controls.Add(Me.txtConnect2innerWebDist)
+        Me.TabPageConnPlate2.Controls.Add(Me.Label26)
+        Me.TabPageConnPlate2.Controls.Add(Me.txtConnect2innerWebCount)
+        Me.TabPageConnPlate2.Controls.Add(Me.Label27)
+        Me.TabPageConnPlate2.Controls.Add(Me.txtConnect2innerWebThickness)
+        Me.TabPageConnPlate2.Controls.Add(Me.Label28)
+        Me.TabPageConnPlate2.Controls.Add(Me.txtConnect2InnerWebHeight)
+        Me.TabPageConnPlate2.Controls.Add(Me.Label29)
+        Me.TabPageConnPlate2.Controls.Add(Me.txtConnect2Width)
+        Me.TabPageConnPlate2.Controls.Add(Me.Label30)
+        Me.TabPageConnPlate2.Controls.Add(Me.txtConnect2Length)
+        Me.TabPageConnPlate2.Controls.Add(Me.Label32)
+        Me.TabPageConnPlate2.Controls.Add(Me.txtConnect2Radius)
+        Me.TabPageConnPlate2.Controls.Add(Me.Label33)
+        Me.TabPageConnPlate2.Controls.Add(Me.txtConnect2SideDistance)
+        Me.TabPageConnPlate2.Location = New System.Drawing.Point(4, 22)
+        Me.TabPageConnPlate2.Name = "TabPageConnPlate2"
+        Me.TabPageConnPlate2.Size = New System.Drawing.Size(408, 281)
+        Me.TabPageConnPlate2.TabIndex = 13
+        Me.TabPageConnPlate2.Text = "D0600'Connect Plate 2"
+        Me.TabPageConnPlate2.UseVisualStyleBackColor = True
         '
         'Label23
         '
@@ -1116,7 +1617,7 @@
         Me.Label23.BackColor = System.Drawing.Color.Transparent
         Me.Label23.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label23.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label23.Location = New System.Drawing.Point(9, 176)
+        Me.Label23.Location = New System.Drawing.Point(9, 143)
         Me.Label23.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label23.Name = "Label23"
         Me.Label23.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -1130,7 +1631,7 @@
         Me.txtConnect2Thickness.BackColor = System.Drawing.SystemColors.Window
         Me.txtConnect2Thickness.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtConnect2Thickness.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtConnect2Thickness.Location = New System.Drawing.Point(113, 174)
+        Me.txtConnect2Thickness.Location = New System.Drawing.Point(113, 141)
         Me.txtConnect2Thickness.Margin = New System.Windows.Forms.Padding(2)
         Me.txtConnect2Thickness.MaxLength = 0
         Me.txtConnect2Thickness.Name = "txtConnect2Thickness"
@@ -1144,7 +1645,7 @@
         Me.Label24.BackColor = System.Drawing.Color.Transparent
         Me.Label24.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label24.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label24.Location = New System.Drawing.Point(9, 211)
+        Me.Label24.Location = New System.Drawing.Point(9, 178)
         Me.Label24.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label24.Name = "Label24"
         Me.Label24.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -1158,7 +1659,7 @@
         Me.txtConnect2Angle.BackColor = System.Drawing.SystemColors.Window
         Me.txtConnect2Angle.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtConnect2Angle.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtConnect2Angle.Location = New System.Drawing.Point(113, 209)
+        Me.txtConnect2Angle.Location = New System.Drawing.Point(113, 176)
         Me.txtConnect2Angle.Margin = New System.Windows.Forms.Padding(2)
         Me.txtConnect2Angle.MaxLength = 0
         Me.txtConnect2Angle.Name = "txtConnect2Angle"
@@ -1284,7 +1785,7 @@
         Me.Label29.BackColor = System.Drawing.Color.Transparent
         Me.Label29.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label29.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label29.Location = New System.Drawing.Point(9, 139)
+        Me.Label29.Location = New System.Drawing.Point(9, 106)
         Me.Label29.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label29.Name = "Label29"
         Me.Label29.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -1298,7 +1799,7 @@
         Me.txtConnect2Width.BackColor = System.Drawing.SystemColors.Window
         Me.txtConnect2Width.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtConnect2Width.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtConnect2Width.Location = New System.Drawing.Point(113, 137)
+        Me.txtConnect2Width.Location = New System.Drawing.Point(113, 104)
         Me.txtConnect2Width.Margin = New System.Windows.Forms.Padding(2)
         Me.txtConnect2Width.MaxLength = 0
         Me.txtConnect2Width.Name = "txtConnect2Width"
@@ -1312,7 +1813,7 @@
         Me.Label30.BackColor = System.Drawing.Color.Transparent
         Me.Label30.Cursor = System.Windows.Forms.Cursors.Default
         Me.Label30.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label30.Location = New System.Drawing.Point(9, 106)
+        Me.Label30.Location = New System.Drawing.Point(9, 73)
         Me.Label30.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
         Me.Label30.Name = "Label30"
         Me.Label30.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -1326,41 +1827,13 @@
         Me.txtConnect2Length.BackColor = System.Drawing.SystemColors.Window
         Me.txtConnect2Length.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtConnect2Length.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtConnect2Length.Location = New System.Drawing.Point(113, 104)
+        Me.txtConnect2Length.Location = New System.Drawing.Point(113, 71)
         Me.txtConnect2Length.Margin = New System.Windows.Forms.Padding(2)
         Me.txtConnect2Length.MaxLength = 0
         Me.txtConnect2Length.Name = "txtConnect2Length"
         Me.txtConnect2Length.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.txtConnect2Length.Size = New System.Drawing.Size(57, 20)
         Me.txtConnect2Length.TabIndex = 130
-        '
-        'Label31
-        '
-        Me.Label31.AutoSize = True
-        Me.Label31.BackColor = System.Drawing.Color.Transparent
-        Me.Label31.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label31.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label31.Location = New System.Drawing.Point(9, 71)
-        Me.Label31.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.Label31.Name = "Label31"
-        Me.Label31.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label31.Size = New System.Drawing.Size(61, 13)
-        Me.Label31.TabIndex = 129
-        Me.Label31.Text = "D0503'Gap"
-        '
-        'txtConnect2Gap
-        '
-        Me.txtConnect2Gap.AcceptsReturn = True
-        Me.txtConnect2Gap.BackColor = System.Drawing.SystemColors.Window
-        Me.txtConnect2Gap.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.txtConnect2Gap.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtConnect2Gap.Location = New System.Drawing.Point(113, 70)
-        Me.txtConnect2Gap.Margin = New System.Windows.Forms.Padding(2)
-        Me.txtConnect2Gap.MaxLength = 0
-        Me.txtConnect2Gap.Name = "txtConnect2Gap"
-        Me.txtConnect2Gap.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtConnect2Gap.Size = New System.Drawing.Size(57, 20)
-        Me.txtConnect2Gap.TabIndex = 128
         '
         'Label32
         '
@@ -1417,98 +1890,6 @@
         Me.txtConnect2SideDistance.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.txtConnect2SideDistance.Size = New System.Drawing.Size(57, 20)
         Me.txtConnect2SideDistance.TabIndex = 124
-        '
-        'TabPage3
-        '
-        Me.TabPage3.Controls.Add(Me.GroupBox1)
-        Me.TabPage3.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage3.Margin = New System.Windows.Forms.Padding(2)
-        Me.TabPage3.Name = "TabPage3"
-        Me.TabPage3.Size = New System.Drawing.Size(408, 281)
-        Me.TabPage3.TabIndex = 8
-        Me.TabPage3.Text = "D0200'Hole"
-        Me.TabPage3.UseVisualStyleBackColor = True
-        '
-        'GroupBox1
-        '
-        Me.GroupBox1.BackColor = System.Drawing.Color.Transparent
-        Me.GroupBox1.Dock = System.Windows.Forms.DockStyle.Fill
-        Me.GroupBox1.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.GroupBox1.Location = New System.Drawing.Point(0, 0)
-        Me.GroupBox1.Margin = New System.Windows.Forms.Padding(2)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Padding = New System.Windows.Forms.Padding(2)
-        Me.GroupBox1.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.GroupBox1.Size = New System.Drawing.Size(408, 281)
-        Me.GroupBox1.TabIndex = 13
-        Me.GroupBox1.TabStop = False
-        '
-        'TabPage7
-        '
-        Me.TabPage7.Controls.Add(Me.groupBolt)
-        Me.TabPage7.Location = New System.Drawing.Point(4, 22)
-        Me.TabPage7.Margin = New System.Windows.Forms.Padding(2)
-        Me.TabPage7.Name = "TabPage7"
-        Me.TabPage7.Size = New System.Drawing.Size(408, 281)
-        Me.TabPage7.TabIndex = 10
-        Me.TabPage7.Text = "D0300'Bolt/Weld"
-        Me.TabPage7.UseVisualStyleBackColor = True
-        '
-        'groupBolt
-        '
-        Me.groupBolt.Controls.Add(Me.lblBoltStyle)
-        Me.groupBolt.Controls.Add(Me.chkTurnBolts)
-        Me.groupBolt.Controls.Add(Me.cbBoltStyle)
-        Me.groupBolt.Location = New System.Drawing.Point(4, 5)
-        Me.groupBolt.Margin = New System.Windows.Forms.Padding(2)
-        Me.groupBolt.Name = "groupBolt"
-        Me.groupBolt.Padding = New System.Windows.Forms.Padding(2)
-        Me.groupBolt.Size = New System.Drawing.Size(400, 42)
-        Me.groupBolt.TabIndex = 149
-        Me.groupBolt.TabStop = False
-        Me.groupBolt.Text = "D0301'Bolt"
-        '
-        'lblBoltStyle
-        '
-        Me.lblBoltStyle.AutoSize = True
-        Me.lblBoltStyle.BackColor = System.Drawing.Color.Transparent
-        Me.lblBoltStyle.Cursor = System.Windows.Forms.Cursors.Default
-        Me.lblBoltStyle.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.lblBoltStyle.Location = New System.Drawing.Point(12, 15)
-        Me.lblBoltStyle.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
-        Me.lblBoltStyle.Name = "lblBoltStyle"
-        Me.lblBoltStyle.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.lblBoltStyle.Size = New System.Drawing.Size(86, 13)
-        Me.lblBoltStyle.TabIndex = 135
-        Me.lblBoltStyle.Text = "D0302'Bolt style:"
-        '
-        'chkTurnBolts
-        '
-        Me.chkTurnBolts.AutoSize = True
-        Me.chkTurnBolts.BackColor = System.Drawing.Color.Transparent
-        Me.chkTurnBolts.Cursor = System.Windows.Forms.Cursors.Default
-        Me.chkTurnBolts.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.chkTurnBolts.Location = New System.Drawing.Point(277, 14)
-        Me.chkTurnBolts.Margin = New System.Windows.Forms.Padding(2)
-        Me.chkTurnBolts.Name = "chkTurnBolts"
-        Me.chkTurnBolts.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.chkTurnBolts.Size = New System.Drawing.Size(107, 17)
-        Me.chkTurnBolts.TabIndex = 138
-        Me.chkTurnBolts.Text = "D0303'Turn bolts"
-        Me.chkTurnBolts.UseVisualStyleBackColor = False
-        '
-        'cbBoltStyle
-        '
-        Me.cbBoltStyle.BackColor = System.Drawing.SystemColors.Window
-        Me.cbBoltStyle.Cursor = System.Windows.Forms.Cursors.Default
-        Me.cbBoltStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList
-        Me.cbBoltStyle.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.cbBoltStyle.Location = New System.Drawing.Point(154, 12)
-        Me.cbBoltStyle.Margin = New System.Windows.Forms.Padding(2)
-        Me.cbBoltStyle.Name = "cbBoltStyle"
-        Me.cbBoltStyle.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.cbBoltStyle.Size = New System.Drawing.Size(95, 21)
-        Me.cbBoltStyle.TabIndex = 134
         '
         'cmdRollover
         '
@@ -1607,36 +1988,30 @@
         CType(Me.Picture2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.picBitmap, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabStrip1.ResumeLayout(False)
-        Me.TabPage2.ResumeLayout(False)
-        Me.TabPage2.PerformLayout()
-        Me.TabPage1.ResumeLayout(False)
+        Me.TabPageGeneral.ResumeLayout(False)
+        Me.TabPageGeneral.PerformLayout()
+        Me.TabPageSidePlate.ResumeLayout(False)
         Me._TabFrames_0.ResumeLayout(False)
         Me._TabFrames_0.PerformLayout()
+        Me.TabControl1.ResumeLayout(False)
+        Me.TabPageHoleGroup1.ResumeLayout(False)
+        Me.TabPageHoleGroup1.PerformLayout()
+        Me.TabPageHoleGroup2.ResumeLayout(False)
+        Me.TabPageHoleGroup2.PerformLayout()
         Me.GroupBottom.ResumeLayout(False)
         Me.GroupBottom.PerformLayout()
-        Me.TabPage4.ResumeLayout(False)
-        Me.TabPage4.PerformLayout()
-        Me.TabPage5.ResumeLayout(False)
-        Me.TabPage5.PerformLayout()
-        Me.TabPage3.ResumeLayout(False)
-        Me.TabPage7.ResumeLayout(False)
-        Me.groupBolt.ResumeLayout(False)
-        Me.groupBolt.PerformLayout()
+        Me.TabPageConnPlate1.ResumeLayout(False)
+        Me.TabPageConnPlate1.PerformLayout()
+        Me.TabPageConnPlate2.ResumeLayout(False)
+        Me.TabPageConnPlate2.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
-    Friend WithEvents TabPage1 As System.Windows.Forms.TabPage
+    Friend WithEvents TabPageSidePlate As System.Windows.Forms.TabPage
     Public WithEvents _TabFrames_0 As System.Windows.Forms.GroupBox
     Public WithEvents txtPlateThickness As System.Windows.Forms.TextBox
     Public WithEvents lblThick As System.Windows.Forms.Label
-    Friend WithEvents TabPage3 As System.Windows.Forms.TabPage
-    Public WithEvents GroupBox1 As System.Windows.Forms.GroupBox
-    Friend WithEvents TabPage7 As System.Windows.Forms.TabPage
-    Friend WithEvents groupBolt As System.Windows.Forms.GroupBox
-    Public WithEvents lblBoltStyle As System.Windows.Forms.Label
-    Public WithEvents chkTurnBolts As System.Windows.Forms.CheckBox
-    Public WithEvents cbBoltStyle As System.Windows.Forms.ComboBox
-    Friend WithEvents TabPage2 As System.Windows.Forms.TabPage
+    Friend WithEvents TabPageGeneral As System.Windows.Forms.TabPage
     Public WithEvents Label3 As System.Windows.Forms.Label
     Public WithEvents txtConnectCutBack2 As System.Windows.Forms.TextBox
     Public WithEvents Label4 As System.Windows.Forms.Label
@@ -1658,7 +2033,7 @@
     Public WithEvents txtAngle1 As Windows.Forms.TextBox
     Public WithEvents Label1 As Windows.Forms.Label
     Public WithEvents txtFillet1 As Windows.Forms.TextBox
-    Friend WithEvents TabPage4 As Windows.Forms.TabPage
+    Friend WithEvents TabPageConnPlate1 As Windows.Forms.TabPage
     Public WithEvents Label9 As Windows.Forms.Label
     Public WithEvents txtMainChordPlateThickness As Windows.Forms.TextBox
     Public WithEvents Label11 As Windows.Forms.Label
@@ -1679,11 +2054,9 @@
     Public WithEvents txtConnect1Width As Windows.Forms.TextBox
     Public WithEvents Label15 As Windows.Forms.Label
     Public WithEvents txtConnect1Length As Windows.Forms.TextBox
-    Public WithEvents Label14 As Windows.Forms.Label
-    Public WithEvents txtConnect1Gap As Windows.Forms.TextBox
     Public WithEvents Label13 As Windows.Forms.Label
     Public WithEvents txtConnect1Radius As Windows.Forms.TextBox
-    Friend WithEvents TabPage5 As Windows.Forms.TabPage
+    Friend WithEvents TabPageConnPlate2 As Windows.Forms.TabPage
     Public WithEvents Label23 As Windows.Forms.Label
     Public WithEvents txtConnect2Thickness As Windows.Forms.TextBox
     Public WithEvents Label24 As Windows.Forms.Label
@@ -1700,11 +2073,44 @@
     Public WithEvents txtConnect2Width As Windows.Forms.TextBox
     Public WithEvents Label30 As Windows.Forms.Label
     Public WithEvents txtConnect2Length As Windows.Forms.TextBox
-    Public WithEvents Label31 As Windows.Forms.Label
-    Public WithEvents txtConnect2Gap As Windows.Forms.TextBox
     Public WithEvents Label32 As Windows.Forms.Label
     Public WithEvents txtConnect2Radius As Windows.Forms.TextBox
     Public WithEvents Label33 As Windows.Forms.Label
     Public WithEvents txtConnect2SideDistance As Windows.Forms.TextBox
+    Public WithEvents Label14 As Windows.Forms.Label
+    Public WithEvents txtConnect1Gap As Windows.Forms.TextBox
+    Public WithEvents Label31 As Windows.Forms.Label
+    Public WithEvents txtConnect2Gap As Windows.Forms.TextBox
+    Public WithEvents Label34 As Windows.Forms.Label
+    Public WithEvents txtConnect1WebThickness As Windows.Forms.TextBox
+    Public WithEvents Label35 As Windows.Forms.Label
+    Public WithEvents txtConnect2WebThickness As Windows.Forms.TextBox
+    Friend WithEvents TabControl1 As Windows.Forms.TabControl
+    Friend WithEvents TabPageHoleGroup1 As Windows.Forms.TabPage
+    Public WithEvents Label36 As Windows.Forms.Label
+    Public WithEvents txtVerHoleCount1 As Windows.Forms.TextBox
+    Public WithEvents Label37 As Windows.Forms.Label
+    Public WithEvents txtHorHoleCount1 As Windows.Forms.TextBox
+    Public WithEvents Label38 As Windows.Forms.Label
+    Public WithEvents txtVerDist1 As Windows.Forms.TextBox
+    Public WithEvents Label39 As Windows.Forms.Label
+    Public WithEvents txtVerSideDist1 As Windows.Forms.TextBox
+    Public WithEvents Label40 As Windows.Forms.Label
+    Public WithEvents txtHorDist1 As Windows.Forms.TextBox
+    Public WithEvents Label41 As Windows.Forms.Label
+    Public WithEvents txtHorSideDist1 As Windows.Forms.TextBox
+    Friend WithEvents TabPageHoleGroup2 As Windows.Forms.TabPage
+    Public WithEvents Label42 As Windows.Forms.Label
+    Public WithEvents txtVerHoleCount2 As Windows.Forms.TextBox
+    Public WithEvents Label43 As Windows.Forms.Label
+    Public WithEvents txtHorHoleCount2 As Windows.Forms.TextBox
+    Public WithEvents Label44 As Windows.Forms.Label
+    Public WithEvents txtVerDist2 As Windows.Forms.TextBox
+    Public WithEvents Label45 As Windows.Forms.Label
+    Public WithEvents txtVerSideDist2 As Windows.Forms.TextBox
+    Public WithEvents Label46 As Windows.Forms.Label
+    Public WithEvents txtHorDist2 As Windows.Forms.TextBox
+    Public WithEvents Label47 As Windows.Forms.Label
+    Public WithEvents txtHorSideDist2 As Windows.Forms.TextBox
 #End Region
 End Class

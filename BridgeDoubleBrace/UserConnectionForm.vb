@@ -285,6 +285,23 @@ Friend Class UserConnectionForm
         Data.mConnectPlate2.innerWebThickness = UIConverter.ConvertToNumeric(txtConnect2innerWebThickness.Text)
         Data.mConnectPlate2.innerWebCount = UIConverter.ConvertToNumeric(txtConnect2innerWebCount.Text)
         Data.mConnectPlate2.innerWebDist = UIConverter.ConvertToNumeric(txtConnect2innerWebDist.Text)
+
+        Data.mSideConnectPlate1.webThickness = UIConverter.ConvertToNumeric(txtConnect1WebThickness.Text)
+        Data.mSideConnectPlate1.horSideDistance = UIConverter.ConvertToNumeric(txtHorSideDist1.Text)
+        Data.mSideConnectPlate1.horDistance = UIConverter.ConvertToNumeric(txtHorDist1.Text)
+        Data.mSideConnectPlate1.horHoleCount = UIConverter.ConvertToNumeric(txtHorHoleCount1.Text)
+        Data.mSideConnectPlate1.verSideDistance = UIConverter.ConvertToNumeric(txtVerSideDist1.Text)
+        Data.mSideConnectPlate1.verDistance = UIConverter.ConvertToNumeric(txtVerDist1.Text)
+        Data.mSideConnectPlate1.verDistance = UIConverter.ConvertToNumeric(txtVerHoleCount1.Text)
+
+        Data.mSideConnectPlate2.webThickness = UIConverter.ConvertToNumeric(txtConnect2WebThickness.Text)
+        Data.mSideConnectPlate2.horSideDistance = UIConverter.ConvertToNumeric(txtHorSideDist2.Text)
+        Data.mSideConnectPlate2.horDistance = UIConverter.ConvertToNumeric(txtHorDist2.Text)
+        Data.mSideConnectPlate2.horHoleCount = UIConverter.ConvertToNumeric(txtHorHoleCount2.Text)
+        Data.mSideConnectPlate2.verSideDistance = UIConverter.ConvertToNumeric(txtVerSideDist2.Text)
+        Data.mSideConnectPlate2.verDistance = UIConverter.ConvertToNumeric(txtVerDist2.Text)
+        Data.mSideConnectPlate2.verDistance = UIConverter.ConvertToNumeric(txtVerHoleCount2.Text)
+
     End Sub
 
     Private Sub WriteToDialog(ByRef Data As Parameters)
@@ -330,6 +347,23 @@ Friend Class UserConnectionForm
         txtConnect2innerWebThickness.Text = UIConverter.ConvertToText(Data.mConnectPlate2.innerWebThickness)
         txtConnect2innerWebCount.Text = UIConverter.ConvertToText(Data.mConnectPlate2.innerWebCount)
         txtConnect2innerWebDist.Text = UIConverter.ConvertToText(Data.mConnectPlate2.innerWebDist)
+
+        txtConnect1WebThickness.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate1.webThickness)
+        txtHorSideDist1.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate1.horSideDistance)
+        txtHorDist1.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate1.horDistance)
+        txtHorHoleCount1.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate1.horHoleCount)
+        txtVerSideDist1.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate1.verSideDistance)
+        txtVerDist1.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate1.verDistance)
+        txtVerHoleCount1.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate1.verDistance)
+
+        txtConnect2WebThickness.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate2.webThickness)
+        txtHorSideDist2.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate2.horSideDistance)
+        txtHorDist2.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate2.horDistance)
+        txtHorHoleCount2.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate2.horHoleCount)
+        txtVerSideDist2.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate2.verSideDistance)
+        txtVerDist2.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate2.verDistance)
+        txtVerHoleCount2.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate2.verDistance)
+
     End Sub
 
     Public Sub EditData(ByRef ConnId As Long)
@@ -523,14 +557,27 @@ Friend Class UserConnectionForm
         MyBase.DefWndProc(m)
     End Sub
 
-    Private Sub txtNumberValue_leave(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) _
+    Private Sub txtDoubleValue_leave(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) _
     Handles txtPlateThickness.Leave,
             txtConnectCutBack1.Leave, txtConnectCutBack2.Leave,
             txtSupport1CutBack.Leave, txtSupport2CutBack.Leave,
-            txtFillet1.Leave, txtFillet2.Leave, txtConnect2Width.Leave, txtConnect2Thickness.Leave, txtConnect2SideDistance.Leave, txtConnect2Radius.Leave, txtConnect2Length.Leave, txtConnect2innerWebThickness.Leave, txtConnect2InnerWebHeight.Leave, txtConnect2innerWebDist.Leave, txtConnect2innerWebCount.Leave, txtConnect2Gap.Leave, txtConnect1Width.Leave, txtConnect1Thickness.Leave, txtConnect1SideDistance.Leave, txtConnect1Radius.Leave, txtConnect1Length.Leave, txtConnect1innerWebThickness.Leave, txtConnect1InnerWebHeight.Leave, txtConnect1innerWebDist.Leave, txtConnect1innerWebCount.Leave, txtConnect1Gap.Leave, TabPage5.Leave
+            txtFillet1.Leave, txtFillet2.Leave, txtConnect2Width.Leave, txtConnect2Thickness.Leave, txtConnect2SideDistance.Leave, txtConnect2Radius.Leave, txtConnect2Length.Leave, txtConnect2innerWebThickness.Leave, txtConnect2InnerWebHeight.Leave, txtConnect2innerWebDist.Leave, txtConnect1Width.Leave, txtConnect1Thickness.Leave, txtConnect1SideDistance.Leave, txtConnect1Radius.Leave, txtConnect1Length.Leave, txtConnect1innerWebThickness.Leave, txtConnect1InnerWebHeight.Leave, txtConnect1innerWebDist.Leave, TabPageConnPlate2.Leave,
+            txtVerSideDist1.Leave, txtVerDist1.Leave, txtMainChordPlateThickness.Leave,
+            txtHorSideDist1.Leave, txtHorDist1.Leave, txtConnect2WebThickness.Leave, txtConnect2Gap.Leave, txtConnect1WebThickness.Leave, txtConnect1Gap.Leave
 
         Dim oldValue As String = eventSender.Text
         eventSender.Text = oCheckInput.CheckPositive(eventSender.Text)
+        If oldValue <> eventSender.Text Then
+            UpdateConnection()
+        End If
+
+    End Sub
+
+
+    Private Sub txtIntegerValue_leave(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles txtVerHoleCount1.Leave, txtHorHoleCount1.Leave, txtConnect2innerWebCount.Leave, txtConnect1innerWebCount.Leave
+
+        Dim oldValue As String = eventSender.Text
+        eventSender.Text = oCheckInput.CheckPositiveInteger(eventSender.Text)
         If oldValue <> eventSender.Text Then
             UpdateConnection()
         End If
