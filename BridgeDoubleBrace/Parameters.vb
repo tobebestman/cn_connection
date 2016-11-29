@@ -55,6 +55,8 @@ Public Class SideConnectPlateParameter
     Public verSideDistance As Double
     Public verDistance As Double
     Public verHoleCount As Integer
+    Public outSidePlateThickness As Double
+    Public insidePlateThickness As Double
 
     Public Sub ReadFromConnection(eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromConnection
         Me.webThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
@@ -63,7 +65,9 @@ Public Class SideConnectPlateParameter
         Me.horHoleCount = eConnection.Number(iNum) : iNum = iNum + 1
         Me.verSideDistance = eConnection.Double(iDbl) : iDbl = iDbl + 1
         Me.verDistance = eConnection.Double(iDbl) : iDbl = iDbl + 1
-        Me.verHoleCount = eConnection.Double(iNum) : iNum = iNum + 1
+        Me.verHoleCount = eConnection.Number(iNum) : iNum = iNum + 1
+        Me.outSidePlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        Me.insidePlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
     End Sub
 
     Public Sub ReadFromTemplate(Template As PsTemplateManager, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromTemplate
@@ -74,6 +78,8 @@ Public Class SideConnectPlateParameter
         Me.verSideDistance = Template.Double(iDbl) : iDbl = iDbl + 1
         Me.verDistance = Template.Double(iDbl) : iDbl = iDbl + 1
         Me.verHoleCount = Template.Number(iNum) : iNum = iNum + 1
+        Me.outSidePlateThickness = Template.Double(iDbl) : iDbl = iDbl + 1
+        Me.insidePlateThickness = Template.Double(iDbl) : iDbl = iDbl + 1
     End Sub
 
     Public Sub WriteToConnection(ByRef eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.WriteToConnection
@@ -84,6 +90,8 @@ Public Class SideConnectPlateParameter
         eConnection.Double(iDbl) = Me.verSideDistance : iDbl = iDbl + 1
         eConnection.Double(iDbl) = Me.verDistance : iDbl = iDbl + 1
         eConnection.Number(iNum) = Me.verHoleCount : iNum = iNum + 1
+        eConnection.Double(iDbl) = Me.outSidePlateThickness : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = Me.insidePlateThickness : iDbl = iDbl + 1
     End Sub
 
     Public Sub WriteToTemplate(ByRef Template As PsTemplateManager) Implements IParameters.WriteToTemplate
@@ -94,6 +102,8 @@ Public Class SideConnectPlateParameter
         Template.AppendDouble(Me.verSideDistance)
         Template.AppendDouble(Me.verDistance)
         Template.AppendNumber(Me.verHoleCount)
+        Template.AppendDouble(Me.outSidePlateThickness)
+        Template.AppendNumber(Me.insidePlateThickness)
     End Sub
 
     Public Sub SetToImperialDefaults() Implements ISetToDefauts.SetToImperialDefaults
@@ -108,6 +118,8 @@ Public Class SideConnectPlateParameter
         verSideDistance = 50
         verDistance = 100
         verHoleCount = 4
+        outSidePlateThickness = 22
+        insidePlateThickness = 26
     End Sub
 End Class
 

@@ -33,6 +33,8 @@
 @D0117,"Ver Count"
 
 @D0118,"Hole Group 2",
+@D0119,"Outside PL thk",
+@D0120,"Inside PL thk",
 
 @D0200,"Hole",
 @D0201,"Distribution in Shape Direction",

@@ -292,7 +292,9 @@ Friend Class UserConnectionForm
         Data.mSideConnectPlate1.horHoleCount = UIConverter.ConvertToNumeric(txtHorHoleCount1.Text)
         Data.mSideConnectPlate1.verSideDistance = UIConverter.ConvertToNumeric(txtVerSideDist1.Text)
         Data.mSideConnectPlate1.verDistance = UIConverter.ConvertToNumeric(txtVerDist1.Text)
-        Data.mSideConnectPlate1.verDistance = UIConverter.ConvertToNumeric(txtVerHoleCount1.Text)
+        Data.mSideConnectPlate1.verHoleCount = UIConverter.ConvertToNumeric(txtVerHoleCount1.Text)
+        Data.mSideConnectPlate1.outSidePlateThickness = UIConverter.ConvertToNumeric(txtOutsidePlThickness1.Text)
+        Data.mSideConnectPlate1.insidePlateThickness = UIConverter.ConvertToNumeric(txtInsidePlThickness1.Text)
 
         Data.mSideConnectPlate2.webThickness = UIConverter.ConvertToNumeric(txtConnect2WebThickness.Text)
         Data.mSideConnectPlate2.horSideDistance = UIConverter.ConvertToNumeric(txtHorSideDist2.Text)
@@ -300,8 +302,9 @@ Friend Class UserConnectionForm
         Data.mSideConnectPlate2.horHoleCount = UIConverter.ConvertToNumeric(txtHorHoleCount2.Text)
         Data.mSideConnectPlate2.verSideDistance = UIConverter.ConvertToNumeric(txtVerSideDist2.Text)
         Data.mSideConnectPlate2.verDistance = UIConverter.ConvertToNumeric(txtVerDist2.Text)
-        Data.mSideConnectPlate2.verDistance = UIConverter.ConvertToNumeric(txtVerHoleCount2.Text)
-
+        Data.mSideConnectPlate2.verHoleCount = UIConverter.ConvertToNumeric(txtVerHoleCount2.Text)
+        Data.mSideConnectPlate2.outSidePlateThickness = UIConverter.ConvertToNumeric(txtOutsidePlThickness2.Text)
+        Data.mSideConnectPlate2.insidePlateThickness = UIConverter.ConvertToNumeric(txtInsidePlThickness2.Text)
     End Sub
 
     Private Sub WriteToDialog(ByRef Data As Parameters)
@@ -354,7 +357,9 @@ Friend Class UserConnectionForm
         txtHorHoleCount1.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate1.horHoleCount)
         txtVerSideDist1.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate1.verSideDistance)
         txtVerDist1.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate1.verDistance)
-        txtVerHoleCount1.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate1.verDistance)
+        txtVerHoleCount1.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate1.verHoleCount)
+        txtOutsidePlThickness1.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate1.outSidePlateThickness)
+        txtInsidePlThickness1.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate1.insidePlateThickness)
 
         txtConnect2WebThickness.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate2.webThickness)
         txtHorSideDist2.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate2.horSideDistance)
@@ -362,7 +367,9 @@ Friend Class UserConnectionForm
         txtHorHoleCount2.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate2.horHoleCount)
         txtVerSideDist2.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate2.verSideDistance)
         txtVerDist2.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate2.verDistance)
-        txtVerHoleCount2.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate2.verDistance)
+        txtVerHoleCount2.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate2.verHoleCount)
+        txtOutsidePlThickness2.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate2.outSidePlateThickness)
+        txtInsidePlThickness2.Text = UIConverter.ConvertToNumeric(Data.mSideConnectPlate2.insidePlateThickness)
 
     End Sub
 
@@ -563,7 +570,7 @@ Friend Class UserConnectionForm
             txtSupport1CutBack.Leave, txtSupport2CutBack.Leave,
             txtFillet1.Leave, txtFillet2.Leave, txtConnect2Width.Leave, txtConnect2Thickness.Leave, txtConnect2SideDistance.Leave, txtConnect2Radius.Leave, txtConnect2Length.Leave, txtConnect2innerWebThickness.Leave, txtConnect2InnerWebHeight.Leave, txtConnect2innerWebDist.Leave, txtConnect1Width.Leave, txtConnect1Thickness.Leave, txtConnect1SideDistance.Leave, txtConnect1Radius.Leave, txtConnect1Length.Leave, txtConnect1innerWebThickness.Leave, txtConnect1InnerWebHeight.Leave, txtConnect1innerWebDist.Leave, TabPageConnPlate2.Leave,
             txtVerSideDist1.Leave, txtVerDist1.Leave, txtMainChordPlateThickness.Leave,
-            txtHorSideDist1.Leave, txtHorDist1.Leave, txtConnect2WebThickness.Leave, txtConnect2Gap.Leave, txtConnect1WebThickness.Leave, txtConnect1Gap.Leave
+            txtHorSideDist1.Leave, txtHorDist1.Leave, txtConnect2WebThickness.Leave, txtConnect2Gap.Leave, txtConnect1WebThickness.Leave, txtConnect1Gap.Leave, txtOutsidePlThickness2.Leave, txtOutsidePlThickness1.Leave, txtInsidePlThickness2.Leave, txtInsidePlThickness1.Leave
 
         Dim oldValue As String = eventSender.Text
         eventSender.Text = oCheckInput.CheckPositive(eventSender.Text)
@@ -594,4 +601,5 @@ Friend Class UserConnectionForm
         End If
 
     End Sub
+
 End Class
