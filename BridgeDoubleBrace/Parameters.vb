@@ -60,7 +60,7 @@ Public Class SideConnectPlateParameter
         Me.webThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
         Me.horSideDistance = eConnection.Double(iDbl) : iDbl = iDbl + 1
         Me.horDistance = eConnection.Double(iDbl) : iDbl = iDbl + 1
-        Me.horDistance = eConnection.Number(iNum) : iNum = iNum + 1
+        Me.horHoleCount = eConnection.Number(iNum) : iNum = iNum + 1
         Me.verSideDistance = eConnection.Double(iDbl) : iDbl = iDbl + 1
         Me.verDistance = eConnection.Double(iDbl) : iDbl = iDbl + 1
         Me.verHoleCount = eConnection.Double(iNum) : iNum = iNum + 1

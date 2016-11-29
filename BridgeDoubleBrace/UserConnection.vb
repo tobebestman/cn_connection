@@ -516,12 +516,21 @@ Public Class UserConnection
             Dim rightPlateId As Long = CreateRightPlate(data, supportingId1, connMat1, oPoly)
 
 
-            Dim pCreater1 As New ConnectPlatesCreator(data.mConnectPlate1,
+            Dim ConnectPlatesCreater1 As New ConnectPlatesCreator(data.mConnectPlate1,
                                                      GetConnectPlateInsertMatrix(data.mConnectPlate1, connectingId1, instPt1))
-            pCreater1.Create()
-            Dim pCreater2 As New ConnectPlatesCreator(data.mConnectPlate2,
+            ConnectPlatesCreater1.Create()
+            Dim ConnectPlatesCreater2 As New ConnectPlatesCreator(data.mConnectPlate2,
                                                      GetConnectPlateInsertMatrix(data.mConnectPlate2, connectingId2, instPt2))
-            pCreater2.Create()
+            ConnectPlatesCreater2.Create()
+
+
+
+            Dim SideConnectPlatesCreater1 As New SideConnectPlatesCreater(supportingId1, connectingId1, data.mSideConnectPlate1,
+                                                                          SidePlateTopToCenterDistance(data, supportingId1),
+                                                                          data.mConnectPlate1.gap,
+                                                     GetSideConnectPlatesMatrix(data.mSideConnectPlate1, connectingId1, instPt1))
+            SideConnectPlatesCreater1.Create()
+
 
             oConnAdpt = Nothing
 
@@ -535,22 +544,22 @@ Public Class UserConnection
             oConnAdpt.AppendCreatedObjectArray(0, leftPlateId)
             oConnAdpt.AppendCreatedObjectArray(0, rightPlateId)
 
-            oConnAdpt.AppendCreatedObjectArray(1, pCreater1.mainPlate)
-            oConnAdpt.AppendCreatedObjectArray(1, pCreater2.mainPlate)
+            oConnAdpt.AppendCreatedObjectArray(1, ConnectPlatesCreater1.mainPlate)
+            oConnAdpt.AppendCreatedObjectArray(1, ConnectPlatesCreater2.mainPlate)
 
-            For Each id As Long In pCreater1.webPlates
+            For Each id As Long In ConnectPlatesCreater1.webPlates
                 oConnAdpt.AppendCreatedObjectArray(2, id)
             Next
-            For Each id As Long In pCreater2.webPlates
+            For Each id As Long In ConnectPlatesCreater2.webPlates
                 oConnAdpt.AppendCreatedObjectArray(2, id)
             Next
 
-            oConnAdpt.AppendCreatedObjectId(pCreater1.mainPlate)
-            oConnAdpt.AppendCreatedObjectId(pCreater2.mainPlate)
-            For Each id As Long In pCreater1.webPlates
+            oConnAdpt.AppendCreatedObjectId(ConnectPlatesCreater1.mainPlate)
+            oConnAdpt.AppendCreatedObjectId(ConnectPlatesCreater2.mainPlate)
+            For Each id As Long In ConnectPlatesCreater1.webPlates
                 oConnAdpt.AppendCreatedObjectId(id)
             Next
-            For Each id As Long In pCreater2.webPlates
+            For Each id As Long In ConnectPlatesCreater2.webPlates
                 oConnAdpt.AppendCreatedObjectId(id)
             Next
 
@@ -572,7 +581,33 @@ Public Class UserConnection
         End Try
     End Sub
 
-    Private Shared Function GetConnectPlateInsertMatrix(ConnectPlate As ConnectPlateParameter, connectingId1 As Long, instPt1 As PsPoint) As PsMatrix
+    Private Shared Function SidePlateTopToCenterDistance(data As Parameters, supportingId1 As Long)
+        Dim sidePlateDist As Double
+        Dim connShap As New ShapeAdapter(supportingId1)
+        sidePlateDist = connShap.Width / 2 - data.mMainChordPlateThickness + data.mPlateThickness
+        Return sidePlateDist
+    End Function
+
+    Private Shared Function GetSideConnectPlatesMatrix(ConnectPlate As SideConnectPlateParameter,
+                                                       connectingId1 As Long,
+                                                       instPt1 As PsPoint) As PsMatrix
+        Dim oMat As New PsMatrix
+        Dim adpt As New ShapeAdapter(connectingId1)
+        Dim zDir As New PsVector
+        zDir.SetFromPoints(adpt.GetEndpointTo(instPt1), instPt1)
+        zDir.Normalize()
+        Dim xDir As New PsVector
+        xDir = adpt.XAxis
+        Dim org As New PsPoint
+        org = adpt.GetEndpointTo(instPt1)
+        org = MathTool.GetPointInDirection(org, zDir, 0)
+        oMat.SetCoordinateSystem(org, xDir, zDir)
+        Return oMat
+    End Function
+
+    Private Shared Function GetConnectPlateInsertMatrix(ConnectPlate As ConnectPlateParameter,
+                                                        connectingId1 As Long,
+                                                        instPt1 As PsPoint) As PsMatrix
         Dim oMat As New PsMatrix
         Dim adpt As New ShapeAdapter(connectingId1)
         Dim zDir As New PsVector
@@ -582,10 +617,75 @@ Public Class UserConnection
         xDir = adpt.YAxis
         Dim org As New PsPoint
         org = adpt.GetEndpointTo(instPt1)
-        org = MathTool.GetPointInDirection(org, zDir, ConnectPlate.gap)
+        org = MathTool.GetPointInDirection(org, zDir, 0)
         oMat.SetCoordinateSystem(org, xDir, zDir)
         Return oMat
     End Function
+
+    Class SideConnectPlatesCreater
+        Public outsideSidePlates As List(Of Integer)
+        Public insideSidePlates As List(Of Integer)
+
+        Private param As SideConnectPlateParameter
+        Private gap As Double
+        Private sidePlateTopToCenterDistance As Double
+        Private insertMatrix As PsMatrix
+        Private supportId As Long
+        Private connectId As Long
+
+        Public Sub New(supportShp As Long, connectShp As Long,
+                       sidePlateData As SideConnectPlateParameter,
+                       sidePlateTopToCenterDistance As Double,
+                       gap As Double, oMat As PsMatrix)
+            supportId = supportShp
+            connectId = connectShp
+            outsideSidePlates = New List(Of Integer)
+            insideSidePlates = New List(Of Integer)
+            param = sidePlateData
+            Me.sidePlateTopToCenterDistance = sidePlateTopToCenterDistance
+            Me.gap = gap
+            insertMatrix = oMat
+        End Sub
+
+        Public Sub Create()
+            Dim mainPlateWidth = 2 * param.horSideDistance + (param.horHoleCount - 1) * param.horDistance
+            mainPlateWidth *= 2
+
+            Dim mainPlateLength = 2 * param.verSideDistance + (param.verHoleCount - 1) * param.verDistance
+            mainPlateLength *= 2
+
+            Dim org As New PsPoint
+            insertMatrix.getOrigin(org)
+
+            Dim yAxis As New PsVector
+            insertMatrix.getYAxis(yAxis)
+
+            org = MathTool.GetPointInDirection(org, -yAxis, gap)
+
+            Dim zAxis As New PsVector
+            insertMatrix.getZAxis(zAxis)
+            Dim outSideOrg = MathTool.GetPointInDirection(org, zAxis, sidePlateTopToCenterDistance)
+            zAxis.SetFromPoints(outSideOrg, org)
+            zAxis.Normalize()
+
+            Dim xAxis As New PsVector
+            xAxis.SetFromCrossProduct(yAxis, zAxis)
+            xAxis.Normalize()
+
+            Dim oMainMat As New PsMatrix
+            oMainMat.SetCoordinateSystem(outSideOrg, xAxis, yAxis)
+
+            Dim id As Long = CreatePlate(mainPlateWidth, mainPlateLength, 10, 0, 0, VerticalPosition.kTop, oMainMat)
+            outsideSidePlates.Add(id)
+
+            oMainMat.getOrigin(org)
+            org = MathTool.GetPointInDirection(org, zAxis, 2 * sidePlateTopToCenterDistance)
+            oMainMat.SetCoordinateSystem(org, -xAxis, yAxis)
+            id = CreatePlate(mainPlateWidth, mainPlateLength, 10, 0, 0, VerticalPosition.kTop, oMainMat)
+            outsideSidePlates.Add(id)
+
+        End Sub
+    End Class
 
     Class ConnectPlatesCreator
         Public webPlates As List(Of Integer)
