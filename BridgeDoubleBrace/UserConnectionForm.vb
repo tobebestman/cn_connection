@@ -465,27 +465,27 @@ Friend Class UserConnectionForm
     Private Sub TabStrip1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TabStrip1.SelectedIndexChanged
         Dim fileName As String = String.Empty
 
-        Select Case Me.TabStrip1.SelectedIndex
-            Case 0
-                fileName = "BottomP"
-            Case 1, 2
-                fileName = "BoltWeld"
-            Case 3
-                fileName = "SideP"
-            Case 4
-                fileName = "SideP2"
-            Case Else
-                fileName = "All"
-        End Select
+        'Select Case Me.TabStrip1.SelectedIndex
+        '    Case 0
+        '        fileName = "BottomP"
+        '    Case 1, 2
+        '        fileName = "BoltWeld"
+        '    Case 3
+        '        fileName = "SideP"
+        '    Case 4
+        '        fileName = "SideP2"
+        '    Case Else
+        '        fileName = "All"
+        'End Select
 
-        picBitmap.Image = Nothing
+        'picBitmap.Image = Nothing
 
-        If Len(fileName) Then
-            fileName = UserConnection.GlobalSettings.PluginDataPath & "\" & PLUGIN_IDENTIFIER & "\" & fileName & ".png"
-            If Len(Dir(fileName)) > 0 Then
-                picBitmap.Image = System.Drawing.Image.FromFile(fileName)
-            End If
-        End If
+        'If Len(fileName) Then
+        '    fileName = UserConnection.GlobalSettings.PluginDataPath & "\" & PLUGIN_IDENTIFIER & "\" & fileName & ".png"
+        '    If Len(Dir(fileName)) > 0 Then
+        '        picBitmap.Image = System.Drawing.Image.FromFile(fileName)
+        '    End If
+        'End If
     End Sub
 
 
@@ -571,9 +571,20 @@ Friend Class UserConnectionForm
     Handles txtPlateThickness.Leave,
             txtConnectCutBack1.Leave, txtConnectCutBack2.Leave,
             txtSupport1CutBack.Leave, txtSupport2CutBack.Leave,
-            txtFillet1.Leave, txtFillet2.Leave, txtConnect2Width.Leave, txtConnect2Thickness.Leave, txtConnect2SideDistance.Leave, txtConnect2Radius.Leave, txtConnect2Length.Leave, txtConnect2innerWebThickness.Leave, txtConnect2InnerWebHeight.Leave, txtConnect2innerWebDist.Leave, txtConnect1Width.Leave, txtConnect1Thickness.Leave, txtConnect1SideDistance.Leave, txtConnect1Radius.Leave, txtConnect1Length.Leave, txtConnect1innerWebThickness.Leave, txtConnect1InnerWebHeight.Leave, txtConnect1innerWebDist.Leave, TabPageConnPlate2.Leave,
+            txtFillet1.Leave, txtFillet2.Leave, txtConnect2Width.Leave,
+            txtConnect2Thickness.Leave, txtConnect2SideDistance.Leave,
+            txtConnect2Radius.Leave, txtConnect2Length.Leave,
+            txtConnect2innerWebThickness.Leave, txtConnect2InnerWebHeight.Leave,
+            txtConnect2innerWebDist.Leave, txtConnect1Width.Leave,
+            txtConnect1Thickness.Leave, txtConnect1SideDistance.Leave,
+            txtConnect1Radius.Leave, txtConnect1Length.Leave,
+            txtConnect1innerWebThickness.Leave, txtConnect1InnerWebHeight.Leave,
+            txtConnect1innerWebDist.Leave,
             txtVerSideDist1.Leave, txtVerDist1.Leave, txtMainChordPlateThickness.Leave,
-            txtHorSideDist1.Leave, txtHorDist1.Leave, txtConnect2WebThickness.Leave, txtConnect2Gap.Leave, txtConnect1WebThickness.Leave, txtConnect1Gap.Leave, txtOutsidePlThickness2.Leave, txtOutsidePlThickness1.Leave, txtInsidePlThickness2.Leave, txtInsidePlThickness1.Leave
+            txtHorSideDist1.Leave, txtHorDist1.Leave, txtConnect2WebThickness.Leave,
+            txtConnect2Gap.Leave, txtConnect1WebThickness.Leave,
+            txtConnect1Gap.Leave, txtOutsidePlThickness2.Leave,
+            txtOutsidePlThickness1.Leave, txtInsidePlThickness2.Leave, txtInsidePlThickness1.Leave
 
         Dim oldValue As String = eventSender.Text
         eventSender.Text = oCheckInput.CheckPositive(eventSender.Text)
