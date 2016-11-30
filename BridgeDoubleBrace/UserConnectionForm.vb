@@ -225,6 +225,9 @@ Friend Class UserConnectionForm
     Private Sub cmdAccept_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdAccept.Click
         Dim Template As New PsTemplateManager
         Dim data As New Parameters
+        data.mVersionNumber = PLUGIN_VERSION
+        ReadFromDialog(data)
+
         data.WriteToTemplate(Template)
         Template.SaveTemplateEntry(PLUGIN_IDENTIFIER, PLUGIN_VERSION)
         Template = Nothing
