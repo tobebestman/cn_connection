@@ -650,7 +650,7 @@ Public Class UserConnection
         Return oMat
     End Function
 
-    Private Shared Function GetConnectPlateInsertMatrix(ConnectPlate As ConnectPlateParameter,
+    Private Shared Function GetConnectPlateInsertMatrix(ConnectPlate As ArcPlateParameter,
                                                         connectingId1 As Long,
                                                         instPt1 As PsPoint) As PsMatrix
         Dim oMat As New PsMatrix
@@ -826,10 +826,10 @@ Public Class UserConnection
         Public webPlates As List(Of Integer)
         Public mainPlate As Integer
 
-        Private param As ConnectPlateParameter
+        Private param As ArcPlateParameter
         Private insertMatrix As PsMatrix
 
-        Public Sub New(plateDef As ConnectPlateParameter, oMat As PsMatrix)
+        Public Sub New(plateDef As ArcPlateParameter, oMat As PsMatrix)
             webPlates = New List(Of Integer)
             mainPlate = -1
             param = plateDef

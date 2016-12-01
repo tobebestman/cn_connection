@@ -70,7 +70,7 @@
 @D0406,"Connect Web Thk 1"
 @D0407,"Connect Web Thk 2"
 
-@D0500,"Connect Plate 1",
+@D0500,"Arc Plate 1",
 @D0501,"Dist",
 @D0502,"Radius",
 @D0503,"Gap",
@@ -82,30 +82,27 @@
 @D0509,"Web Thickness",
 @D0510,"Web Count",
 @D0511,"Web Side Dist",
+@D0512,"Web Connect Plate"
 
-@D0600,"Connect Plate 2",
-@D0601,"Dist",
-@D0602,"Radius",
-@D0603,"Gap",
-@D0604,"Length",
-@D0605,"Width",
-@D0606,"Thickness",
-@D0607,"Angle",
-@D0608,"Web Height",
-@D0609,"Web Thickness",
-@D0610,"Web Count",
-@D0611,"Web Side Dist",,
+@D0600,"Arc Plate 2",
 
-@D0700,"Assignment",
-@D0701,"Element",
-@D0702,"Material",
-@D0703,"Detail Style",
-@D0704,"Display Class",
-@D0705,"Area Class",
-@D0706,"Part Family",
-@D0707,"Description",
-@D0708,"Level",
-@D0709,"Item Number",
+@D0700,"Web Connect Plate 1",
+@D0701,"Thickness",
+@D0702,"Bolt Group",
+@D0703,"Ver Side Dist",
+@D0704,"Hor Side Dist",
+@D0705,"Group Dist",
+@D0706,"Plate",
+@D0707,"Edge Hor Dist",
+@D0708,"Edge Ver Dist",
+@D0709,"Hor Dist",
+@D0710,"Hor Count",
+@D0711,"Ver Dist",
+@D0712,"Ver Count",
+@D0713,"Inner Ver Edge Dist"
+
+
+@D0800,"Web Connect Plate 2",
 
 @M0000,"Select supporting weld shape1",
 @M0001,"Select supporting weld shape2",

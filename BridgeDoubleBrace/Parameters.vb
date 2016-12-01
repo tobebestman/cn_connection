@@ -46,6 +46,108 @@ Imports PSN_SubstationShared.UnitConvert
 Imports PSN_BridgeDoubleBrace
 Imports System.Windows.Forms
 
+Public Class WebConnectPlateParameter
+    Implements IParameters, ISetToDefauts
+
+    Public boltGroupHorSideDist As Double
+    Public boltGroupSpan As Double
+
+    Public webConnectPlateThickness As Double
+
+    Public webConnectPlateHorEdgeDist As Double
+    Public webConnectPlateHorDist As Double
+    Public webConnectPlateHorCount As Integer
+
+    Public webConnectPlateVerEdgeDist As Double
+    Public webConnectPlateVerDist As Double
+    Public webConnectPlateVerCount As Integer
+    Public webConnectPlateInnerVerEdgeDist As Double
+
+    Public Sub ReadFromConnection(eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromConnection
+        boltGroupHorSideDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        boltGroupSpan = eConnection.Double(iDbl) : iDbl = iDbl + 1
+
+        webConnectPlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
+
+        webConnectPlateHorEdgeDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        webConnectPlateHorDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        webConnectPlateHorCount = eConnection.Number(iNum) : iNum = iNum + 1
+
+        webConnectPlateVerEdgeDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        webConnectPlateVerDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        webConnectPlateVerCount = eConnection.Number(iNum) : iNum = iNum + 1
+        webConnectPlateInnerVerEdgeDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
+    End Sub
+
+    Public Sub ReadFromTemplate(Template As PsTemplateManager, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromTemplate
+        boltGroupHorSideDist = Template.Double(iDbl) : iDbl = iDbl + 1
+        boltGroupSpan = Template.Double(iDbl) : iDbl = iDbl + 1
+
+        webConnectPlateThickness = Template.Double(iDbl) : iDbl = iDbl + 1
+
+        webConnectPlateHorEdgeDist = Template.Double(iDbl) : iDbl = iDbl + 1
+        webConnectPlateHorDist = Template.Double(iDbl) : iDbl = iDbl + 1
+        webConnectPlateHorCount = Template.Number(iNum) : iNum = iNum + 1
+
+        webConnectPlateVerEdgeDist = Template.Double(iDbl) : iDbl = iDbl + 1
+        webConnectPlateVerDist = Template.Double(iDbl) : iDbl = iDbl + 1
+        webConnectPlateVerCount = Template.Number(iNum) : iNum = iNum + 1
+        webConnectPlateInnerVerEdgeDist = Template.Double(iDbl) : iDbl = iDbl + 1
+    End Sub
+
+    Public Sub SetToImperialDefaults() Implements ISetToDefauts.SetToImperialDefaults
+        Throw New NotImplementedException()
+    End Sub
+
+    Public Sub SetToMetricDefaults() Implements ISetToDefauts.SetToMetricDefaults
+        boltGroupHorSideDist = 130
+        boltGroupSpan = 210
+
+        webConnectPlateThickness = 30
+
+        webConnectPlateHorEdgeDist = 50
+        webConnectPlateHorDist = 5
+        webConnectPlateHorCount = 110
+
+        webConnectPlateVerEdgeDist = 50
+        webConnectPlateVerDist = 110
+        webConnectPlateVerCount = 5
+        webConnectPlateInnerVerEdgeDist = 100
+    End Sub
+
+    Public Sub WriteToConnection(ByRef eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.WriteToConnection
+        eConnection.Double(iDbl) = boltGroupHorSideDist : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = boltGroupSpan : iDbl = iDbl + 1
+
+        eConnection.Double(iDbl) = webConnectPlateThickness : iDbl = iDbl + 1
+
+        eConnection.Double(iDbl) = webConnectPlateHorEdgeDist : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = webConnectPlateHorDist : iDbl = iDbl + 1
+        eConnection.Number(iNum) = webConnectPlateHorCount : iNum = iNum + 1
+
+        eConnection.Double(iDbl) = webConnectPlateVerEdgeDist : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = webConnectPlateVerDist : iDbl = iDbl + 1
+        eConnection.Number(iNum) = webConnectPlateVerCount : iNum = iNum + 1
+        eConnection.Double(iDbl) = webConnectPlateInnerVerEdgeDist : iDbl = iDbl + 1
+    End Sub
+
+    Public Sub WriteToTemplate(ByRef Template As PsTemplateManager) Implements IParameters.WriteToTemplate
+        Template.AppendDouble(boltGroupHorSideDist)
+        Template.AppendDouble(boltGroupSpan)
+
+        Template.AppendDouble(webConnectPlateThickness)
+
+        Template.AppendDouble(webConnectPlateHorEdgeDist)
+        Template.AppendDouble(webConnectPlateHorDist)
+        Template.AppendNumber(webConnectPlateHorCount)
+
+        Template.AppendDouble(webConnectPlateVerEdgeDist)
+        Template.AppendDouble(webConnectPlateVerDist)
+        Template.AppendNumber(webConnectPlateVerCount)
+        Template.AppendDouble(webConnectPlateInnerVerEdgeDist)
+    End Sub
+End Class
+
 Public Class SideConnectPlateParameter
     Implements IParameters, ISetToDefauts
     Public webThickness As Double
@@ -123,7 +225,7 @@ Public Class SideConnectPlateParameter
     End Sub
 End Class
 
-Public Class ConnectPlateParameter
+Public Class ArcPlateParameter
     Implements IParameters, ISetToDefauts
     Public sideDistance As Double
     Public radius As Double
@@ -137,14 +239,14 @@ Public Class ConnectPlateParameter
     Public innerWebCount As Integer
     Public innerWebDist As Double
 
-    Private Sub writeConnectPlate(ByRef plateParam As ConnectPlateParameter,
+    Private Sub writeConnectPlate(ByRef plateParam As ArcPlateParameter,
                                  ByRef Template As PsTemplateManager)
 
 
 
     End Sub
 
-    Private Sub readConnectPlate(ByRef plateParam As ConnectPlateParameter,
+    Private Sub readConnectPlate(ByRef plateParam As ArcPlateParameter,
                                  Template As PsTemplateManager,
                                  ByRef iDbl As Integer,
                                  ByRef iNum As Integer,
@@ -259,11 +361,14 @@ Public Class Parameters
 
     Public mMainChordPlateThickness As Double
 
-    Public mConnectPlate1 As ConnectPlateParameter
-    Public mConnectPlate2 As ConnectPlateParameter
+    Public mConnectPlate1 As ArcPlateParameter
+    Public mConnectPlate2 As ArcPlateParameter
 
     Public mSideConnectPlate1 As SideConnectPlateParameter
     Public mSideConnectPlate2 As SideConnectPlateParameter
+
+    Public mWebConnectPlate1 As WebConnectPlateParameter
+    Public mWebConnectPlate2 As WebConnectPlateParameter
 
     Public Sub WriteToConnectionId(ByVal ConnectionId As Long)
         Dim oTrans As New PsTransaction
@@ -306,6 +411,8 @@ Public Class Parameters
         mSideConnectPlate1.WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
         mSideConnectPlate2.WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
 
+        mWebConnectPlate1.WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
+        mWebConnectPlate2.WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
     End Sub
 
     Public Sub WriteToConnection(ByRef eConnection As PsConnection,
@@ -350,6 +457,9 @@ Public Class Parameters
 
         mSideConnectPlate1.ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
         mSideConnectPlate2.ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
+
+        mWebConnectPlate1.ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
+        mWebConnectPlate2.ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
     End Sub
 
     Public Sub ReadFromConnection(eConnection As PsConnection,
@@ -418,6 +528,9 @@ Public Class Parameters
 
         mSideConnectPlate1.WriteToTemplate(Template)
         mSideConnectPlate2.WriteToTemplate(Template)
+
+        mWebConnectPlate1.WriteToTemplate(Template)
+        mWebConnectPlate2.WriteToTemplate(Template)
     End Sub
 
 
@@ -432,6 +545,9 @@ Public Class Parameters
 
         mSideConnectPlate1.ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
         mSideConnectPlate2.ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
+
+        mWebConnectPlate1.ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
+        mWebConnectPlate2.ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
 
     End Sub
 
@@ -469,11 +585,14 @@ Public Class Parameters
     Public Sub New()
         MyBase.New()
 
-        mConnectPlate1 = New ConnectPlateParameter()
-        mConnectPlate2 = New ConnectPlateParameter()
+        mConnectPlate1 = New ArcPlateParameter()
+        mConnectPlate2 = New ArcPlateParameter()
 
         mSideConnectPlate1 = New SideConnectPlateParameter()
         mSideConnectPlate2 = New SideConnectPlateParameter()
+
+        mWebConnectPlate1 = New WebConnectPlateParameter()
+        mWebConnectPlate2 = New WebConnectPlateParameter()
     End Sub
 
     Protected Overrides Sub Finalize()
@@ -490,7 +609,6 @@ Public Class Parameters
             SetToMetricDefaults()
         Else
             SetToImperialDefaults()
-
         End If
 
     End Sub
@@ -519,6 +637,9 @@ Public Class Parameters
 
         mSideConnectPlate1.SetToMetricDefaults()
         mSideConnectPlate2.SetToMetricDefaults()
+
+        mWebConnectPlate1.SetToMetricDefaults()
+        mWebConnectPlate2.SetToMetricDefaults()
     End Sub
 
     Public Sub SetToImperialDefaults() Implements ISetToDefauts.SetToImperialDefaults
@@ -546,5 +667,7 @@ Public Class Parameters
         mSideConnectPlate1.SetToImperialDefaults()
         mSideConnectPlate2.SetToImperialDefaults()
 
+        mWebConnectPlate1.SetToImperialDefaults()
+        mWebConnectPlate2.SetToImperialDefaults()
     End Sub
 End Class
