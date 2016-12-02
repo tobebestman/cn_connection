@@ -516,11 +516,11 @@ Public Class UserConnection
             Dim rightPlateId As Long = CreateRightPlate(data, supportingId1, connMat1, oPoly)
 
 
-            Dim ConnectPlatesCreater1 As New ConnectPlatesCreator(data.mConnectPlate1,
-                                                     GetConnectPlateInsertMatrix(data.mConnectPlate1, connectingId1, instPt1))
+            Dim ConnectPlatesCreater1 As New ArcPlatesCreator(data.mConnectPlate1,
+                                                     GetConnectPlateInsertMatrix(connectingId1, instPt1))
             ConnectPlatesCreater1.Create()
-            Dim ConnectPlatesCreater2 As New ConnectPlatesCreator(data.mConnectPlate2,
-                                                     GetConnectPlateInsertMatrix(data.mConnectPlate2, connectingId2, instPt2))
+            Dim ConnectPlatesCreater2 As New ArcPlatesCreator(data.mConnectPlate2,
+                                                     GetConnectPlateInsertMatrix(connectingId2, instPt2))
             ConnectPlatesCreater2.Create()
 
             Dim SideConnectPlatesCreater1 As New SideConnectPlatesCreater(supportingId1, connectingId1, data.mSideConnectPlate1,
@@ -537,6 +537,14 @@ Public Class UserConnection
                         GetSideConnectPlatesMatrix(data.mSideConnectPlate2, connectingId2, instPt2))
             SideConnectPlatesCreater2.Create()
 
+            Dim webConnectPlatesCreater1 As New WebConnectPlatesCreater(data.mWebConnectPlate1,
+                                                     data.mConnectPlate1,
+                                                     GetConnectPlateInsertMatrix(connectingId1, instPt1))
+            webConnectPlatesCreater1.Create()
+            Dim webConnectPlatesCreater2 As New WebConnectPlatesCreater(data.mWebConnectPlate2,
+                                                     data.mConnectPlate2,
+                                                     GetConnectPlateInsertMatrix(connectingId2, instPt2))
+            webConnectPlatesCreater2.Create()
             oConnAdpt = Nothing
 
             oConnAdpt = New ConnectionAdapter(ConnectionId)
@@ -579,6 +587,12 @@ Public Class UserConnection
                 oConnAdpt.AppendCreatedObjectArray(4, id)
             Next
 
+            For Each id As Long In webConnectPlatesCreater1.webPlates
+                oConnAdpt.AppendCreatedObjectArray(5, id)
+            Next
+            For Each id As Long In webConnectPlatesCreater2.webPlates
+                oConnAdpt.AppendCreatedObjectArray(6, id)
+            Next
 
             oConnAdpt.AppendCreatedObjectId(ConnectPlatesCreater1.mainPlate)
             oConnAdpt.AppendCreatedObjectId(ConnectPlatesCreater2.mainPlate)
@@ -605,6 +619,13 @@ Public Class UserConnection
                 oConnAdpt.AppendCreatedObjectId(id)
             Next
             For Each id As Long In SideConnectPlatesCreater2.insideSidePlates
+                oConnAdpt.AppendCreatedObjectId(id)
+            Next
+
+            For Each id As Long In webConnectPlatesCreater1.webPlates
+                oConnAdpt.AppendCreatedObjectId(id)
+            Next
+            For Each id As Long In webConnectPlatesCreater2.webPlates
                 oConnAdpt.AppendCreatedObjectId(id)
             Next
 
@@ -650,8 +671,7 @@ Public Class UserConnection
         Return oMat
     End Function
 
-    Private Shared Function GetConnectPlateInsertMatrix(ConnectPlate As ArcPlateParameter,
-                                                        connectingId1 As Long,
+    Private Shared Function GetConnectPlateInsertMatrix(connectingId1 As Long,
                                                         instPt1 As PsPoint) As PsMatrix
         Dim oMat As New PsMatrix
         Dim adpt As New ShapeAdapter(connectingId1)
@@ -666,6 +686,8 @@ Public Class UserConnection
         oMat.SetCoordinateSystem(org, xDir, zDir)
         Return oMat
     End Function
+
+
 
     Class SideConnectPlatesCreater
         Public outsideSidePlates As List(Of Integer)
@@ -822,7 +844,82 @@ Public Class UserConnection
 
     End Class
 
-    Class ConnectPlatesCreator
+    Class WebConnectPlatesCreater
+        Public webPlates As List(Of Integer)
+        Private param As WebConnectPlateParameter
+        Private arcPlateParam As ArcPlateParameter
+        Private insertMatrix As PsMatrix
+
+        Public Sub New(param As WebConnectPlateParameter,
+                       arcParam As ArcPlateParameter,
+                       oMat As PsMatrix)
+            Me.param = param
+            Me.arcPlateParam = arcParam
+            insertMatrix = oMat
+            webPlates = New List(Of Integer)
+        End Sub
+
+        Public Function Create() As Boolean
+            Dim result As Boolean = False
+            Dim yAxis As New PsVector
+            insertMatrix.getYAxis(yAxis)
+
+            Dim org As New PsPoint
+            insertMatrix.getOrigin(org)
+            org = MathTool.GetPointInDirection(org, -yAxis, param.gap / 2)
+
+            Dim xAxis As New PsVector
+            insertMatrix.getXAxis(xAxis)
+
+            Dim zAxis As New PsVector
+            insertMatrix.getZAxis(zAxis)
+
+            org = MathTool.GetPointInDirection(org, -xAxis,
+                   arcPlateParam.width / 2 - param.boltGroupHorSideDist + param.webConnectPlateHorEdgeDist -
+                   plateWidth() / 2)
+
+            For i As Integer = 0 To arcPlateParam.innerWebCount
+
+                Dim org1 As New PsPoint
+                org1 = MathTool.GetPointInDirection(org, zAxis, param.webConnectPlateThickness)
+                Dim oMat1 As New PsMatrix
+                oMat1.SetCoordinateSystem(org1, xAxis, yAxis)
+                Dim id As Long = CreatePlate(plateWidth(), plateLength(), param.webConnectPlateThickness,
+                             0, 0, VerticalPosition.kMiddle, oMat1)
+                Debug.Assert(id > 0)
+                webPlates.Add(id)
+
+                Dim org2 As New PsPoint
+                org2 = MathTool.GetPointInDirection(org, -zAxis, param.webConnectPlateThickness)
+                Dim oMat2 As New PsMatrix
+                oMat2.SetCoordinateSystem(org2, xAxis, yAxis)
+                id = CreatePlate(plateWidth(), plateLength(), param.webConnectPlateThickness,
+                             0, 0, VerticalPosition.kMiddle, oMat2)
+                Debug.Assert(id > 0)
+                webPlates.Add(id)
+
+                org = MathTool.GetPointInDirection(org, xAxis, (param.boltGroupSpan +
+                                                   (param.webConnectPlateHorCount - 1) * param.webConnectPlateHorDist))
+            Next
+
+            Return result
+        End Function
+
+        Private Function plateLength() As Double
+            Dim result As Double = 2 * (param.webConnectPlateInnerVerEdgeDist + param.webConnectPlateVerEdgeDist +
+                (param.webConnectPlateVerCount - 1) * param.webConnectPlateVerDist) +
+                param.gap
+            Return result
+        End Function
+
+        Private Function plateWidth() As Double
+            Dim result As Double = (param.webConnectPlateHorCount - 1) * param.webConnectPlateHorDist +
+                                        2 * param.webConnectPlateHorEdgeDist
+            Return result
+        End Function
+    End Class
+
+    Class ArcPlatesCreator
         Public webPlates As List(Of Integer)
         Public mainPlate As Integer
 
@@ -1392,6 +1489,16 @@ Public Class UserConnection
                     'now remove the new created side plates for connect member 2
                     For i As Integer = oConnection.ArrayCreatedEntityCount(4) - 1 To 0 Step -1
                         oConnection.RemoveArrayCreatedObjectId(4, i)
+                    Next
+
+                    'now remove the new created web plates for connect member 1
+                    For i As Integer = oConnection.ArrayCreatedEntityCount(5) - 1 To 0 Step -1
+                        oConnection.RemoveArrayCreatedObjectId(5, i)
+                    Next
+
+                    'now remove the new created web plates for connect member 2
+                    For i As Integer = oConnection.ArrayCreatedEntityCount(6) - 1 To 0 Step -1
+                        oConnection.RemoveArrayCreatedObjectId(6, i)
                     Next
 
                     oConnection.RemoveAllSecondActiveEntity(True)

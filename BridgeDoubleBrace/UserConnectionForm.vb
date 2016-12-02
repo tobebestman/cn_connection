@@ -319,6 +319,7 @@ Friend Class UserConnectionForm
         Data.mWebConnectPlate1.webConnectPlateVerDist = UIConverter.ConvertToNumeric(txtWebConnectPlateVerDist1.Text)
         Data.mWebConnectPlate1.webConnectPlateVerCount = UIConverter.ConvertToNumeric(txtWebConnectPlateVerCount1.Text)
         Data.mWebConnectPlate1.webConnectPlateInnerVerEdgeDist = UIConverter.ConvertToNumeric(txtWebConnectPlateInnerVerEdgeDist1.Text)
+        Data.mWebConnectPlate1.gap = UIConverter.ConvertToNumeric(txtConnect1Gap.Text)
 
         Data.mWebConnectPlate2.boltGroupHorSideDist = UIConverter.ConvertToNumeric(txtBoltGroupHorSideDist2.Text)
         Data.mWebConnectPlate2.boltGroupSpan = UIConverter.ConvertToNumeric(txtBoltGroupSpan2.Text)
@@ -330,6 +331,7 @@ Friend Class UserConnectionForm
         Data.mWebConnectPlate2.webConnectPlateVerDist = UIConverter.ConvertToNumeric(txtWebConnectPlateVerDist2.Text)
         Data.mWebConnectPlate2.webConnectPlateVerCount = UIConverter.ConvertToNumeric(txtWebConnectPlateVerCount2.Text)
         Data.mWebConnectPlate2.webConnectPlateInnerVerEdgeDist = UIConverter.ConvertToNumeric(txtWebConnectPlateInnerVerEdgeDist2.Text)
+        Data.mWebConnectPlate2.gap = UIConverter.ConvertToNumeric(txtConnect2Gap.Text)
 
     End Sub
 
@@ -407,6 +409,7 @@ Friend Class UserConnectionForm
         txtWebConnectPlateVerDist1.Text = UIConverter.ConvertToText(Data.mWebConnectPlate1.webConnectPlateVerDist)
         txtWebConnectPlateVerCount1.Text = UIConverter.ConvertToText(Data.mWebConnectPlate1.webConnectPlateVerCount)
         txtWebConnectPlateInnerVerEdgeDist1.Text = UIConverter.ConvertToText(Data.mWebConnectPlate1.webConnectPlateInnerVerEdgeDist)
+        txtConnect1Gap.Text = UIConverter.ConvertToText(Data.mWebConnectPlate1.gap)
 
         txtBoltGroupHorSideDist2.Text = UIConverter.ConvertToText(Data.mWebConnectPlate2.boltGroupHorSideDist)
         txtBoltGroupSpan2.Text = UIConverter.ConvertToText(Data.mWebConnectPlate2.boltGroupSpan)
@@ -418,6 +421,7 @@ Friend Class UserConnectionForm
         txtWebConnectPlateVerDist2.Text = UIConverter.ConvertToText(Data.mWebConnectPlate2.webConnectPlateVerDist)
         txtWebConnectPlateVerCount2.Text = UIConverter.ConvertToText(Data.mWebConnectPlate2.webConnectPlateVerCount)
         txtWebConnectPlateInnerVerEdgeDist2.Text = UIConverter.ConvertToText(Data.mWebConnectPlate2.webConnectPlateInnerVerEdgeDist)
+        txtConnect2Gap.Text = UIConverter.ConvertToText(Data.mWebConnectPlate2.gap)
 
     End Sub
 

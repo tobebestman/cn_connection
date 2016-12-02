@@ -62,6 +62,7 @@ Public Class WebConnectPlateParameter
     Public webConnectPlateVerDist As Double
     Public webConnectPlateVerCount As Integer
     Public webConnectPlateInnerVerEdgeDist As Double
+    Public gap As Double
 
     Public Sub ReadFromConnection(eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromConnection
         boltGroupHorSideDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
@@ -77,6 +78,7 @@ Public Class WebConnectPlateParameter
         webConnectPlateVerDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
         webConnectPlateVerCount = eConnection.Number(iNum) : iNum = iNum + 1
         webConnectPlateInnerVerEdgeDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        gap = eConnection.Double(iDbl) : iDbl = iDbl + 1
     End Sub
 
     Public Sub ReadFromTemplate(Template As PsTemplateManager, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromTemplate
@@ -93,6 +95,8 @@ Public Class WebConnectPlateParameter
         webConnectPlateVerDist = Template.Double(iDbl) : iDbl = iDbl + 1
         webConnectPlateVerCount = Template.Number(iNum) : iNum = iNum + 1
         webConnectPlateInnerVerEdgeDist = Template.Double(iDbl) : iDbl = iDbl + 1
+
+        gap = Template.Double(iDbl) : iDbl = iDbl + 1
     End Sub
 
     Public Sub SetToImperialDefaults() Implements ISetToDefauts.SetToImperialDefaults
@@ -106,13 +110,15 @@ Public Class WebConnectPlateParameter
         webConnectPlateThickness = 30
 
         webConnectPlateHorEdgeDist = 50
-        webConnectPlateHorDist = 5
-        webConnectPlateHorCount = 110
+        webConnectPlateHorDist = 110
+        webConnectPlateHorCount = 5
 
         webConnectPlateVerEdgeDist = 50
         webConnectPlateVerDist = 110
         webConnectPlateVerCount = 5
         webConnectPlateInnerVerEdgeDist = 100
+
+        gap = 20
     End Sub
 
     Public Sub WriteToConnection(ByRef eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.WriteToConnection
@@ -129,6 +135,8 @@ Public Class WebConnectPlateParameter
         eConnection.Double(iDbl) = webConnectPlateVerDist : iDbl = iDbl + 1
         eConnection.Number(iNum) = webConnectPlateVerCount : iNum = iNum + 1
         eConnection.Double(iDbl) = webConnectPlateInnerVerEdgeDist : iDbl = iDbl + 1
+
+        eConnection.Double(iDbl) = gap : iDbl = iDbl + 1
     End Sub
 
     Public Sub WriteToTemplate(ByRef Template As PsTemplateManager) Implements IParameters.WriteToTemplate
@@ -145,6 +153,8 @@ Public Class WebConnectPlateParameter
         Template.AppendDouble(webConnectPlateVerDist)
         Template.AppendNumber(webConnectPlateVerCount)
         Template.AppendDouble(webConnectPlateInnerVerEdgeDist)
+
+        Template.AppendDouble(gap)
     End Sub
 End Class
 
