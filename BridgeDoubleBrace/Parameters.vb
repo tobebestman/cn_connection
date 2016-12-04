@@ -215,7 +215,7 @@ Public Class SideConnectPlateParameter
         Template.AppendDouble(Me.verDistance)
         Template.AppendNumber(Me.verHoleCount)
         Template.AppendDouble(Me.outSidePlateThickness)
-        Template.AppendNumber(Me.insidePlateThickness)
+        Template.AppendDouble(Me.insidePlateThickness)
     End Sub
 
     Public Sub SetToImperialDefaults() Implements ISetToDefauts.SetToImperialDefaults
@@ -351,6 +351,11 @@ Public Class Parameters
     Public mSecondLeftCutIndex As Integer
     Public mSecondRightcutIndex As Integer
 
+    Public mFirstConnectDrill1 As Integer
+    Public mFirstConnectDrill2 As Integer
+    Public mSecondConnectDrill1 As Integer
+    Public mSecondConnectDrill2 As Integer
+
     Public mCreateGroup As Boolean
 
     Public mSupport1CutBack As Double
@@ -436,6 +441,11 @@ Public Class Parameters
         eConnection.Number(iNum) = mSecondLeftCutIndex : iNum = iNum + 1
         eConnection.Number(iNum) = mSecondRightcutIndex : iNum = iNum + 1
 
+        eConnection.Number(iNum) = mFirstConnectDrill1 : iNum = iNum + 1
+        eConnection.Number(iNum) = mFirstConnectDrill2 : iNum = iNum + 1
+        eConnection.Number(iNum) = mSecondConnectDrill1 : iNum = iNum + 1
+        eConnection.Number(iNum) = mSecondConnectDrill2 : iNum = iNum + 1
+
         eConnection.Double(iDbl) = mSupport1CutBack : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mSupport2CutBack : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mConnect1CutBack : iDbl = iDbl + 1
@@ -482,6 +492,11 @@ Public Class Parameters
         mFirstRightCutIndex = eConnection.Number(iNum) : iNum = iNum + 1
         mSecondLeftCutIndex = eConnection.Number(iNum) : iNum = iNum + 1
         mSecondRightcutIndex = eConnection.Number(iNum) : iNum = iNum + 1
+
+        mFirstConnectDrill1 = eConnection.Number(iNum) : iNum = iNum + 1
+        mFirstConnectDrill2 = eConnection.Number(iNum) : iNum = iNum + 1
+        mSecondConnectDrill1 = eConnection.Number(iNum) : iNum = iNum + 1
+        mSecondConnectDrill2 = eConnection.Number(iNum) : iNum = iNum + 1
 
         mSupport1CutBack = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mSupport2CutBack = eConnection.Double(iDbl) : iDbl = iDbl + 1
