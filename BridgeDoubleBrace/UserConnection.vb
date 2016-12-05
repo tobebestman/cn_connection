@@ -536,10 +536,10 @@ Public Class UserConnection
             SideConnectPlatesCreater1.Create()
             SideConnectPlatesCreater1.CreateDrill(SideConnectPlatesCreater1.FirstMainPlateMatrix, sidePlateCreator1.sidePlateId)
             SideConnectPlatesCreater1.CreateDrill(SideConnectPlatesCreater1.SecondMainPlateMatrix, sidePlateCreator2.sidePlateId)
-            Dim drillId1 As Integer = SideConnectPlatesCreater1.CreateDrill(SideConnectPlatesCreater1.FirstMainPlateMatrix, connectingId1)
-            Dim drillId2 As Integer = SideConnectPlatesCreater1.CreateDrill(SideConnectPlatesCreater1.SecondMainPlateMatrix, connectingId1)
-            data.mFirstConnectDrill1 = IIf(drillId1 <> -1, drillId1, -1)
-            data.mFirstConnectDrill2 = IIf(drillId2 <> -1, drillId1, -1)
+            Dim drillId1 As List(Of Integer) = SideConnectPlatesCreater1.CreateDrill(SideConnectPlatesCreater1.FirstMainPlateMatrix, connectingId1)
+            Dim drillId2 As List(Of Integer) = SideConnectPlatesCreater1.CreateDrill(SideConnectPlatesCreater1.SecondMainPlateMatrix, connectingId1)
+            data.mSideConnectPlate1.drillModifyIndices.AddRange(drillId1)
+            data.mSideConnectPlate1.drillModifyIndices.AddRange(drillId2)
 
             Dim SideConnectPlatesCreater2 As New SideConnectPlatesCreater(supportingId2, connectingId2, data.mSideConnectPlate2,
                         SidePlateTopToCenterDistance(data, supportingId2),
@@ -551,8 +551,8 @@ Public Class UserConnection
             SideConnectPlatesCreater2.CreateDrill(SideConnectPlatesCreater2.SecondMainPlateMatrix, sidePlateCreator2.sidePlateId)
             drillId1 = SideConnectPlatesCreater2.CreateDrill(SideConnectPlatesCreater2.FirstMainPlateMatrix, connectingId2)
             drillId2 = SideConnectPlatesCreater2.CreateDrill(SideConnectPlatesCreater2.SecondMainPlateMatrix, connectingId2)
-            data.mSecondConnectDrill1 = IIf(drillId1 <> -1, drillId1, -1)
-            data.mSecondConnectDrill2 = IIf(drillId2 <> -1, drillId1, -1)
+            data.mSideConnectPlate2.drillModifyIndices.AddRange(drillId1)
+            data.mSideConnectPlate2.drillModifyIndices.AddRange(drillId2)
 
             Dim webConnectPlatesCreater1 As New WebConnectPlatesCreater(data.mWebConnectPlate1,
                                                      data.mConnectPlate1,
@@ -786,8 +786,8 @@ Public Class UserConnection
             Return result
         End Function
 
-        Public Function CreateDrill(oMat As PsMatrix, id As Long) As Integer
-            Dim result As Integer
+        Public Function CreateDrill(oMat As PsMatrix, id As Long) As List(Of Integer)
+            Dim result As New List(Of Integer)
 
             Dim centers As List(Of PsPoint) = CalHoleGroupCenters(oMat)
 
@@ -800,13 +800,16 @@ Public Class UserConnection
                 oMat.getXAxis(xDir)
                 oMat.getYAxis(ydir)
                 oDrill.SetXYPlane(xDir, ydir)
-                oDrill.SetLinearHoleField(20, param.horHoleCount.ToString() + "x" + param.horDistance.ToString(),
+                oDrill.SetLinearHoleField(param.owner.mHoleDia, param.horHoleCount.ToString() + "x" + param.horDistance.ToString(),
                                            param.verHoleCount.ToString() + "x" + param.verDistance.ToString())
                 oDrill.SetInsertPoint(center)
                 oDrill.SetHoleType(HoleType.kHoleNormal)
                 oDrill.SetObjectId(id)
                 oDrill.Apply()
-                result = oDrill.GetModifyIndex()
+                Dim modIndex As Integer = oDrill.GetModifyIndex()
+                If (modIndex <> -1) Then
+                    result.Add(modIndex)
+                End If
             Next
 
             Return result
@@ -1059,7 +1062,7 @@ Public Class UserConnection
             oDrill.SetToDefaults()
             oDrill.SetXYPlane(xAxis, yAxis)
             oDrill.SetInsertPoint(center)
-            oDrill.SetLinearHoleField(20, param.webConnectPlateHorCount.ToString() + "x" +
+            oDrill.SetLinearHoleField(param.owner.mHoleDia, param.webConnectPlateHorCount.ToString() + "x" +
                                            param.webConnectPlateHorDist.ToString(),
                                            param.webConnectPlateVerCount.ToString() + "x" +
                                            param.webConnectPlateVerDist.ToString())
@@ -1745,23 +1748,19 @@ Public Class UserConnection
         Dim connectId1 As Long = oConnection.AdditionalObjectId(2)
         Dim connectId2 As Long = oConnection.AdditionalObjectId(3)
 
-        If (param.mFirstConnectDrill1 <> -1) Then
-            oModify.SetObjectId(connectId1)
-            oModify.DeleteHoleField(param.mFirstConnectDrill1)
-        End If
-        If (param.mFirstConnectDrill2 <> -1) Then
-            oModify.SetObjectId(connectId1)
-            oModify.DeleteHoleField(param.mFirstConnectDrill2)
-        End If
+        For Each mid As Integer In param.mSideConnectPlate1.drillModifyIndices
+            If (mid <> -1) Then
+                oModify.SetObjectId(connectId1)
+                oModify.DeleteHoleField(mid)
+            End If
+        Next
 
-        If (param.mSecondConnectDrill1 <> -1) Then
-            oModify.SetObjectId(connectId2)
-            oModify.DeleteHoleField(param.mSecondConnectDrill1)
-        End If
-        If (param.mSecondConnectDrill2 <> -1) Then
-            oModify.SetObjectId(connectId2)
-            oModify.DeleteHoleField(param.mSecondConnectDrill2)
-        End If
+        For Each mid As Integer In param.mSideConnectPlate2.drillModifyIndices
+            If (mid <> -1) Then
+                oModify.SetObjectId(connectId2)
+                oModify.DeleteHoleField(mid)
+            End If
+        Next
 
         oModify.SetObjectId(connectId1)
         For Each modId As Integer In param.mWebConnectPlate1.webConnectDrillModifyIds

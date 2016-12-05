@@ -264,6 +264,7 @@ Friend Class UserConnectionForm
         Data.mBottomFillet2 = UIConverter.ConvertToNumeric(txtFillet2.Text)
 
         Data.mMainChordPlateThickness = UIConverter.ConvertToNumeric(txtMainChordPlateThickness.Text)
+        Data.mHoleDia = UIConverter.ConvertToNumeric(txtHoleDia.Text)
 
         Data.mConnectPlate1.sideDistance = UIConverter.ConvertToNumeric(txtConnect1SideDistance.Text)
         Data.mConnectPlate1.radius = UIConverter.ConvertToNumeric(txtConnect1Radius.Text)
@@ -354,6 +355,7 @@ Friend Class UserConnectionForm
         txtFillet2.Text = UIConverter.ConvertToText(Data.mBottomFillet2)
 
         txtMainChordPlateThickness.Text = UIConverter.ConvertToText(Data.mMainChordPlateThickness)
+        txtHoleDia.Text = UIConverter.ConvertToText(Data.mHoleDia)
 
         txtConnect1SideDistance.Text = UIConverter.ConvertToText(Data.mConnectPlate1.sideDistance)
         txtConnect1Radius.Text = UIConverter.ConvertToText(Data.mConnectPlate1.radius)

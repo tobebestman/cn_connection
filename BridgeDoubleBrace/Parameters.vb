@@ -66,6 +66,12 @@ Public Class WebConnectPlateParameter
     Public webConnectDrillModifyIds As List(Of Integer)
     Public gap As Double
 
+    Public owner As Parameters
+
+    Public Sub New(owner As Parameters)
+        Me.owner = owner
+    End Sub
+
     Public Sub ReadFromConnection(eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromConnection
         boltGroupHorSideDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
         boltGroupSpan = eConnection.Double(iDbl) : iDbl = iDbl + 1
@@ -188,6 +194,15 @@ Public Class SideConnectPlateParameter
     Public outSidePlateThickness As Double
     Public insidePlateThickness As Double
 
+    Public drillModifyIndices As List(Of Integer)
+
+    Public owner As Parameters
+
+    Public Sub New(owner As Parameters)
+        Me.owner = owner
+        drillModifyIndices = New List(Of Integer)
+    End Sub
+
     Public Sub ReadFromConnection(eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromConnection
         Me.webThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
         Me.horSideDistance = eConnection.Double(iDbl) : iDbl = iDbl + 1
@@ -198,6 +213,13 @@ Public Class SideConnectPlateParameter
         Me.verHoleCount = eConnection.Number(iNum) : iNum = iNum + 1
         Me.outSidePlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
         Me.insidePlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
+
+        Dim count As Integer
+        count = eConnection.Number(iNum) : iNum = iNum + 1
+        For i As Integer = 0 To count - 1
+            Me.drillModifyIndices.Add(eConnection.Number(iNum))
+            iNum = iNum + 1
+        Next
     End Sub
 
     Public Sub ReadFromTemplate(Template As PsTemplateManager, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromTemplate
@@ -222,6 +244,13 @@ Public Class SideConnectPlateParameter
         eConnection.Number(iNum) = Me.verHoleCount : iNum = iNum + 1
         eConnection.Double(iDbl) = Me.outSidePlateThickness : iDbl = iDbl + 1
         eConnection.Double(iDbl) = Me.insidePlateThickness : iDbl = iDbl + 1
+
+        eConnection.Number(iNum) = Me.drillModifyIndices.Count : iNum = iNum + 1
+        For Each id As Integer In Me.drillModifyIndices
+            eConnection.Number(iNum) = id
+            iNum = iNum + 1
+        Next
+
     End Sub
 
     Public Sub WriteToTemplate(ByRef Template As PsTemplateManager) Implements IParameters.WriteToTemplate
@@ -266,6 +295,12 @@ Public Class ArcPlateParameter
     Public innerWebThickness As Double
     Public innerWebCount As Integer
     Public innerWebDist As Double
+
+    Private owner As Parameters
+
+    Public Sub New(owner As Parameters)
+        Me.owner = owner
+    End Sub
 
     Private Sub writeConnectPlate(ByRef plateParam As ArcPlateParameter,
                                  ByRef Template As PsTemplateManager)
@@ -369,11 +404,6 @@ Public Class Parameters
     Public mSecondLeftCutIndex As Integer
     Public mSecondRightcutIndex As Integer
 
-    Public mFirstConnectDrill1 As Integer
-    Public mFirstConnectDrill2 As Integer
-    Public mSecondConnectDrill1 As Integer
-    Public mSecondConnectDrill2 As Integer
-
     Public mCreateGroup As Boolean
 
     Public mSupport1CutBack As Double
@@ -393,6 +423,8 @@ Public Class Parameters
     Public mBottomFillet2 As Double
 
     Public mMainChordPlateThickness As Double
+
+    Public mHoleDia As Double
 
     Public mConnectPlate1 As ArcPlateParameter
     Public mConnectPlate2 As ArcPlateParameter
@@ -459,11 +491,6 @@ Public Class Parameters
         eConnection.Number(iNum) = mSecondLeftCutIndex : iNum = iNum + 1
         eConnection.Number(iNum) = mSecondRightcutIndex : iNum = iNum + 1
 
-        eConnection.Number(iNum) = mFirstConnectDrill1 : iNum = iNum + 1
-        eConnection.Number(iNum) = mFirstConnectDrill2 : iNum = iNum + 1
-        eConnection.Number(iNum) = mSecondConnectDrill1 : iNum = iNum + 1
-        eConnection.Number(iNum) = mSecondConnectDrill2 : iNum = iNum + 1
-
         eConnection.Double(iDbl) = mSupport1CutBack : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mSupport2CutBack : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mConnect1CutBack : iDbl = iDbl + 1
@@ -480,6 +507,7 @@ Public Class Parameters
         eConnection.Double(iDbl) = mBottomFillet2 : iDbl = iDbl + 1
 
         eConnection.Double(iDbl) = mMainChordPlateThickness : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mHoleDia : iDbl = iDbl + 1
     End Sub
 
     Public Sub ReadFromConnection(ByRef eConnection As PsConnection, Optional ByVal forClone As Boolean = False)
@@ -511,11 +539,6 @@ Public Class Parameters
         mSecondLeftCutIndex = eConnection.Number(iNum) : iNum = iNum + 1
         mSecondRightcutIndex = eConnection.Number(iNum) : iNum = iNum + 1
 
-        mFirstConnectDrill1 = eConnection.Number(iNum) : iNum = iNum + 1
-        mFirstConnectDrill2 = eConnection.Number(iNum) : iNum = iNum + 1
-        mSecondConnectDrill1 = eConnection.Number(iNum) : iNum = iNum + 1
-        mSecondConnectDrill2 = eConnection.Number(iNum) : iNum = iNum + 1
-
         mSupport1CutBack = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mSupport2CutBack = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mConnect1CutBack = eConnection.Double(iDbl) : iDbl = iDbl + 1
@@ -532,6 +555,7 @@ Public Class Parameters
         mBottomFillet2 = eConnection.Double(iDbl) : iDbl = iDbl + 1
 
         mMainChordPlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mHoleDia = eConnection.Double(iDbl) : iDbl = iDbl + 1
     End Sub
 
 
@@ -565,6 +589,7 @@ Public Class Parameters
         Template.AppendDouble(mBottomFillet2)
 
         Template.AppendDouble(mMainChordPlateThickness)
+        Template.AppendDouble(mHoleDia)
 
         mConnectPlate1.WriteToTemplate(Template)
         mConnectPlate2.WriteToTemplate(Template)
@@ -622,20 +647,21 @@ Public Class Parameters
         mBottomFillet2 = Template.Double(iDbl) : iDbl = iDbl + 1
 
         mMainChordPlateThickness = Template.Double(iDbl) : iDbl = iDbl + 1
+        mHoleDia = Template.Double(iDbl) : iDbl = iDbl + 1
     End Sub
 
 
     Public Sub New()
         MyBase.New()
 
-        mConnectPlate1 = New ArcPlateParameter()
-        mConnectPlate2 = New ArcPlateParameter()
+        mConnectPlate1 = New ArcPlateParameter(Me)
+        mConnectPlate2 = New ArcPlateParameter(Me)
 
-        mSideConnectPlate1 = New SideConnectPlateParameter()
-        mSideConnectPlate2 = New SideConnectPlateParameter()
+        mSideConnectPlate1 = New SideConnectPlateParameter(Me)
+        mSideConnectPlate2 = New SideConnectPlateParameter(Me)
 
-        mWebConnectPlate1 = New WebConnectPlateParameter()
-        mWebConnectPlate2 = New WebConnectPlateParameter()
+        mWebConnectPlate1 = New WebConnectPlateParameter(Me)
+        mWebConnectPlate2 = New WebConnectPlateParameter(Me)
     End Sub
 
     Protected Overrides Sub Finalize()
@@ -674,6 +700,7 @@ Public Class Parameters
         mBottomFillet2 = 50
 
         mMainChordPlateThickness = 52
+        mHoleDia = 30
 
         mConnectPlate1.SetToMetricDefaults()
         mConnectPlate2.SetToMetricDefaults()
@@ -703,6 +730,7 @@ Public Class Parameters
         mBottomFillet2 = 5
 
         mMainChordPlateThickness = 2
+        mHoleDia = 2
 
         mConnectPlate1.SetToImperialDefaults()
         mConnectPlate2.SetToImperialDefaults()
