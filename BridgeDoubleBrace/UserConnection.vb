@@ -558,10 +558,14 @@ Public Class UserConnection
                                                      data.mConnectPlate1,
                                                      GetConnectPlateInsertMatrix(connectingId1, instPt1))
             webConnectPlatesCreater1.Create()
+            DrillConnectMemberWeb(data, connectingId1, instPt1, data.mWebConnectPlate1, webConnectPlatesCreater1)
+
             Dim webConnectPlatesCreater2 As New WebConnectPlatesCreater(data.mWebConnectPlate2,
                                                      data.mConnectPlate2,
                                                      GetConnectPlateInsertMatrix(connectingId2, instPt2))
             webConnectPlatesCreater2.Create()
+            DrillConnectMemberWeb(data, connectingId2, instPt2, data.mWebConnectPlate2, webConnectPlatesCreater2)
+
             oConnAdpt = Nothing
 
             oConnAdpt = New ConnectionAdapter(ConnectionId)
@@ -661,6 +665,29 @@ Public Class UserConnection
         Catch ex As Exception
             MessageBox.Show(ex.Message)
         End Try
+    End Sub
+
+    Private Shared Sub DrillConnectMemberWeb(data As Parameters,
+                                             shpId As Long,
+                                             instPt1 As PsPoint,
+                                             webConnectPlateDef As WebConnectPlateParameter,
+                                             webCreator As WebConnectPlatesCreater)
+        Dim centers As List(Of PsPoint) = webCreator.CalculateDrillCenter()
+        Dim oMat As PsMatrix = GetConnectPlateInsertMatrix(shpId, instPt1)
+        Dim xDir As New PsVector
+        Dim yDir As New PsVector
+        oMat.getXAxis(xDir)
+        oMat.getYAxis(yDir)
+        Dim ModIds As New List(Of Integer)
+        For Each center As PsPoint In centers
+            Dim ModId As Integer = webCreator.CreateDrill(shpId, xDir, yDir, center)
+            If (ModId > 0) Then
+                ModIds.Add(ModId)
+            End If
+        Next
+        For Each modId As Integer In ModIds
+            webConnectPlateDef.webConnectDrillModifyIds.Add(modId)
+        Next
     End Sub
 
     Private Shared Function SidePlateTopToCenterDistance(data As Parameters, supportingId1 As Long)
@@ -932,6 +959,35 @@ Public Class UserConnection
             webPlates = New List(Of Integer)
         End Sub
 
+        Public Function CalculateDrillCenter() As List(Of PsPoint)
+            Dim result = New List(Of PsPoint)
+            Dim xAxis As New PsVector
+            insertMatrix.getXAxis(xAxis)
+
+            Dim yAxis As New PsVector
+            insertMatrix.getYAxis(yAxis)
+
+            Dim org As New PsPoint
+            insertMatrix.getOrigin(org)
+            org = MathTool.GetPointInDirection(org, -yAxis, param.gap / 2)
+            org = MathTool.GetPointInDirection(org, -xAxis,
+                   arcPlateParam.width / 2 - param.boltGroupHorSideDist + param.webConnectPlateHorEdgeDist -
+                   plateWidth() / 2)
+
+            For c As Integer = 0 To 2
+                For r As Integer = 0 To 1
+                    Dim org1 As PsPoint = org
+                    Dim dist As Double = param.boltGroupSpan + (param.webConnectPlateHorCount - 1) * param.webConnectPlateHorDist
+                    org1 = MathTool.GetPointInDirection(org, xAxis, c * dist)
+                    org1 = MathTool.GetPointInDirection(org1, Math.Pow(-1, r) * yAxis,
+                               param.webConnectPlateInnerVerEdgeDist + param.gap / 2 +
+                               (param.webConnectPlateVerCount - 1) * param.webConnectPlateVerDist / 2)
+                    result.Add(org1)
+                Next
+            Next
+            Return result
+        End Function
+
         Public Function Create() As Boolean
             Dim result As Boolean = False
             Dim yAxis As New PsVector
@@ -962,6 +1018,17 @@ Public Class UserConnection
                 Debug.Assert(id > 0)
                 webPlates.Add(id)
 
+                Dim center As New PsPoint
+                center = org1
+                center = MathTool.GetPointInDirection(org1, yAxis,
+                               param.webConnectPlateInnerVerEdgeDist + param.gap / 2 +
+                               (param.webConnectPlateVerCount - 1) * param.webConnectPlateVerDist / 2)
+                CreateDrill(id, xAxis, yAxis, center)
+                center = MathTool.GetPointInDirection(org1, -yAxis,
+                               param.webConnectPlateInnerVerEdgeDist + param.gap / 2 +
+                               (param.webConnectPlateVerCount - 1) * param.webConnectPlateVerDist / 2)
+                CreateDrill(id, xAxis, yAxis, center)
+
                 Dim org2 As New PsPoint
                 org2 = MathTool.GetPointInDirection(org, -zAxis, param.webConnectPlateThickness)
                 Dim oMat2 As New PsMatrix
@@ -970,12 +1037,42 @@ Public Class UserConnection
                              0, 0, VerticalPosition.kMiddle, oMat2)
                 Debug.Assert(id > 0)
                 webPlates.Add(id)
+                center = org1
+                center = MathTool.GetPointInDirection(org2, yAxis,
+                               param.webConnectPlateInnerVerEdgeDist + param.gap / 2 +
+                               (param.webConnectPlateVerCount - 1) * param.webConnectPlateVerDist / 2)
+                CreateDrill(id, xAxis, yAxis, center)
+                center = MathTool.GetPointInDirection(org2, -yAxis,
+                               param.webConnectPlateInnerVerEdgeDist + param.gap / 2 +
+                               (param.webConnectPlateVerCount - 1) * param.webConnectPlateVerDist / 2)
+                CreateDrill(id, xAxis, yAxis, center)
 
                 org = MathTool.GetPointInDirection(org, xAxis, (param.boltGroupSpan +
                                                    (param.webConnectPlateHorCount - 1) * param.webConnectPlateHorDist))
             Next
 
             Return result
+        End Function
+
+        Public Function CreateDrill(id As Long, xAxis As PsVector, yAxis As PsVector, center As PsPoint) As Integer
+            Dim oDrill As New PsDrillObject
+            oDrill.SetToDefaults()
+            oDrill.SetXYPlane(xAxis, yAxis)
+            oDrill.SetInsertPoint(center)
+            oDrill.SetLinearHoleField(20, param.webConnectPlateHorCount.ToString() + "x" +
+                                           param.webConnectPlateHorDist.ToString(),
+                                           param.webConnectPlateVerCount.ToString() + "x" +
+                                           param.webConnectPlateVerDist.ToString())
+            oDrill.SetXOffset(0)
+            oDrill.SetYOffset(0)
+            oDrill.SetHoleBoltType(HoleBoltType.kHoleBoltNormal)
+            oDrill.SetObjectId(id)
+            oDrill.Apply()
+
+            Dim result As Integer = oDrill.GetModifyIndex()
+
+            Return result
+
         End Function
 
         Private Function plateLength() As Double
@@ -1665,6 +1762,20 @@ Public Class UserConnection
             oModify.SetObjectId(connectId2)
             oModify.DeleteHoleField(param.mSecondConnectDrill2)
         End If
+
+        oModify.SetObjectId(connectId1)
+        For Each modId As Integer In param.mWebConnectPlate1.webConnectDrillModifyIds
+            If (modId <> -1) Then
+                oModify.DeleteHoleField(modId)
+            End If
+        Next
+
+        oModify.SetObjectId(connectId2)
+        For Each modId As Integer In param.mWebConnectPlate2.webConnectDrillModifyIds
+            If (modId <> -1) Then
+                oModify.DeleteHoleField(modId)
+            End If
+        Next
 
         Return oConnection
     End Function

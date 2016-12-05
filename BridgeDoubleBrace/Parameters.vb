@@ -62,6 +62,8 @@ Public Class WebConnectPlateParameter
     Public webConnectPlateVerDist As Double
     Public webConnectPlateVerCount As Integer
     Public webConnectPlateInnerVerEdgeDist As Double
+
+    Public webConnectDrillModifyIds As List(Of Integer)
     Public gap As Double
 
     Public Sub ReadFromConnection(eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromConnection
@@ -79,6 +81,14 @@ Public Class WebConnectPlateParameter
         webConnectPlateVerCount = eConnection.Number(iNum) : iNum = iNum + 1
         webConnectPlateInnerVerEdgeDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
         gap = eConnection.Double(iDbl) : iDbl = iDbl + 1
+
+        Dim count As Integer
+        count = eConnection.Number(iNum) : iNum = iNum + 1
+        Me.webConnectDrillModifyIds = New List(Of Integer)
+        For i As Integer = 0 To count - 1
+            Me.webConnectDrillModifyIds.Add(eConnection.Number(iNum))
+            iNum = iNum + 1
+        Next
     End Sub
 
     Public Sub ReadFromTemplate(Template As PsTemplateManager, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromTemplate
@@ -119,6 +129,8 @@ Public Class WebConnectPlateParameter
         webConnectPlateInnerVerEdgeDist = 100
 
         gap = 20
+
+        webConnectDrillModifyIds = New List(Of Integer)
     End Sub
 
     Public Sub WriteToConnection(ByRef eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.WriteToConnection
@@ -137,6 +149,12 @@ Public Class WebConnectPlateParameter
         eConnection.Double(iDbl) = webConnectPlateInnerVerEdgeDist : iDbl = iDbl + 1
 
         eConnection.Double(iDbl) = gap : iDbl = iDbl + 1
+
+        eConnection.Number(iNum) = Me.webConnectDrillModifyIds.Count : iNum = iNum + 1
+        For i As Integer = 0 To Me.webConnectDrillModifyIds.Count - 1
+            eConnection.Number(iNum) = Me.webConnectDrillModifyIds(i)
+            iNum = iNum + 1
+        Next
     End Sub
 
     Public Sub WriteToTemplate(ByRef Template As PsTemplateManager) Implements IParameters.WriteToTemplate
