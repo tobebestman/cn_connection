@@ -640,7 +640,7 @@ Friend Class UserConnectionForm
         Dim oldValue As String = eventSender.Text
         eventSender.Text = oCheckInput.CheckPositive(eventSender.Text)
         If oldValue <> eventSender.Text Then
-            UpdateConnection()
+            'UpdateConnection()
         End If
 
     End Sub
@@ -651,7 +651,7 @@ Friend Class UserConnectionForm
         Dim oldValue As String = eventSender.Text
         eventSender.Text = oCheckInput.CheckPositiveInteger(eventSender.Text)
         If oldValue <> eventSender.Text Then
-            UpdateConnection()
+            'UpdateConnection()
         End If
 
     End Sub
@@ -662,7 +662,7 @@ Friend Class UserConnectionForm
         Dim oldValue As String = sender.Text
         sender.text = oCheckInput.CheckAngular(sender.text)
         If (oldValue <> sender.text) Then
-            UpdateConnection()
+            'UpdateConnection()
         End If
 
     End Sub
