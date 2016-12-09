@@ -49,6 +49,8 @@ Imports System.Windows.Forms
 Public Class WebConnectPlateParameter
     Implements IParameters, ISetToDefauts
 
+    Public connectMemberWebThickness As Double
+
     Public boltGroupHorSideDist As Double
     Public boltGroupSpan As Double
 
@@ -73,6 +75,9 @@ Public Class WebConnectPlateParameter
     End Sub
 
     Public Sub ReadFromConnection(eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromConnection
+
+        connectMemberWebThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
+
         boltGroupHorSideDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
         boltGroupSpan = eConnection.Double(iDbl) : iDbl = iDbl + 1
 
@@ -98,6 +103,9 @@ Public Class WebConnectPlateParameter
     End Sub
 
     Public Sub ReadFromTemplate(Template As PsTemplateManager, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromTemplate
+
+        connectMemberWebThickness = Template.Double(iDbl) : iDbl = iDbl + 1
+
         boltGroupHorSideDist = Template.Double(iDbl) : iDbl = iDbl + 1
         boltGroupSpan = Template.Double(iDbl) : iDbl = iDbl + 1
 
@@ -120,6 +128,9 @@ Public Class WebConnectPlateParameter
     End Sub
 
     Public Sub SetToMetricDefaults() Implements ISetToDefauts.SetToMetricDefaults
+
+        connectMemberWebThickness = 28
+
         boltGroupHorSideDist = 130
         boltGroupSpan = 210
 
@@ -140,6 +151,9 @@ Public Class WebConnectPlateParameter
     End Sub
 
     Public Sub WriteToConnection(ByRef eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.WriteToConnection
+
+        eConnection.Double(iDbl) = connectMemberWebThickness : iDbl = iDbl + 1
+
         eConnection.Double(iDbl) = boltGroupHorSideDist : iDbl = iDbl + 1
         eConnection.Double(iDbl) = boltGroupSpan : iDbl = iDbl + 1
 
@@ -164,6 +178,9 @@ Public Class WebConnectPlateParameter
     End Sub
 
     Public Sub WriteToTemplate(ByRef Template As PsTemplateManager) Implements IParameters.WriteToTemplate
+
+        Template.AppendDouble(connectMemberWebThickness)
+
         Template.AppendDouble(boltGroupHorSideDist)
         Template.AppendDouble(boltGroupSpan)
 
@@ -184,7 +201,7 @@ End Class
 
 Public Class SideConnectPlateParameter
     Implements IParameters, ISetToDefauts
-    Public webThickness As Double
+    Public FlangeThickness As Double
     Public horSideDistance As Double
     Public horDistance As Double
     Public horHoleCount As Integer
@@ -204,7 +221,7 @@ Public Class SideConnectPlateParameter
     End Sub
 
     Public Sub ReadFromConnection(eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromConnection
-        Me.webThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        Me.FlangeThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
         Me.horSideDistance = eConnection.Double(iDbl) : iDbl = iDbl + 1
         Me.horDistance = eConnection.Double(iDbl) : iDbl = iDbl + 1
         Me.horHoleCount = eConnection.Number(iNum) : iNum = iNum + 1
@@ -223,7 +240,7 @@ Public Class SideConnectPlateParameter
     End Sub
 
     Public Sub ReadFromTemplate(Template As PsTemplateManager, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromTemplate
-        Me.webThickness = Template.Double(iDbl) : iDbl = iDbl + 1
+        Me.FlangeThickness = Template.Double(iDbl) : iDbl = iDbl + 1
         Me.horSideDistance = Template.Double(iDbl) : iDbl = iDbl + 1
         Me.horDistance = Template.Double(iDbl) : iDbl = iDbl + 1
         Me.horHoleCount = Template.Number(iNum) : iNum = iNum + 1
@@ -235,7 +252,7 @@ Public Class SideConnectPlateParameter
     End Sub
 
     Public Sub WriteToConnection(ByRef eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.WriteToConnection
-        eConnection.Double(iDbl) = Me.webThickness : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = Me.FlangeThickness : iDbl = iDbl + 1
         eConnection.Double(iDbl) = Me.horSideDistance : iDbl = iDbl + 1
         eConnection.Double(iDbl) = Me.horDistance : iDbl = iDbl + 1
         eConnection.Number(iNum) = Me.horHoleCount : iNum = iNum + 1
@@ -254,7 +271,7 @@ Public Class SideConnectPlateParameter
     End Sub
 
     Public Sub WriteToTemplate(ByRef Template As PsTemplateManager) Implements IParameters.WriteToTemplate
-        Template.AppendDouble(Me.webThickness)
+        Template.AppendDouble(Me.FlangeThickness)
         Template.AppendDouble(Me.horSideDistance)
         Template.AppendDouble(Me.horDistance)
         Template.AppendNumber(Me.horHoleCount)
@@ -270,7 +287,7 @@ Public Class SideConnectPlateParameter
     End Sub
 
     Public Sub SetToMetricDefaults() Implements ISetToDefauts.SetToMetricDefaults
-        webThickness = 30
+        FlangeThickness = 30
         horSideDistance = 50
         horDistance = 100
         horHoleCount = 4
@@ -384,7 +401,7 @@ Public Class ArcPlateParameter
         gap = 20
         length = 1400
         width = 2000
-        thickness = 36
+        thickness = 90 '36
         angle = 45
         innerWebHeight = 250
         innerWebThickness = 20
@@ -464,6 +481,11 @@ Public Class Parameters
 
     Private Sub WriteToConnection(ByRef eConnection As PsConnection)
         If eConnection Is Nothing Then Return
+
+        eConnection.DeleteAllDoubles()
+        eConnection.DeleteAllNumbers()
+        eConnection.DeleteAllBools()
+        eConnection.DeleteAllStrings()
 
         Dim iDbl, iNum, iBln, iStr As Integer
         iDbl = 0 : iNum = 0 : iBln = 0 : iStr = 0
@@ -719,7 +741,7 @@ Public Class Parameters
         mConnect1CutBack = 10
         mConnect2CutBack = 10
 
-        mPlateThickness = 20
+        mPlateThickness = 2
 
         mBottomAngle1 = 5
         mBottomAngle2 = 5

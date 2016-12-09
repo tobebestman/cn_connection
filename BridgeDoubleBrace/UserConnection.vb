@@ -610,7 +610,14 @@ Public Class UserConnection
             For Each id As Long In webConnectPlatesCreater1.webPlates
                 oConnAdpt.AppendCreatedObjectArray(5, id)
             Next
+            For Each id As Long In webConnectPlatesCreater1.accessoryPlates
+                oConnAdpt.AppendCreatedObjectArray(5, id)
+            Next
+
             For Each id As Long In webConnectPlatesCreater2.webPlates
+                oConnAdpt.AppendCreatedObjectArray(6, id)
+            Next
+            For Each id As Long In webConnectPlatesCreater2.accessoryPlates
                 oConnAdpt.AppendCreatedObjectArray(6, id)
             Next
 
@@ -646,6 +653,13 @@ Public Class UserConnection
                 oConnAdpt.AppendCreatedObjectId(id)
             Next
             For Each id As Long In webConnectPlatesCreater2.webPlates
+                oConnAdpt.AppendCreatedObjectId(id)
+            Next
+
+            For Each id As Long In webConnectPlatesCreater1.accessoryPlates
+                oConnAdpt.AppendCreatedObjectId(id)
+            Next
+            For Each id As Long In webConnectPlatesCreater2.accessoryPlates
                 oConnAdpt.AppendCreatedObjectId(id)
             Next
 
@@ -830,13 +844,31 @@ Public Class UserConnection
             outsideSidePlates.Add(id)
             CreateDrill(oMainMat2, id)
 
-            id = CreatePlate(mainPlateWidth, mainPlateLength / 2, AccessoryPlateThickness, 0, mainPlateLength / 4, VerticalPosition.kDown, oMainMat)
-            accessorySidePlates.Add(id)
-            CreateDrill(oMainMat, id)
+            If (AccessoryPlateThickness() > 0) Then
+                id = CreatePlate(mainPlateWidth, mainPlateLength / 2,
+                                 AccessoryPlateThickness, 0, mainPlateLength / 4,
+                                 VerticalPosition.kDown, oMainMat)
+                accessorySidePlates.Add(id)
+                CreateDrill(oMainMat, id)
+                id = CreatePlate(mainPlateWidth, mainPlateLength / 2,
+                                 AccessoryPlateThickness, 0, mainPlateLength / 4,
+                                 VerticalPosition.kDown, oMainMat2)
+                accessorySidePlates.Add(id)
+                CreateDrill(oMainMat2, id)
+            ElseIf (AccessoryPlateThickness < 0) Then
+                'this should not happen. so just omit it.
+                'id = CreatePlate(mainPlateWidth, mainPlateLength / 2,
+                '                 Math.Abs(AccessoryPlateThickness), 0, -mainPlateLength / 4,
+                '                 VerticalPosition.kDown, oMainMat)
+                'accessorySidePlates.Add(id)
+                'CreateDrill(oMainMat, id)
+                'id = CreatePlate(mainPlateWidth, mainPlateLength / 2,
+                '                 Math.Abs(AccessoryPlateThickness), 0, -mainPlateLength / 4,
+                '                 VerticalPosition.kDown, oMainMat2)
+                'accessorySidePlates.Add(id)
+                'CreateDrill(oMainMat2, id)
+            End If
 
-            id = CreatePlate(mainPlateWidth, mainPlateLength / 2, AccessoryPlateThickness, 0, mainPlateLength / 4, VerticalPosition.kDown, oMainMat2)
-            accessorySidePlates.Add(id)
-            CreateDrill(oMainMat2, id)
 
             AddInsidePlates(mainPlateWidth, mainPlateLength, oMainMat)
             AddInsidePlates(mainPlateWidth, mainPlateLength, oMainMat2)
@@ -854,14 +886,14 @@ Public Class UserConnection
             oMainMat.getZAxis(zAxis)
             org1 = MathTool.GetPointInDirection(org1, zAxis, flangeThickness + AccessoryPlateThickness())
             oMainMat.SetCoordinateSystem(org1, xAxis, yAxis)
-            Dim w As Double = (mainPlateWidth - param.webThickness) / 2
+            Dim w As Double = (mainPlateWidth - param.FlangeThickness) / 2
             Dim pid As Long = CreatePlate(w, mainPlateLength, 26,
-                                          w / 2 + param.webThickness / 2, 0, VerticalPosition.kDown, oMainMat)
+                                          w / 2 + param.FlangeThickness / 2, 0, VerticalPosition.kDown, oMainMat)
             insideSidePlates.Add(pid)
             CreateDrill(oMainMat, pid)
 
             pid = CreatePlate(w, mainPlateLength, 26,
-                                         -w / 2 - param.webThickness / 2, 0, VerticalPosition.kDown, oMainMat)
+                                         -w / 2 - param.FlangeThickness / 2, 0, VerticalPosition.kDown, oMainMat)
             insideSidePlates.Add(pid)
             CreateDrill(oMainMat, pid)
         End Sub
@@ -949,6 +981,7 @@ Public Class UserConnection
 
     Class WebConnectPlatesCreater
         Public webPlates As List(Of Integer)
+        Public accessoryPlates As List(Of Integer)
         Private param As WebConnectPlateParameter
         Private arcPlateParam As ArcPlateParameter
         Private insertMatrix As PsMatrix
@@ -960,6 +993,7 @@ Public Class UserConnection
             Me.arcPlateParam = arcParam
             insertMatrix = oMat
             webPlates = New List(Of Integer)
+            accessoryPlates = New List(Of Integer)
         End Sub
 
         Public Function CalculateDrillCenter() As List(Of PsPoint)
@@ -1012,43 +1046,8 @@ Public Class UserConnection
 
             For i As Integer = 0 To arcPlateParam.innerWebCount
 
-                Dim org1 As New PsPoint
-                org1 = MathTool.GetPointInDirection(org, zAxis, param.webConnectPlateThickness)
-                Dim oMat1 As New PsMatrix
-                oMat1.SetCoordinateSystem(org1, xAxis, yAxis)
-                Dim id As Long = CreatePlate(plateWidth(), plateLength(), param.webConnectPlateThickness,
-                             0, 0, VerticalPosition.kMiddle, oMat1)
-                Debug.Assert(id > 0)
-                webPlates.Add(id)
-
-                Dim center As New PsPoint
-                center = org1
-                center = MathTool.GetPointInDirection(org1, yAxis,
-                               param.webConnectPlateInnerVerEdgeDist + param.gap / 2 +
-                               (param.webConnectPlateVerCount - 1) * param.webConnectPlateVerDist / 2)
-                CreateDrill(id, xAxis, yAxis, center)
-                center = MathTool.GetPointInDirection(org1, -yAxis,
-                               param.webConnectPlateInnerVerEdgeDist + param.gap / 2 +
-                               (param.webConnectPlateVerCount - 1) * param.webConnectPlateVerDist / 2)
-                CreateDrill(id, xAxis, yAxis, center)
-
-                Dim org2 As New PsPoint
-                org2 = MathTool.GetPointInDirection(org, -zAxis, param.webConnectPlateThickness)
-                Dim oMat2 As New PsMatrix
-                oMat2.SetCoordinateSystem(org2, xAxis, yAxis)
-                id = CreatePlate(plateWidth(), plateLength(), param.webConnectPlateThickness,
-                             0, 0, VerticalPosition.kMiddle, oMat2)
-                Debug.Assert(id > 0)
-                webPlates.Add(id)
-                center = org1
-                center = MathTool.GetPointInDirection(org2, yAxis,
-                               param.webConnectPlateInnerVerEdgeDist + param.gap / 2 +
-                               (param.webConnectPlateVerCount - 1) * param.webConnectPlateVerDist / 2)
-                CreateDrill(id, xAxis, yAxis, center)
-                center = MathTool.GetPointInDirection(org2, -yAxis,
-                               param.webConnectPlateInnerVerEdgeDist + param.gap / 2 +
-                               (param.webConnectPlateVerCount - 1) * param.webConnectPlateVerDist / 2)
-                CreateDrill(id, xAxis, yAxis, center)
+                CreatePlateOnOneSide(org, xAxis, yAxis, zAxis)
+                CreatePlateOnOneSide(org, xAxis, yAxis, -zAxis)
 
                 org = MathTool.GetPointInDirection(org, xAxis, (param.boltGroupSpan +
                                                    (param.webConnectPlateHorCount - 1) * param.webConnectPlateHorDist))
@@ -1056,6 +1055,46 @@ Public Class UserConnection
 
             Return result
         End Function
+
+
+        Private Sub CreatePlateOnOneSide(org As PsPoint, xAxis As PsVector, yAxis As PsVector, zAxis As PsVector)
+            Dim org1 As New PsPoint
+            org1 = MathTool.GetPointInDirection(org, zAxis, arcPlateParam.thickness / 2 + param.webConnectPlateThickness / 2)
+            Dim oMat1 As New PsMatrix
+            oMat1.SetCoordinateSystem(org1, xAxis, yAxis)
+            Dim id As Long = CreatePlate(plateWidth(), plateLength(), param.webConnectPlateThickness,
+                         0, 0, VerticalPosition.kMiddle, oMat1)
+            Debug.Assert(id > 0)
+            webPlates.Add(id)
+
+            Dim accessoryPlateThickness As Double = (arcPlateParam.thickness - param.connectMemberWebThickness) / 2
+            Dim aId As Long
+            If (accessoryPlateThickness > 0) Then
+                Dim oAccessOrg As New PsPoint
+                oAccessOrg = MathTool.GetPointInDirection(org, zAxis, param.connectMemberWebThickness / 2 + param.webConnectPlateThickness / 2)
+                Dim oAccessMat As New PsMatrix
+                oAccessMat.SetCoordinateSystem(oAccessOrg, xAxis, yAxis)
+                aId = CreatePlate(plateWidth(), plateLength() / 2, accessoryPlateThickness,
+                                               0, plateLength() / 4, VerticalPosition.kMiddle, oAccessMat)
+                Debug.Assert(aId > 0)
+                accessoryPlates.Add(aId)
+            End If
+
+            Dim center As New PsPoint
+            center = org1
+            center = MathTool.GetPointInDirection(org1, yAxis,
+                           param.webConnectPlateInnerVerEdgeDist + param.gap / 2 +
+                           (param.webConnectPlateVerCount - 1) * param.webConnectPlateVerDist / 2)
+            CreateDrill(id, xAxis, yAxis, center)
+            CreateDrill(aId, xAxis, yAxis, center)
+
+            center = MathTool.GetPointInDirection(org1, -yAxis,
+                           param.webConnectPlateInnerVerEdgeDist + param.gap / 2 +
+                           (param.webConnectPlateVerCount - 1) * param.webConnectPlateVerDist / 2)
+            CreateDrill(id, xAxis, yAxis, center)
+            CreateDrill(aId, xAxis, yAxis, center)
+
+        End Sub
 
         Public Function CreateDrill(id As Long, xAxis As PsVector, yAxis As PsVector, center As PsPoint) As Integer
             Dim oDrill As New PsDrillObject
@@ -1426,7 +1465,7 @@ Public Class UserConnection
         GetConnectingPointsInOrder(connectingId2, connMat2, rc1, rc2)
         Dim rightBoundary As List(Of PsPoint) = GetPlateBoundaryBetweenLines(rs1, rs2,
                                                data.mSupport2CutBack,
-                                               New ShapeAdapter(supportId1).Height, data.mBottomAngle4,
+                                               New ShapeAdapter(supportId2).Height, data.mBottomAngle4,
                                                rc1, rc2,
                                                data.mConnect2CutBack,
                                                New ShapeAdapter(connectingId2).Width, data.mBottomAngle3, data.mBottomFillet2)

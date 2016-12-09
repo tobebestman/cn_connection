@@ -67,14 +67,16 @@
 @D0403,"Connect Cut back 1",
 @D0404,"Connect Cut back 2",
 @D0405,"Main Chord Thk",
-@D0406,"Connect Web Thk 1"
-@D0407,"Connect Web Thk 2"
-@D0408,"Hole Dia"
+@D0406,"Connect Flange Thk 1"
+@D0407,"Connect Flange Thk 2"
+@D0408,"Hole Dia",
+@D0409,"Connect Web Thk 1"
+@D0410,"Connect Web Thk 2"
 
 @D0500,"Arc Plate 1",
 @D0501,"Dist",
 @D0502,"Radius",
-@D0503,"Gap",
+@D0503,"Gap 1",
 @D0504,"Length",
 @D0505,"Width",
 @D0506,"Thickness",
@@ -83,7 +85,8 @@
 @D0509,"Web Thickness",
 @D0510,"Web Count",
 @D0511,"Web Side Dist",
-@D0512,"Web Connect Plate"
+@D0512,"Web Connect Plate",
+@D0513,"Gap 2",
 
 @D0600,"Arc Plate 2",
 
