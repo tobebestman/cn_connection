@@ -511,7 +511,6 @@ Public Class UserConnection
                                                             connectingId1, connectingId2,
                                                             connMat1, connMat2, instPt1, instPt2)
             Dim dist As Double = MathTool.GetDistanceBetween(instPt1, instPt2)
-
             Dim sidePlateCreator1 As New SidePlateCreator(data, supportingId1,
                            CalculatePositiveXSidePlateMatrix(data, supportingId1, connMat1), oPoly)
             sidePlateCreator1.Create(VerticalPosition.kDown)
@@ -1320,6 +1319,14 @@ Public Class UserConnection
 
         Dim bottomHalf As List(Of PsPoint) = GetBottomHalfPlateProfile(data, supportId1, supportId2, connectingId1, connectingId2, connMat1, connMat2)
 
+        Dim zDir1 As New PsVector
+        Dim zDir2 As New PsVector
+
+        connMat1.getZAxis(zDir1)
+        connMat2.getZAxis(zDir2)
+
+        Dim dot As Double = MathTool.GetDotProductFrom(zDir1, zDir2)
+
         'For i As Long = 0 To bottomHalf.Count - 1
         '    Utility.drawBall(bottomHalf(i), 50)
         'Next
@@ -1334,53 +1341,76 @@ Public Class UserConnection
         Dim transMat As PsMatrix = ConvertConnectionMatToSidePlateInsertMat(connMat1)
         transMat.Invert()
         Dim oPoly As New PsPolygon
+        oPoly.init()
 
         For i As Integer = 0 To bottomHalf.Count - 1
             Dim pt As PsPoint = transMat.TransformPoint(bottomHalf(i))
             Debug.Assert(Math.Abs(pt.z) < PRECISION)
-            oPoly.appendVertex(pt)
+            Dim vpt As New PsPolygonVertex
+            vpt.set(pt, 0)
+            oPoly.appendVertex(vpt)
         Next
 
-        SetFirstBottomFillet(bottomHalf, oPoly)
-        SetSecondBottomFillet(bottomHalf, oPoly)
+        SetFirstBottomFillet(oPoly, data.mBottomFillet1)
+        SetSecondBottomFillet(oPoly, data.mBottomFillet2)
 
         For i As Integer = 0 To TopHalf.Count - 1
             Dim pt As PsPoint = transMat.TransformPoint(TopHalf(i))
-            oPoly.appendVertex(pt)
+            Debug.Assert(Math.Abs(pt.z) < PRECISION)
+            Dim vpt As New PsPolygonVertex
+            vpt.set(pt, 0)
+            oPoly.appendVertex(vpt)
         Next
 
+        oPoly.Close()
         Return oPoly
-
     End Function
-    Private Shared Sub SetFirstBottomFillet(bottomHalf As List(Of PsPoint), oPoly As PsPolygon)
-        Dim dir1 As New PsVector
-        Dim dir2 As New PsVector
-        dir1.SetFromPoints(bottomHalf(1), bottomHalf(2))
-        dir1.Normalize()
-        dir2.SetFromPoints(bottomHalf(4), bottomHalf(3))
-        dir2.Normalize()
-        Dim burge1 As Double = -Math.Tan(dir1.GetAngleTo(dir2) / 4)
-
-        Dim roundVertex As New PsPolygonVertex
-        oPoly.getVertex(2, roundVertex)
-        roundVertex.Bulge = burge1
-        oPoly.setVertex(2, roundVertex)
+    Private Shared Sub SetFirstBottomFillet(oPoly As PsPolygon, r As Double)
+        FilletPolyBetween(1, 2, 3, 4, oPoly, r)
     End Sub
 
+    Private Shared Sub FilletPolyBetween(sId1 As Integer, eId1 As Integer,
+                                         sId2 As Integer, eId2 As Integer,
+                                         oPoly As PsPolygon, r As Double)
+        Dim spt1 As New PsPoint
+        Dim ept1 As New PsPoint
+        Dim spt2 As New PsPoint
+        Dim ept2 As New PsPoint
 
-    Private Shared Sub SetSecondBottomFillet(bottomHalf As List(Of PsPoint), oPoly As PsPolygon)
+        oPoly.getVertexAsPoint(sId1, spt1)
+        oPoly.getVertexAsPoint(eId1, ept1)
+
+        oPoly.getVertexAsPoint(eId2, spt2)
+        oPoly.getVertexAsPoint(sId2, ept2)
+
         Dim dir1 As New PsVector
         Dim dir2 As New PsVector
-        dir1.SetFromPoints(bottomHalf(10), bottomHalf(9))
+        dir1.SetFromPoints(spt1, ept1)
         dir1.Normalize()
-        dir2.SetFromPoints(bottomHalf(11), bottomHalf(12))
+        dir2.SetFromPoints(spt2, ept2)
         dir2.Normalize()
-        Dim burge1 As Double = -Math.Tan(dir1.GetAngleTo(dir2) / 4)
+        Dim bulge1 As Double = -Math.Tan((Math.PI - Math.Abs(dir2.GetAngleTo(dir1))) / 4)
 
+        Dim pts As List(Of PsPoint) = FilletTwoLine(spt1, ept1, spt2, ept2, r)
         Dim roundVertex As New PsPolygonVertex
-        oPoly.getVertex(10, roundVertex)
-        roundVertex.Bulge = burge1
-        oPoly.setVertex(10, roundVertex)
+        oPoly.getVertex(eId1, roundVertex)
+
+        If (ept1.get_DistanceTo(pts(0)) > PRECISION) Then
+            Debug.Assert(False)
+            roundVertex.set(pts(0), bulge1)
+        Else
+            roundVertex.Bulge = bulge1
+        End If
+        oPoly.setVertex(eId1, roundVertex)
+
+        If (ept2.get_DistanceTo(pts(1)) > PRECISION) Then
+            Debug.Assert(False)
+            oPoly.setVertex(sId2, New PsPolygonVertex(ept2.x, ept2.y, 0))
+        End If
+    End Sub
+
+    Private Shared Sub SetSecondBottomFillet(oPoly As PsPolygon, r As Double)
+        FilletPolyBetween(9, 10, 11, 12, oPoly, r)
     End Sub
 
     Private Shared Function ConvertConnectionMatToSidePlateInsertMat(connMat As PsMatrix) As PsMatrix

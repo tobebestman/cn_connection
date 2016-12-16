@@ -605,7 +605,7 @@ Public Class Parameters
         Template.AppendDouble(mBottomAngle1)
         Template.AppendDouble(mBottomAngle2)
         Template.AppendDouble(mBottomAngle3)
-        Template.AppendDouble(mBottomAngle3)
+        Template.AppendDouble(mBottomAngle4)
 
         Template.AppendDouble(mBottomFillet1)
         Template.AppendDouble(mBottomFillet2)
@@ -705,21 +705,21 @@ Public Class Parameters
     End Sub
 
     Public Sub SetToMetricDefaults() Implements ISetToDefauts.SetToMetricDefaults
-        mSupport1CutBack = 1800
-        mSupport2CutBack = 1600
+        mSupport1CutBack = 2800
+        mSupport2CutBack = 2800
 
         mConnect1CutBack = 2400
         mConnect2CutBack = 2400
 
         mPlateThickness = 104
 
-        mBottomAngle1 = 5
-        mBottomAngle2 = 5
-        mBottomAngle3 = 5
-        mBottomAngle4 = 5
+        mBottomAngle1 = 0.1
+        mBottomAngle2 = 45
+        mBottomAngle3 = 45
+        mBottomAngle4 = 0.1
 
-        mBottomFillet1 = 50
-        mBottomFillet2 = 50
+        mBottomFillet1 = 100
+        mBottomFillet2 = 100
 
         mMainChordPlateThickness = 52
         mHoleDia = 30

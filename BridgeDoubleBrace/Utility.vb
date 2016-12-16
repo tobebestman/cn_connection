@@ -87,6 +87,29 @@ Module Utility
         oPrim.CreateSphere(100)
     End Sub
 
+    Public Sub drawUcs(oMat As PsMatrix)
+        Dim org As New PsPoint
+        oMat.getOrigin(org)
+
+        Dim MathTool As New PsGeometryFunctions
+
+        Dim oAxis As New PsVector
+        Dim oLine As New PsGeoLine
+        oMat.getXAxis(oAxis)
+        oLine.StartPoint = org
+        oLine.EndPoint = MathTool.GetPointInDirection(org, oAxis, 200)
+        oLine.DrawLine()
+
+        oMat.getYAxis(oAxis)
+        oLine.EndPoint = MathTool.GetPointInDirection(org, oAxis, 200)
+        oLine.DrawLine()
+
+        oMat.getZAxis(oAxis)
+        oLine.EndPoint = MathTool.GetPointInDirection(org, oAxis, 200)
+        oLine.DrawLine()
+
+    End Sub
+
     Public Function IsPipe(ByVal objId As Integer) As Boolean
         Dim shapeInfo As New PsShapeInfo
         shapeInfo.SetObjectId(objId)

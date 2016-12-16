@@ -204,7 +204,7 @@ Public Module GeoHelper
         End If
 
         Dim angle As Double = MathTool.GetAngleBetweenVectors(vec1, vec2)
-        If (Math.Abs((Math.Abs(angle) - Math.PI / 2)) < PRECISION) Then
+        If (Math.Abs((Math.Abs(angle) - Math.PI)) < PRECISION) Then
             Debug.Assert(False)
             Return Nothing
         End If
@@ -213,6 +213,8 @@ Public Module GeoHelper
 
         result.Add(MathTool.GetPointInDirection(inter, -vec1, dist))
         result.Add(MathTool.GetPointInDirection(inter, -vec2, dist))
+
+        'result .Add (inter)
 
         Return result
     End Function
