@@ -76,13 +76,13 @@ Public Module GeoHelper
                                                  pts2 As PsPoint, pte2 As PsPoint,
                                                  returnFirst As Boolean) As PsMatrix
         Dim intersect As New PsPoint
-        If MathTool.IntersectLineWithLine(pts1, pte1, pts2, pte2, 4, intersect) = False Then
+        If MathTool.IntersectLineWithLine(pts1, pte1, pts2, pte2, 0, intersect) = False Then
             Debug.Assert(False)
             Return Nothing
         End If
 
-        Debug.Assert(isOnTheSameSide(pts1, pte1, intersect) = True)
-        Debug.Assert(isOnTheSameSide(pts2, pte2, intersect) = True)
+        Debug.Assert(IsOnTheSameSide(pts1, pte1, intersect) = True)
+        Debug.Assert(IsOnTheSameSide(pts2, pte2, intersect) = True)
 
         Dim pt As New PsPoint
         pt.CopyFrom(intersect)
@@ -151,7 +151,7 @@ Public Module GeoHelper
         Debug.Assert(Math.Abs(newVec.y) < PRECISION)
         Debug.Assert(Math.Abs(newVec.z) < PRECISION)
 
-        newVec = rotateVector(newVec, angle)
+        newVec = RotateVector(newVec, angle)
         oMat.Invert()
         newVec = oMat.TransformVector(newVec)
         newVec.Normalize()
@@ -183,7 +183,7 @@ Public Module GeoHelper
         End If
 
         Dim inter As New PsPoint
-        If (MathTool.IntersectLineWithLine(spt1, ept1, spt2, ept2, 4, inter) = False) Then
+        If (MathTool.IntersectLineWithLine(spt1, ept1, spt2, ept2, 0, inter) = False) Then
             Debug.Assert(False)
             Return Nothing
         End If

@@ -38,11 +38,12 @@ Imports Bentley.ProStructures.Steel.Shape
 Imports Bentley.ProStructures.StructuralObject
 Imports Bentley.ProStructures.StructuralObject.JoistData
 
+
 Imports PlugInBase
 Imports PlugInBase.PlugInCommon
 Imports PlugInBase.PlugInCommon.CommonFunctions
 Imports PSN_SubstationShared.UnitConvert
-Imports PSN_BridgeDoubleBrace
+Imports PSN_BridgeTripleBrace
 Imports System.Windows.Forms
 
 Public Class Parameters
@@ -58,6 +59,8 @@ Public Class Parameters
 
     Public mFirstCutBackCutIndex As Integer
     Public mSecondCutBackCutIndex As Integer
+
+    Public mColumnCutIndex As Integer
 
     Public mCreateGroup As Boolean
 
@@ -80,6 +83,8 @@ Public Class Parameters
     Public mMainChordPlateThickness As Double
 
     Public mHoleDia As Double
+
+    Public mColumnCutBack As Double
 
     Public mConnectPlate1 As ArcPlateParameter
     Public mConnectPlate2 As ArcPlateParameter
@@ -154,6 +159,8 @@ Public Class Parameters
         eConnection.Number(iNum) = mFirstCutBackCutIndex : iNum = iNum + 1
         eConnection.Number(iNum) = mSecondCutBackCutIndex : iNum = iNum + 1
 
+        eConnection.Number(iNum) = mColumnCutIndex : iNum = iNum + 1
+
         eConnection.Double(iDbl) = mSupport1CutBack : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mSupport2CutBack : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mConnect1CutBack : iDbl = iDbl + 1
@@ -171,6 +178,8 @@ Public Class Parameters
 
         eConnection.Double(iDbl) = mMainChordPlateThickness : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mHoleDia : iDbl = iDbl + 1
+
+        eConnection.Double(iDbl) = mColumnCutBack : iDbl = iDbl + 1
     End Sub
 
     Public Sub ReadFromConnection(ByRef eConnection As PsConnection, Optional ByVal forClone As Boolean = False)
@@ -205,6 +214,8 @@ Public Class Parameters
         mFirstCutBackCutIndex = eConnection.Number(iNum) : iNum = iNum + 1
         mSecondCutBackCutIndex = eConnection.Number(iNum) : iNum = iNum + 1
 
+        mColumnCutIndex = eConnection.Number(iNum) : iNum = iNum + 1
+
         mSupport1CutBack = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mSupport2CutBack = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mConnect1CutBack = eConnection.Double(iDbl) : iDbl = iDbl + 1
@@ -222,6 +233,8 @@ Public Class Parameters
 
         mMainChordPlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mHoleDia = eConnection.Double(iDbl) : iDbl = iDbl + 1
+
+        mColumnCutBack = eConnection.Double(iDbl) : iDbl = iDbl + 1
     End Sub
 
 
@@ -256,6 +269,8 @@ Public Class Parameters
 
         Template.AppendDouble(mMainChordPlateThickness)
         Template.AppendDouble(mHoleDia)
+
+        Template.AppendDouble(mColumnCutBack)
 
         mConnectPlate1.WriteToTemplate(Template)
         mConnectPlate2.WriteToTemplate(Template)
@@ -314,6 +329,8 @@ Public Class Parameters
 
         mMainChordPlateThickness = Template.Double(iDbl) : iDbl = iDbl + 1
         mHoleDia = Template.Double(iDbl) : iDbl = iDbl + 1
+
+        mColumnCutBack = Template.Double(iDbl) : iDbl = iDbl + 1
     End Sub
 
 
@@ -368,6 +385,8 @@ Public Class Parameters
         mMainChordPlateThickness = 52
         mHoleDia = 30
 
+        mColumnCutBack = 1400
+
         mConnectPlate1.SetToMetricDefaults()
         mConnectPlate2.SetToMetricDefaults()
 
@@ -379,32 +398,7 @@ Public Class Parameters
     End Sub
 
     Public Sub SetToImperialDefaults() Implements ISetToDefauts.SetToImperialDefaults
-        mSupport1CutBack = 20
-        mSupport2CutBack = 30
-
-        mConnect1CutBack = 10
-        mConnect2CutBack = 10
-
-        mPlateThickness = 2
-
-        mBottomAngle1 = 5
-        mBottomAngle2 = 5
-        mBottomAngle3 = 5
-        mBottomAngle4 = 5
-
-        mBottomFillet1 = 5
-        mBottomFillet2 = 5
-
-        mMainChordPlateThickness = 2
-        mHoleDia = 2
-
-        mConnectPlate1.SetToImperialDefaults()
-        mConnectPlate2.SetToImperialDefaults()
-
-        mSideConnectPlate1.SetToImperialDefaults()
-        mSideConnectPlate2.SetToImperialDefaults()
-
-        mWebConnectPlate1.SetToImperialDefaults()
-        mWebConnectPlate2.SetToImperialDefaults()
+        MessageBox.Show("Can not support the imperial units.")
+        Throw New NotImplementedException()
     End Sub
 End Class

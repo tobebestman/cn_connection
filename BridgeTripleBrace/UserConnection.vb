@@ -132,13 +132,14 @@ Public Class UserConnection
             Return False
         End If
 
+
         If Utility.GetIntersectPtAndUcsBySupportAndConnectMembers(supportId1, connectId1, instPt1, connUcs1) = False Then
             Return False
         End If
-
         If Utility.GetIntersectPtAndUcsBySupportAndConnectMembers(supportId2, connectId2, instPt2, connUcs2) = False Then
             Return False
         End If
+
 
         Return True
     End Function
@@ -390,15 +391,17 @@ Public Class UserConnection
             Dim connectingId1 = mBuilder.getConnectingShapeIdFromAdapter(oConnAdpt, 2)
             Dim connectingId2 = mBuilder.getConnectingShapeIdFromAdapter(oConnAdpt, 3)
 
+            Dim supportingColumnId = mBuilder.getSupportColumnIdFromAdapter(oConnAdpt, 4)
+
             If (supportingId1 <= 0 Or supportingId2 <= 0 Or
-                    connectingId1 <= 0 Or connectingId2 <= 0) Then
+                connectingId1 <= 0 Or connectingId2 <= 0 Or
+                supportingColumnId <= 0) Then
                 Debug.Assert(False)
                 Return
             End If
 
             'execute creation
             If oConnAdpt.IsBuilt Then
-                'recoverOriginSupporingShape(oConnAdpt)
                 CleanI(ConnectionId, False)
             End If
 
@@ -413,6 +416,14 @@ Public Class UserConnection
                 Return
             End If
 
+            Dim cutId As Integer = CutColumnBySupportShape(data, supportingId2, supportingColumnId)
+            data.mColumnCutIndex = IIf(cutId <> -1, cutId, -1)
+
+            CutColumnSidePlate(data, supportingId2, supportingColumnId)
+
+            'Utility.drawUcs(connMat1)
+            'Utility.drawUcs(connMat3)
+
             Dim cutIds As List(Of Integer) = CutSupportShapeSidePlate(connMat1, supportingId1, data, instPt1, instPt2, True)
             If (cutIds.Count = 2) Then
                 data.mFirstLeftCutIndex = IIf(cutIds(0) <> -1, cutIds(0), -1)
@@ -425,7 +436,7 @@ Public Class UserConnection
                 data.mSecondRightcutIndex = IIf(cutIds(1) <> -1, cutIds(1), -1)
             End If
 
-            Dim cutId As Integer = Utility.CutShapeInwards(connectingId1, instPt1, data.mConnect1CutBack + data.mConnectPlate1.gap)
+            cutId = Utility.CutShapeInwards(connectingId1, instPt1, data.mConnect1CutBack + data.mConnectPlate1.gap)
             data.mFirstCutBackCutIndex = IIf(cutId <> -1, cutId, -1)
             cutId = Utility.CutShapeInwards(connectingId2, instPt2, data.mConnect2CutBack + data.mConnectPlate2.gap)
             data.mSecondCutBackCutIndex = IIf(cutId <> -1, cutId, -1)
@@ -602,6 +613,95 @@ Public Class UserConnection
         Catch ex As Exception
             MessageBox.Show(ex.Message)
         End Try
+    End Sub
+
+    Private Shared Function CutColumnBySupportShape(data As Parameters, supportingId2 As Long, supportingColumnId As Long) As Integer
+        Dim instPt3 As New PsPoint
+        Dim connMat3 As New PsMatrix
+        If Utility.GetIntersectPtAndUcsBySupportAndConnectMembers(
+            supportingColumnId, supportingId2, instPt3, connMat3) = False Then
+            Debug.Assert(False)
+            Return -1
+        End If
+
+        Dim zAxis As New PsVector
+        connMat3.getZAxis(zAxis)
+
+        Dim instPt2 As New PsPoint
+        Dim connMat2 As New PsMatrix
+        If Utility.GetIntersectPtAndUcsBySupportAndConnectMembers(
+            supportingId2, supportingColumnId, instPt2, connMat2) = False Then
+            Debug.Assert(False)
+        End If
+
+        Dim zAxis2 As New PsVector
+        connMat2.getZAxis(zAxis2)
+        Dim yAxis2 As New PsVector
+        connMat2.getYAxis(yAxis2)
+
+        Dim ang As Double = zAxis2.GetAngleTo(zAxis)
+
+        Dim supportAdpt As New ShapeAdapter(supportingId2)
+        Dim pt As New PsPoint
+        pt = MathTool.GetPointInDirection(instPt2, -zAxis, supportAdpt.Height / 2 / Math.Sin(ang))
+
+        Dim oPlane As New PsCutPlane
+        oPlane.InsertPoint = pt
+        oPlane.Normal = yAxis2
+
+        Dim oCut As New PsCutObjects
+        oCut.SetToDefaults()
+        oCut.SetAsPlaneCut(oPlane)
+        oCut.SetObjectId(supportingColumnId)
+        oCut.Apply()
+        Return oCut.GetModifyIndex
+
+    End Function
+
+
+    Private Shared Sub CutColumnSidePlate(data As Parameters, supportingId2 As Long, supportingColumnId As Long)
+        Dim instPt3 As New PsPoint
+        Dim connMat3 As New PsMatrix
+        If Utility.GetIntersectPtAndUcsBySupportAndConnectMembers(
+            supportingColumnId, supportingId2, instPt3, connMat3) = False Then
+            Debug.Assert(False)
+        End If
+
+        Dim yAxis As New PsVector
+        Dim zAxis As New PsVector
+        connMat3.getYAxis(yAxis)
+        connMat3.getZAxis(zAxis)
+        Dim colAdpt As New ShapeAdapter(supportingColumnId)
+
+        Dim pt1 As New PsPoint
+        pt1 = MathTool.GetPointInDirection(instPt3, -yAxis, colAdpt.Height / 2)
+
+        Dim pt2 As New PsPoint
+        pt2 = MathTool.GetPointInDirection(pt1, -zAxis, data.mColumnCutBack)
+
+        Dim instPt2 As New PsPoint
+        Dim connMat2 As New PsMatrix
+        If Utility.GetIntersectPtAndUcsBySupportAndConnectMembers(
+            supportingId2, supportingColumnId, instPt2, connMat2) = False Then
+            Debug.Assert(False)
+        End If
+
+        Dim zAxis2 As New PsVector
+        connMat2.getZAxis(zAxis2)
+        Dim ang As Double = zAxis2.GetAngleTo(zAxis)
+
+        Dim pt3 As New PsPoint
+        pt3 = MathTool.GetPointInDirection(pt2, yAxis, colAdpt.Height)
+        pt3 = MathTool.GetPointInDirection(pt3, zAxis, colAdpt.Height * Math.Cos(ang))
+
+        Dim pt4 As New PsPoint
+        pt4 = MathTool.GetPointInDirection(instPt3, yAxis, colAdpt.Height / 2)
+
+        'drawBall(pt1, 100)
+        'drawBall(pt2, 100)
+        'drawBall(pt3, 100)
+        'drawBall(pt4, 100)
+
     End Sub
 
     Private Shared Sub DrillConnectMemberWeb(data As Parameters,
@@ -1597,7 +1697,6 @@ Public Class UserConnection
 
             'oAdpt.ReadAddtionalObjects()
             'oAdpt.ReadCreatedObjectArray()
-            'recoverOriginSupporingShape(oAdpt)
 
             Dim oTrans As New PsTransaction
             Dim oConnection As PsConnection = Nothing
@@ -1608,12 +1707,6 @@ Public Class UserConnection
                 If oConnection IsNot Nothing Then
 
                     oConnection = RemoveModifications(oConnection)
-
-                    'For i As Integer = oConnection.AdditionalEntityCount - 1 To 0 Step -1
-                    '    Dim id As Long = oConnection.AdditionalObjectId(i)
-                    '    oEdit.SetObjectId(id)
-                    '    oEdit.DeleteAllCutPlanes()
-                    'Next
 
                     oConnection.RemoveAllAdditionalEntity(False)
 
@@ -1676,6 +1769,8 @@ Public Class UserConnection
         Dim support1 As Long = oConnection.AdditionalObjectId(0)
         Dim support2 As Long = oConnection.AdditionalObjectId(1)
 
+        Dim columnId As Long = oConnection.AdditionalObjectId(4)
+
         Dim oModify As New PsEditModification
 
         If (param.mFirstLeftCutIndex <> -1) Then
@@ -1696,6 +1791,11 @@ Public Class UserConnection
         If (param.mSecondRightcutIndex <> -1) Then
             oModify.SetObjectId(support2)
             oModify.DeletePolyCut(param.mSecondRightcutIndex)
+        End If
+
+        If (param.mColumnCutIndex <> -1) Then
+            oModify.SetObjectId(columnId)
+            oModify.DeleteCutPlane(param.mColumnCutIndex)
         End If
 
         Dim connectId1 As Long = oConnection.AdditionalObjectId(2)
@@ -1786,7 +1886,6 @@ Public Class UserConnection
             If supportingShape2 <= 0 Then Return 0
         Loop Until (IsWeldShape(supportingShape2))
 
-
         Dim connectingShape1 As Long
         Do
             connectingShape1 = Selection.PickObject(RSS.RSS("M0002"))
@@ -1799,6 +1898,11 @@ Public Class UserConnection
             If connectingShape2 <= 0 Then Return 0
         Loop Until (IsWeldShape(connectingShape2))
 
+        Dim supportingColumn As Long
+        Do
+            supportingColumn = Selection.PickObject(RSS.RSS("M0004"))
+            If supportingColumn <= 0 Then Return 0
+        Loop Until (IsWeldShape(supportingColumn))
         Dim oCreateConnection As New PsCreateConnection
 
         IsCreatingConn = True
@@ -1815,6 +1919,7 @@ Public Class UserConnection
         connAdpt.AppendAdditionalObjectId(supportingShape2)
         connAdpt.AppendAdditionalObjectId(connectingShape1)
         connAdpt.AppendAdditionalObjectId(connectingShape2)
+        connAdpt.AppendAdditionalObjectId(supportingColumn)
         connAdpt.CommitAppendObjects()
 
         Dim data As New Parameters

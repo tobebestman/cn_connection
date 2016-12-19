@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProjectGuid>{3AFAF32B-F5B6-4516-BE18-708F6605737A}</ProjectGuid>
+    <ProjectGuid>{68F3B2E6-14C4-49EA-B12D-4554B1BDCD44}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>PSN_BridgeDoubleBrace</RootNamespace>
-    <AssemblyName>PSN_BridgeDoubleBrace</AssemblyName>
+    <RootNamespace>PSN_BridgeTripleBrace</RootNamespace>
+    <AssemblyName>PSN_BridgeTripleBrace</AssemblyName>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
     <TargetFrameworkProfile />
@@ -106,18 +106,33 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArcPlateParameter.vb" />
-    <Compile Include="SideConnectPlateParameter.vb" />
-    <Compile Include="WebConnectPlateParameter.vb" />
-    <Content Include="BridgeDoubleBrace.keyins">
+    <Content Include="BridgeTripleBrace.keyins">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Compile Include="..\BridgeDoubleBrace\ArcPlateParameter.vb">
+      <Link>ArcPlateParameter.vb</Link>
+    </Compile>
+    <Compile Include="..\BridgeDoubleBrace\GeoHelper.vb">
+      <Link>GeoHelper.vb</Link>
+    </Compile>
+    <Compile Include="..\BridgeDoubleBrace\IParameters.vb">
+      <Link>IParameters.vb</Link>
+    </Compile>
+    <Compile Include="..\BridgeDoubleBrace\ISetToDefauts.vb">
+      <Link>ISetToDefauts.vb</Link>
+    </Compile>
+    <Compile Include="..\BridgeDoubleBrace\SideConnectPlateParameter.vb">
+      <Link>SideConnectPlateParameter.vb</Link>
+    </Compile>
+    <Compile Include="..\BridgeDoubleBrace\Utility.vb">
+      <Link>Utility.vb</Link>
+    </Compile>
+    <Compile Include="..\BridgeDoubleBrace\WebConnectPlateParameter.vb">
+      <Link>WebConnectPlateParameter.vb</Link>
+    </Compile>
     <Compile Include="AddInMain.vb" />
     <Compile Include="ConnectionBuilder.vb" />
     <Compile Include="Constants.vb" />
-    <Compile Include="GeoHelper.vb" />
-    <Compile Include="IParameters.vb" />
-    <Compile Include="ISetToDefauts.vb" />
     <Compile Include="KeyinCommands.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
@@ -142,7 +157,6 @@
     <Compile Include="UserConnectionForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Utility.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -156,7 +170,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="BridgeDoubleBrace.rss" />
+    <None Include="BridgeTripleBrace.rss" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>

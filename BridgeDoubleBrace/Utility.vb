@@ -63,6 +63,8 @@ Module Utility
     Public Const kShapeClass_HALF_HE As Short = 20 ' SHAPECLASS_HALF_HE        
     Public Const kShapeClassCOLD_C As Short = 21 ' SHAPECLASS_COLD_C 
 
+    Public MathTool As New PsGeometryFunctions
+
     Public Function IsWeldShape(ByVal objId As Integer) As Boolean
         Dim oTrans As New PsTransaction
         Dim oShape As PsShape = Nothing
@@ -97,16 +99,16 @@ Module Utility
         Dim oLine As New PsGeoLine
         oMat.getXAxis(oAxis)
         oLine.StartPoint = org
-        oLine.EndPoint = MathTool.GetPointInDirection(org, oAxis, 200)
-        oLine.DrawLine()
+        oLine.EndPoint = MathTool.GetPointInDirection(org, oAxis, 500)
+        oLine.DrawLine(CoordSystem.kWcs, "0", "0", 1, 5)
 
         oMat.getYAxis(oAxis)
-        oLine.EndPoint = MathTool.GetPointInDirection(org, oAxis, 200)
-        oLine.DrawLine()
+        oLine.EndPoint = MathTool.GetPointInDirection(org, oAxis, 500)
+        oLine.DrawLine(CoordSystem.kWcs, "0", "0", 3, 10)
 
         oMat.getZAxis(oAxis)
-        oLine.EndPoint = MathTool.GetPointInDirection(org, oAxis, 200)
-        oLine.DrawLine()
+        oLine.EndPoint = MathTool.GetPointInDirection(org, oAxis, 500)
+        oLine.DrawLine(CoordSystem.kWcs, "0", "0", 5, 15)
 
     End Sub
 
@@ -135,6 +137,86 @@ Module Utility
         oPrimit.SetXYPlane(New PsVector(1, 0, 0), New PsVector(0, 1, 0))
         oPrimit.CreateSphere(r)
     End Sub
+
+
+    ''' <summary>
+    ''' get the intersect point and usc defined by the input supportId and
+    ''' connectId. 
+    ''' origin: the intersect of the support and connect member.
+    ''' 
+    '''   ====================   (support Member)
+    '''                   /  
+    '''                  /     ^ YAxis 
+    '''                 /      |      
+    '''                /       |
+    '''               /        -----> ZAxis
+    '''              /
+    '''             (connect memer)   
+    ''' </summary>
+    ''' <param name="supportId"></param>
+    ''' <param name="connectId"></param>
+    ''' <param name="instPt"></param>
+    ''' <param name="connUcs"></param>
+    ''' <returns></returns>
+    Public Function GetIntersectPtAndUcsBySupportAndConnectMembers(supportId As Long, connectId As Long,
+                                          ByRef instPt As PsPoint, ByRef connUcs As PsMatrix) As Boolean
+        Dim MathTool As New PsGeometryFunctions
+        Dim supportAdpt As New ShapeAdapter(supportId)
+        Dim connectAdpt As New ShapeAdapter(connectId)
+
+        If MathTool.IntersectLineWithLine(supportAdpt.MidLineStart, supportAdpt.MidLineEnd,
+                                                   connectAdpt.MidLineStart, connectAdpt.MidLineEnd, 0, instPt) = False Then
+            Return False
+        End If
+        Dim pt1 As PsPoint = MathTool.OrthoProjectPointToLine(connectAdpt.MidLineMid,
+                                                              supportAdpt.MidLineStart,
+                                                              supportAdpt.MidLineEnd)
+        Dim yAxis As New PsVector
+        yAxis.SetFromPoints(connectAdpt.MidLineMid, pt1)
+
+        Dim zAxis As New PsVector
+        If supportAdpt.GetEndSideTo(instPt) = 1 Then
+            zAxis.SetFromPoints(supportAdpt.MidLineEnd, supportAdpt.MidLineStart)
+        Else
+            zAxis.SetFromPoints(supportAdpt.MidLineStart, supportAdpt.MidLineMid)
+        End If
+
+        zAxis.Normalize() : yAxis.Normalize()
+        Dim xAxis As New PsVector
+        xAxis.SetFromCrossProduct(yAxis, zAxis)
+        xAxis.Normalize()
+
+        connUcs.SetCoordinateSystem(instPt, xAxis, yAxis)
+        Return True
+    End Function
+
+
+    Public Function CutShapeInwards(shapeId As Long, ByRef basePoint As PsPoint, distance As Double) As Long
+
+        Dim shapeAdpt As New ShapeAdapter(shapeId)
+        Dim oMidPt As PsPoint
+        oMidPt = shapeAdpt.MidLineMid
+
+        'mid --> base
+        Dim vect As New PsVector
+        vect.SetFromPoints(oMidPt, basePoint)
+        vect.Normalize()
+
+        Dim cutPt As New PsPoint
+        cutPt = MathTool.GetPointInDirection(basePoint, -vect, distance)
+
+        Dim oCut As New PsCutObjects
+        oCut.SetToDefaults()
+
+        Dim oPlane As New PsCutPlane
+        oPlane.SetFromNormal(cutPt, vect)
+        oCut.SetAsPlaneCut(oPlane)
+        oCut.SetObjectId(shapeId)
+
+        oCut.Apply()
+        Return oCut.GetModifyIndex
+    End Function
+
 
     'Public Function BoltObjects(ByVal objectIds As List(Of Long), ByVal BoltType As String, ByVal BoltWorkLoose As Double, ByVal BoltAdditionalLen As Double, ByVal BoltGap As Double, ByVal BoltTurn As Boolean, ByVal ConnectionID As Long) As List(Of Long)
 
@@ -237,5 +319,46 @@ Module Utility
         Return Point
 
     End Function
+
+    Public Sub FilletPolyBetween(sId1 As Integer, eId1 As Integer,
+                                      sId2 As Integer, eId2 As Integer,
+                                      oPoly As PsPolygon, r As Double)
+        Dim spt1 As New PsPoint
+        Dim ept1 As New PsPoint
+        Dim spt2 As New PsPoint
+        Dim ept2 As New PsPoint
+
+        oPoly.getVertexAsPoint(sId1, spt1)
+        oPoly.getVertexAsPoint(eId1, ept1)
+
+        oPoly.getVertexAsPoint(eId2, spt2)
+        oPoly.getVertexAsPoint(sId2, ept2)
+
+        Dim dir1 As New PsVector
+        Dim dir2 As New PsVector
+        dir1.SetFromPoints(spt1, ept1)
+        dir1.Normalize()
+        dir2.SetFromPoints(spt2, ept2)
+        dir2.Normalize()
+        Dim bulge1 As Double = -Math.Tan((Math.PI - Math.Abs(dir2.GetAngleTo(dir1))) / 4)
+
+        Dim pts As List(Of PsPoint) = FilletTwoLine(spt1, ept1, spt2, ept2, r)
+        Dim roundVertex As New PsPolygonVertex
+        oPoly.getVertex(eId1, roundVertex)
+
+        If (ept1.get_DistanceTo(pts(0)) > PRECISION) Then
+            Debug.Assert(False)
+            roundVertex.set(pts(0), bulge1)
+        Else
+            roundVertex.Bulge = bulge1
+        End If
+        oPoly.setVertex(eId1, roundVertex)
+
+        If (ept2.get_DistanceTo(pts(1)) > PRECISION) Then
+            Debug.Assert(False)
+            oPoly.setVertex(sId2, New PsPolygonVertex(ept2.x, ept2.y, 0))
+        End If
+    End Sub
+
 End Module
 
