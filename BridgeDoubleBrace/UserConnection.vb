@@ -1262,29 +1262,16 @@ Public Class UserConnection
         '    Utility.drawBall(TopHalf(i), 100)
         'Next
 
-        Dim transMat As PsMatrix = ConvertConnectionMatToSidePlateInsertMat(connMat1)
-        transMat.Invert()
         Dim oPoly As New PsPolygon
         oPoly.init()
 
-        For i As Integer = 0 To bottomHalf.Count - 1
-            Dim pt As PsPoint = transMat.TransformPoint(bottomHalf(i))
-            Debug.Assert(Math.Abs(pt.z) < PRECISION)
-            Dim vpt As New PsPolygonVertex
-            vpt.set(pt, 0)
-            oPoly.appendVertex(vpt)
-        Next
+        Dim transMat As PsMatrix = ConvertConnectionMatToSidePlateInsertMat(connMat1)
+        Utility.TransformPointListToPolygon(bottomHalf, oPoly, transMat)
 
         SetFirstBottomFillet(oPoly, data.mBottomFillet1)
         SetSecondBottomFillet(oPoly, data.mBottomFillet2)
 
-        For i As Integer = 0 To TopHalf.Count - 1
-            Dim pt As PsPoint = transMat.TransformPoint(TopHalf(i))
-            Debug.Assert(Math.Abs(pt.z) < PRECISION)
-            Dim vpt As New PsPolygonVertex
-            vpt.set(pt, 0)
-            oPoly.appendVertex(vpt)
-        Next
+        Utility.TransformPointListToPolygon(TopHalf, oPoly, transMat)
 
         oPoly.Close()
         Return oPoly

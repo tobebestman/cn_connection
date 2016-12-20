@@ -419,10 +419,13 @@ Public Class UserConnection
             Dim cutId As Integer = CutColumnBySupportShape(data, supportingId2, supportingColumnId)
             data.mColumnCutIndex = IIf(cutId <> -1, cutId, -1)
 
-            CutColumnSidePlate(data, supportingId2, supportingColumnId)
-
-            'Utility.drawUcs(connMat1)
-            'Utility.drawUcs(connMat3)
+            Dim boolIds As List(Of Integer) = BooleanCutColumn(data, supportingId2, supportingColumnId)
+            If (boolIds.Count = 4) Then
+                data.mColumnBoolCutIndex1 = IIf(boolIds(0) <> -1, boolIds(0), -1)
+                data.mColumnBoolCutIndex2 = IIf(boolIds(1) <> -1, boolIds(1), -1)
+                data.mColumnBoolCutIndex3 = IIf(boolIds(2) <> -1, boolIds(2), -1)
+                data.mColumnBoolCutIndex4 = IIf(boolIds(3) <> -1, boolIds(3), -1)
+            End If
 
             Dim cutIds As List(Of Integer) = CutSupportShapeSidePlate(connMat1, supportingId1, data, instPt1, instPt2, True)
             If (cutIds.Count = 2) Then
@@ -615,6 +618,173 @@ Public Class UserConnection
         End Try
     End Sub
 
+    Private Function BooleanCutColumnSide(data As Parameters,
+                                                 supportingColumnId As Long,
+                                                 oPtOrg As PsPoint,
+                                                 oMat As PsMatrix,
+                                                 topSidePlateBoolPoints As List(Of PsPoint)) As List(Of Integer)
+
+        Dim result As New List(Of Integer)
+
+        Dim oBoolPoly As New PsPolygon
+        oBoolPoly.init()
+
+        Dim xDir As New PsVector
+        Dim yDir As New PsVector
+
+        oMat.getYAxis(xDir)
+        oMat.getZAxis(yDir)
+
+        Dim oInsertMat As New PsMatrix
+        oInsertMat.SetCoordinateSystem(oPtOrg, xDir, yDir)
+
+        Utility.TransformPointListToPolygon(topSidePlateBoolPoints, oBoolPoly, oInsertMat)
+        oBoolPoly.Close()
+
+        Dim colAdpt As New ShapeAdapter(supportingColumnId)
+
+        Dim oCreater As New PsCreatePlate
+        oCreater.SetToDefaults()
+        oCreater.SetInsertMatrix(oInsertMat)
+        oCreater.SetInsertHeight(colAdpt.Width / 2 + data.mPlateThickness - data.mMainChordPlateThickness)
+        oCreater.SetFromPolygon(oBoolPoly)
+        oCreater.SetNormalPosition(VerticalPosition.kTop)
+        oCreater.SetThickness(data.mPlateThickness)
+        If oCreater.Create() = False Then
+            Debug.Assert(False)
+        End If
+        Dim pId1 As Long = oCreater.ObjectId
+        Dim oCut As New PsCutObjects
+        oCut.SetToDefaults()
+        oCut.SetAsBooleanCut(pId1)
+        oCut.SetObjectId(supportingColumnId)
+        If oCut.Apply() < 0 Then
+            Debug.Assert(False)
+        End If
+
+        result.Add(oCut.GetModifyIndex)
+
+        oCreater.SetToDefaults()
+        oCreater.SetInsertMatrix(oInsertMat)
+        oCreater.SetInsertHeight(-(colAdpt.Width / 2 + data.mPlateThickness - data.mMainChordPlateThickness))
+        oCreater.SetFromPolygon(oBoolPoly)
+        oCreater.SetNormalPosition(VerticalPosition.kDown)
+        oCreater.SetThickness(data.mPlateThickness)
+        If oCreater.Create() = False Then
+            Debug.Assert(False)
+        End If
+        Dim pId2 As Long = oCreater.ObjectId
+        oCut.SetToDefaults()
+        oCut.SetAsBooleanCut(pId2)
+        oCut.SetObjectId(supportingColumnId)
+        If oCut.Apply() < 0 Then
+            Debug.Assert(False)
+        End If
+
+        result.Add(oCut.GetModifyIndex)
+
+        Utility.EraseObjectId(pId1)
+        Utility.EraseObjectId(pId2)
+
+        Return result
+    End Function
+
+    Private Function BooleanCutColumnFlange(data As Parameters, supportingColumnId As Long,
+                                            oMat As PsMatrix, pt1 As PsPoint,
+                                            pt2 As PsPoint,
+                                            vertPos As VerticalPosition) As Integer
+
+        Dim platePts1 As List(Of PsPoint) = CalculateColumnFlangeBoolPoints(supportingColumnId,
+                                                                          oMat, pt1, pt2)
+        Dim oPoly As New PsPolygon
+        oPoly.init()
+
+        Dim xDir As New PsVector
+        Dim yDir As New PsVector
+        Dim org As PsPoint = MathTool.GetPointBetween(platePts1(0), platePts1(3))
+
+        oMat.getXAxis(xDir)
+        oMat.getZAxis(yDir)
+
+        Dim oTransMat As New PsMatrix
+        oTransMat.SetCoordinateSystem(org, xDir, -yDir)
+
+        Utility.TransformPointListToPolygon(platePts1, oPoly, oTransMat)
+        oPoly.Close()
+
+        Dim oCreater As New PsCreatePlate
+        oCreater.SetToDefaults()
+        oCreater.SetThickness(data.mMainChordPlateThickness * 2)
+        oCreater.SetInsertMatrix(oTransMat)
+        oCreater.SetFromPolygon(oPoly)
+        oCreater.SetNormalPosition(vertPos)
+
+        If oCreater.Create() = False Then
+            Debug.Assert(False)
+        End If
+
+        Dim pId1 As Long = oCreater.ObjectId
+        Dim oCut As New PsCutObjects
+        oCut.SetToDefaults()
+        oCut.SetAsBooleanCut(pId1)
+        oCut.SetObjectId(supportingColumnId)
+        If oCut.Apply() < 0 Then
+            Debug.Assert(False)
+        End If
+
+        Utility.EraseObjectId(pId1)
+
+        Return oCut.GetModifyIndex
+
+    End Function
+    Private Function BooleanCutColumn(data As Parameters,
+                                                 supportingId2 As Long,
+                                                 supportingColumnId As Long) As List(Of Integer)
+
+        Dim topSidePlateBoolPoints As List(Of PsPoint) =
+            GetTopHalfSidePlateBooleanCutBoundary(data,
+                                                  supportingId2,
+                                                  supportingColumnId)
+        Dim oMat As New PsMatrix
+        Dim oPtOrg As New PsPoint
+        Utility.GetIntersectPtAndUcsBySupportAndConnectMembers(supportingColumnId, supportingId2, oPtOrg, oMat)
+
+        Dim result As List(Of Integer) = BooleanCutColumnSide(data, supportingColumnId,
+                                      oPtOrg, oMat, topSidePlateBoolPoints)
+
+        Dim modIndex As Integer = BooleanCutColumnFlange(data, supportingColumnId, oMat,
+                                                          topSidePlateBoolPoints(0),
+                                                          topSidePlateBoolPoints(1),
+                                                          VerticalPosition.kDown)
+        result.Add(modIndex)
+
+        modIndex = BooleanCutColumnFlange(data, supportingColumnId, oMat,
+                                           topSidePlateBoolPoints(2),
+                                           topSidePlateBoolPoints(3),
+                                           VerticalPosition.kTop)
+
+        result.Add(modIndex)
+        Return result
+    End Function
+
+
+    Public Function CalculateColumnFlangeBoolPoints(supportingColumnId As Long,
+                                                    oMat As PsMatrix,
+                                                    pt1 As PsPoint,
+                                                    pt2 As PsPoint) As List(Of PsPoint)
+        Dim pts As New List(Of PsPoint)
+        Dim xDir As New PsVector
+        oMat.getXAxis(xDir)
+
+        Dim columAdpt As New ShapeAdapter(supportingColumnId)
+        pts.Add(MathTool.GetPointInDirection(pt1, xDir, columAdpt.Width / 2))
+        pts.Add(MathTool.GetPointInDirection(pt2, xDir, columAdpt.Width / 2))
+        pts.Add(MathTool.GetPointInDirection(pt2, -xDir, columAdpt.Width / 2))
+        pts.Add(MathTool.GetPointInDirection(pt1, -xDir, columAdpt.Width / 2))
+        Return pts
+    End Function
+
+
     Private Shared Function CutColumnBySupportShape(data As Parameters, supportingId2 As Long, supportingColumnId As Long) As Integer
         Dim instPt3 As New PsPoint
         Dim connMat3 As New PsMatrix
@@ -658,8 +828,23 @@ Public Class UserConnection
 
     End Function
 
+    ''' <summary>
+    '''                                   +   pt2
+    '''                                 / |
+    '''                                /  |
+    '''                          pt3  *   |
+    '''                               |   |
+    '''                          pt4  +---+  pt1
+    ''' </summary>
+    ''' <param name="data"></param>
+    ''' <param name="supportingId2"></param>
+    ''' <param name="supportingColumnId"></param>
+    ''' <returns></returns>
+    Private Shared Function GetTopHalfSidePlateBooleanCutBoundary(data As Parameters,
+                                                  supportingId2 As Long,
+                                                  supportingColumnId As Long) As List(Of PsPoint)
+        Dim result As New List(Of PsPoint)
 
-    Private Shared Sub CutColumnSidePlate(data As Parameters, supportingId2 As Long, supportingColumnId As Long)
         Dim instPt3 As New PsPoint
         Dim connMat3 As New PsMatrix
         If Utility.GetIntersectPtAndUcsBySupportAndConnectMembers(
@@ -697,12 +882,17 @@ Public Class UserConnection
         Dim pt4 As New PsPoint
         pt4 = MathTool.GetPointInDirection(instPt3, yAxis, colAdpt.Height / 2)
 
+        result.Add(pt1)
+        result.Add(pt2)
+        result.Add(pt3)
+        result.Add(pt4)
+
         'drawBall(pt1, 100)
         'drawBall(pt2, 100)
         'drawBall(pt3, 100)
         'drawBall(pt4, 100)
-
-    End Sub
+        Return result
+    End Function
 
     Private Shared Sub DrillConnectMemberWeb(data As Parameters,
                                              shpId As Long,
@@ -1362,33 +1552,24 @@ Public Class UserConnection
         '    Utility.drawBall(TopHalf(i), 100)
         'Next
 
-        Dim transMat As PsMatrix = ConvertConnectionMatToSidePlateInsertMat(connMat1)
-        transMat.Invert()
         Dim oPoly As New PsPolygon
         oPoly.init()
 
-        For i As Integer = 0 To bottomHalf.Count - 1
-            Dim pt As PsPoint = transMat.TransformPoint(bottomHalf(i))
-            Debug.Assert(Math.Abs(pt.z) < PRECISION)
-            Dim vpt As New PsPolygonVertex
-            vpt.set(pt, 0)
-            oPoly.appendVertex(vpt)
-        Next
+        Dim transMat As PsMatrix = ConvertConnectionMatToSidePlateInsertMat(connMat1)
+
+        Utility.TransformPointListToPolygon(bottomHalf, oPoly, transMat)
 
         SetFirstBottomFillet(oPoly, data.mBottomFillet1)
         SetSecondBottomFillet(oPoly, data.mBottomFillet2)
 
-        For i As Integer = 0 To TopHalf.Count - 1
-            Dim pt As PsPoint = transMat.TransformPoint(TopHalf(i))
-            Debug.Assert(Math.Abs(pt.z) < PRECISION)
-            Dim vpt As New PsPolygonVertex
-            vpt.set(pt, 0)
-            oPoly.appendVertex(vpt)
-        Next
+        Utility.TransformPointListToPolygon(TopHalf, oPoly, transMat)
 
         oPoly.Close()
         Return oPoly
     End Function
+
+
+
     Private Shared Sub SetFirstBottomFillet(oPoly As PsPolygon, r As Double)
         FilletPolyBetween(1, 2, 3, 4, oPoly, r)
     End Sub
@@ -1796,6 +1977,23 @@ Public Class UserConnection
         If (param.mColumnCutIndex <> -1) Then
             oModify.SetObjectId(columnId)
             oModify.DeleteCutPlane(param.mColumnCutIndex)
+        End If
+
+        If (param.mColumnBoolCutIndex1 <> -1) Then
+            oModify.SetObjectId(columnId)
+            oModify.DeleteSubBody(param.mColumnBoolCutIndex1)
+        End If
+        If (param.mColumnBoolCutIndex2 <> -1) Then
+            oModify.SetObjectId(columnId)
+            oModify.DeleteSubBody(param.mColumnBoolCutIndex2)
+        End If
+        If (param.mColumnBoolCutIndex3 <> -1) Then
+            oModify.SetObjectId(columnId)
+            oModify.DeleteSubBody(param.mColumnBoolCutIndex3)
+        End If
+        If (param.mColumnBoolCutIndex4 <> -1) Then
+            oModify.SetObjectId(columnId)
+            oModify.DeleteSubBody(param.mColumnBoolCutIndex4)
         End If
 
         Dim connectId1 As Long = oConnection.AdditionalObjectId(2)

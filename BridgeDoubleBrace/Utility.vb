@@ -190,6 +190,23 @@ Module Utility
         Return True
     End Function
 
+    Public Sub TransformPointListToPolygon(bottomHalf As List(Of PsPoint), oPoly As PsPolygon, transMat As PsMatrix)
+        Dim oTran As New PsMatrix
+        oTran.CopyFrom(transMat)
+        oTran.Invert()
+        For i As Integer = 0 To bottomHalf.Count - 1
+            Dim pt As PsPoint = oTran.TransformPoint(bottomHalf(i))
+            Debug.Assert(Math.Abs(pt.z) < PRECISION)
+            Dim vpt As New PsPolygonVertex
+            vpt.set(pt, 0)
+            oPoly.appendVertex(vpt)
+        Next
+    End Sub
+
+    Public Sub EraseObjectId(pId1 As Long)
+        Dim trans As New PsTransaction
+        trans.EraseLongId(pId1)
+    End Sub
 
     Public Function CutShapeInwards(shapeId As Long, ByRef basePoint As PsPoint, distance As Double) As Long
 
