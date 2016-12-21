@@ -671,7 +671,7 @@ Friend Class UserConnectionForm
             txtWebConnectPlateInnerVerEdgeDist1.Leave, txtWebConnectPlateHorEdgeDist2.Leave,
             txtWebConnectPlateHorEdgeDist1.Leave, txtWebConnectPlateHorDist2.Leave,
             txtWebConnectPlateHorDist1.Leave, txtBoltGroupSpan2.Leave,
-            txtBoltGroupSpan1.Leave, txtBoltGroupHorSideDist2.Leave, txtConnect2WebThickness.Leave, txtConnect1WebThickness.Leave
+            txtBoltGroupSpan1.Leave, txtBoltGroupHorSideDist2.Leave, txtConnect2WebThickness.Leave, txtConnect1WebThickness.Leave, txtTopFillet2.Leave, txtTopFillet1.Leave, txtColumnGap.Leave, txtColumnCutBack.Leave
 
         Dim oldValue As String = eventSender.Text
         eventSender.Text = oCheckInput.CheckPositive(eventSender.Text)
@@ -699,7 +699,7 @@ Friend Class UserConnectionForm
     Private Sub txtAngle3_Leave(sender As Object, e As EventArgs) Handles _
         txtAngle4.Leave, txtAngle3.Leave,
         txtAngle2.Leave, txtAngle1.Leave,
-        txtConnect2Angle.Leave, txtConnect1Angle.Leave
+        txtConnect2Angle.Leave, txtConnect1Angle.Leave, txtTopAngle2.Leave, txtTopAngle1.Leave
 
         Dim oldValue As String = sender.Text
         sender.text = oCheckInput.CheckAngular(sender.text)
