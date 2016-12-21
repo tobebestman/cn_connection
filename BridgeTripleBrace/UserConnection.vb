@@ -447,6 +447,7 @@ Public Class UserConnection
             Dim oPoly As PsPolygon = CreateSidePlateProfile(data,
                                                             supportingId1, supportingId2,
                                                             connectingId1, connectingId2,
+                                                            supportingColumnId,
                                                             connMat1, connMat2, instPt1, instPt2)
             Dim dist As Double = MathTool.GetDistanceBetween(instPt1, instPt2)
             Dim sidePlateCreator1 As New SidePlateCreator(data, supportingId1,
@@ -1526,6 +1527,7 @@ Public Class UserConnection
                                        supportId2 As Long,
                                        connectingId1 As Long,
                                        connectingId2 As Long,
+                                       columnId As Long,
                                        connMat1 As PsMatrix,
                                        connMat2 As PsMatrix,
                                        instPt1 As PsPoint,
@@ -1539,28 +1541,17 @@ Public Class UserConnection
         connMat1.getZAxis(zDir1)
         connMat2.getZAxis(zDir2)
 
-        Dim dot As Double = MathTool.GetDotProductFrom(zDir1, zDir2)
-
-        'For i As Long = 0 To bottomHalf.Count - 1
-        '    Utility.drawBall(bottomHalf(i), 50)
-        'Next
-
-        Dim TopHalf As New List(Of PsPoint)
-        GetTopHalfProfileWithoutTopColumn(data, supportId1, supportId2, connMat1, connMat2, instPt1, instPt2, TopHalf)
-
-        'For i As Long = 0 To TopHalf.Count - 1
-        '    Utility.drawBall(TopHalf(i), 100)
-        'Next
-
         Dim oPoly As New PsPolygon
         oPoly.init()
 
         Dim transMat As PsMatrix = ConvertConnectionMatToSidePlateInsertMat(connMat1)
-
         Utility.TransformPointListToPolygon(bottomHalf, oPoly, transMat)
 
         SetFirstBottomFillet(oPoly, data.mBottomFillet1)
         SetSecondBottomFillet(oPoly, data.mBottomFillet2)
+
+        Dim TopHalf As New List(Of PsPoint)
+        GetTopHalfProfileWithoutTopColumn(data, supportId1, supportId2, connMat1, connMat2, instPt1, instPt2, TopHalf)
 
         Utility.TransformPointListToPolygon(TopHalf, oPoly, transMat)
 

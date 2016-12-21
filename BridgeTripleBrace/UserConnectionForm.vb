@@ -271,6 +271,13 @@ Friend Class UserConnectionForm
 
         Data.mColumnCutBack = UIConverter.ConvertToNumeric(txtColumnCutBack.Text)
 
+        Data.mTopAngle1 = UIConverter.ConvertAngleToNumeric(txtTopAngle1.Text)
+        Data.mTopAngle2 = UIConverter.ConvertAngleToNumeric(txtTopAngle2.Text)
+        Data.mTopFillet1 = UIConverter.ConvertToNumeric(txtTopFillet1.Text)
+        Data.mTopFillet2 = UIConverter.ConvertToNumeric(txtTopFillet2.Text)
+
+        Data.mColumnGap = UIConverter.ConvertToNumeric(txtColumnGap.Text)
+
         Data.mConnectPlate1.sideDistance = UIConverter.ConvertToNumeric(txtConnect1SideDistance.Text)
         Data.mConnectPlate1.radius = UIConverter.ConvertToNumeric(txtConnect1Radius.Text)
         Data.mConnectPlate1.gap = UIConverter.ConvertToNumeric(txtConnect1Gap.Text)
@@ -366,6 +373,13 @@ Friend Class UserConnectionForm
         txtHoleDia.Text = UIConverter.ConvertToText(Data.mHoleDia)
 
         txtColumnCutBack.Text = UIConverter.ConvertToText(Data.mColumnCutBack)
+
+        txtTopAngle1.Text = UIConverter.ConvertAngleToText(Data.mTopAngle1)
+        txtTopAngle2.Text = UIConverter.ConvertAngleToText(Data.mTopAngle2)
+        txtTopFillet1.Text = UIConverter.ConvertToText(Data.mTopFillet1)
+        txtTopFillet2.Text = UIConverter.ConvertToText(Data.mTopFillet2)
+
+        txtColumnGap.Text = UIConverter.ConvertToText(Data.mColumnGap)
 
         txtConnect1SideDistance.Text = UIConverter.ConvertToText(Data.mConnectPlate1.sideDistance)
         txtConnect1Radius.Text = UIConverter.ConvertToText(Data.mConnectPlate1.radius)

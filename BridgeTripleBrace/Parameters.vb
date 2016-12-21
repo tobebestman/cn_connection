@@ -91,6 +91,13 @@ Public Class Parameters
 
     Public mColumnCutBack As Double
 
+    Public mTopAngle1 As Double
+    Public mTopAngle2 As Double
+    Public mTopFillet1 As Double
+    Public mTopFillet2 As Double
+
+    Public mColumnGap As Double
+
     Public mConnectPlate1 As ArcPlateParameter
     Public mConnectPlate2 As ArcPlateParameter
 
@@ -190,6 +197,13 @@ Public Class Parameters
         eConnection.Double(iDbl) = mHoleDia : iDbl = iDbl + 1
 
         eConnection.Double(iDbl) = mColumnCutBack : iDbl = iDbl + 1
+
+        eConnection.Double(iDbl) = mTopAngle1 : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mTopAngle2 : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mTopFillet1 : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mTopFillet2 : iDbl = iDbl + 1
+
+        eConnection.Double(iDbl) = mColumnGap : iDbl = iDbl + 1
     End Sub
 
     Public Sub ReadFromConnection(ByRef eConnection As PsConnection, Optional ByVal forClone As Boolean = False)
@@ -250,6 +264,13 @@ Public Class Parameters
         mHoleDia = eConnection.Double(iDbl) : iDbl = iDbl + 1
 
         mColumnCutBack = eConnection.Double(iDbl) : iDbl = iDbl + 1
+
+        mTopAngle1 = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mTopAngle2 = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mTopFillet1 = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mTopFillet2 = eConnection.Double(iDbl) : iDbl = iDbl + 1
+
+        mColumnGap = eConnection.Double(iDbl) : iDbl = iDbl + 1
     End Sub
 
 
@@ -286,6 +307,13 @@ Public Class Parameters
         Template.AppendDouble(mHoleDia)
 
         Template.AppendDouble(mColumnCutBack)
+
+        Template.AppendDouble(mTopAngle1)
+        Template.AppendDouble(mTopAngle2)
+        Template.AppendDouble(mTopFillet1)
+        Template.AppendDouble(mTopFillet2)
+
+        Template.AppendDouble(mColumnGap)
 
         mConnectPlate1.WriteToTemplate(Template)
         mConnectPlate2.WriteToTemplate(Template)
@@ -346,6 +374,13 @@ Public Class Parameters
         mHoleDia = Template.Double(iDbl) : iDbl = iDbl + 1
 
         mColumnCutBack = Template.Double(iDbl) : iDbl = iDbl + 1
+
+        mTopAngle1 = Template.Double(iDbl) : iDbl = iDbl + 1
+        mTopAngle2 = Template.Double(iDbl) : iDbl = iDbl + 1
+        mTopFillet1 = Template.Double(iDbl) : iDbl = iDbl + 1
+        mTopFillet2 = Template.Double(iDbl) : iDbl = iDbl + 1
+
+        mColumnGap = Template.Double(iDbl) : iDbl = iDbl + 1
     End Sub
 
 
@@ -401,6 +436,13 @@ Public Class Parameters
         mHoleDia = 30
 
         mColumnCutBack = 1400
+
+        mTopAngle1 = 45
+        mTopAngle2 = 45
+        mTopFillet1 = 200
+        mTopFillet2 = 200
+
+        mColumnGap = 40
 
         mConnectPlate1.SetToMetricDefaults()
         mConnectPlate2.SetToMetricDefaults()
