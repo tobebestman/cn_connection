@@ -1551,11 +1551,20 @@ Public Class UserConnection
         SetSecondBottomFillet(oPoly, data.mBottomFillet2)
 
         Dim TopHalf As New List(Of PsPoint)
-        GetTopHalfProfileWithoutTopColumn(data, supportId1, supportId2, connMat1, connMat2, instPt1, instPt2, TopHalf)
+        GetTopHalfProfileWithTopColumn(data, supportId1, supportId2,
+                                       columnId,
+                                       connMat1, connMat2, instPt1, instPt2, TopHalf)
 
-        Utility.TransformPointListToPolygon(TopHalf, oPoly, transMat)
+        Dim oPoly2 As New PsPolygon
+        oPoly2.init()
+        Utility.TransformPointListToPolygon(TopHalf, oPoly2, transMat)
+        FilletPolyBetween(0, 1, 2, 3, oPoly2, data.mTopFillet1)
+        FilletPolyBetween(4, 5, 6, 7, oPoly2, data.mTopFillet2)
 
-        oPoly.Close()
+        oPoly.append(oPoly2, True, PRECISION)
+
+        'oPoly.draw(CoordSystem.kWcs, "0", "0", 1)
+
         Return oPoly
     End Function
 
@@ -1582,8 +1591,9 @@ Public Class UserConnection
         Return transMat
     End Function
 
-    Private Shared Sub GetTopHalfProfileWithoutTopColumn(data As Parameters,
+    Private Shared Sub GetTopHalfProfileWithTopColumn(data As Parameters,
                                                          supportId1 As Long, supportId2 As Long,
+                                                         columnId As Long,
                                                          connMat1 As PsMatrix, connMat2 As PsMatrix,
                                                          instPt1 As PsPoint, instPt2 As PsPoint, TopHalf As List(Of PsPoint))
         Dim org2 As New PsPoint
@@ -1598,7 +1608,6 @@ Public Class UserConnection
         Dim spt As PsPoint
         spt = MathTool.GetPointInDirection(org2, -zAxis2, data.mSupport2CutBack)
         spt = MathTool.GetPointInDirection(spt, yAxis2, New ShapeAdapter(supportId2).Height / 2)
-        TopHalf.Add(spt)
 
         Dim org1 As New PsPoint
         Dim yAxis1 As New PsVector
@@ -1618,8 +1627,61 @@ Public Class UserConnection
             TopHalf.Add(ept)
             Return
         End If
-        TopHalf.Add(mPt)
+
+        'now we have spt, mpt and ept  at the
+        'bottom of the top half
+
+        Dim upperPoints As List(Of PsPoint) =
+            GetTopHalfSidePlateBooleanCutBoundary(data, supportId2, columnId)
+
+        Debug.Assert(upperPoints.Count = 4)
+
+        Dim inst1 As New PsPoint
+        If MathTool.IntersectLineWithLine(spt, mPt, upperPoints(0), upperPoints(1), 0, inst1) = False Then
+            Debug.Assert(False)
+        End If
+
+        Dim inst2 As New PsPoint
+        If MathTool.IntersectLineWithLine(ept, mPt, upperPoints(2), upperPoints(3), 0, inst2) = False Then
+            Debug.Assert(False)
+        End If
+
+        Dim newEndPt As New PsPoint
+        Dim xAxis As New PsVector
+        Dim yAxis As New PsVector
+        xAxis.SetFromPoints(inst1, spt)
+        yAxis.SetFromPoints(inst1, upperPoints(1))
+
+        xAxis.Normalize()
+        yAxis.Normalize()
+
+        Dim zAxis As New PsVector
+        zAxis.SetFromCrossProduct(xAxis, yAxis)
+
+        GeoHelper.RotateLineByStart(upperPoints(1), inst1, data.mTopAngle1,
+                                     zAxis, newEndPt)
+
+        Dim pts1 As List(Of PsPoint) = GeoHelper.FilletTwoLine(spt, mPt, upperPoints(1), newEndPt, data.mTopFillet1)
+
+        Dim newEndPt2 As New PsPoint
+        GeoHelper.RotateLineByStart(upperPoints(2), inst2, -data.mBottomAngle2,
+                                    zAxis, newEndPt2)
+        Dim pts2 As List(Of PsPoint) = GeoHelper.FilletTwoLine(ept, mPt,
+                                                               upperPoints(2), newEndPt2, data.mTopFillet2)
+
+        TopHalf.Add(spt)
+        TopHalf.Add(pts1(0))
+        TopHalf.Add(pts1(1))
+        TopHalf.Add(upperPoints(1))
+        TopHalf.Add(upperPoints(2))
+        TopHalf.Add(pts2(1))
+        TopHalf.Add(pts2(0))
         TopHalf.Add(ept)
+
+        'For Each pt As PsPoint In TopHalf
+        '    Utility.drawBall(pt, 80)
+        'Next
+
     End Sub
 
     Private Function GetBottomHalfPlateProfile(data As Parameters,
