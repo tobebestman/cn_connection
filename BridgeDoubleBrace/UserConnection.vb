@@ -654,7 +654,7 @@ Public Class UserConnection
         xDir = adpt.XAxis
         Dim org As New PsPoint
         org = adpt.GetEndpointTo(instPt1)
-        org = MathTool.GetPointInDirection(org, -zDir, gap / 2)
+        org = MathTool.GetPointInDirection(org, zDir, gap / 2)
         oMat.SetCoordinateSystem(org, xDir, zDir)
         Return oMat
     End Function
@@ -776,14 +776,37 @@ Public Class UserConnection
             CreateDrill(oMainMat2, id)
 
             If (AccessoryPlateThickness() > 0) Then
+                Dim xAxis As New PsVector
+                oMainMat.getXAxis(xAxis)
+                Dim yAxis As New PsVector
+                oMainMat.getYAxis(yAxis)
+                Dim org As New PsPoint
+                Dim aMat As New PsMatrix
+
+                oMainMat.getOrigin(org)
+                org = MathTool.GetPointInDirection(org, -yAxis, gap / 2)
+                aMat.SetCoordinateSystem(org, xAxis, yAxis)
+
                 id = CreatePlate(mainPlateWidth, (mainPlateLength - gap) / 2,
-                                 AccessoryPlateThickness, 0, (mainPlateLength - gap) / 4 + gap / 2,
-                                 VerticalPosition.kDown, oMainMat)
+                                 AccessoryPlateThickness, 0, (mainPlateLength - gap) / 4,
+                                 VerticalPosition.kDown, aMat)
                 accessorySidePlates.Add(id)
                 CreateDrill(oMainMat, id)
+
+                Dim xAxis2 As New PsVector
+                oMainMat2.getXAxis(xAxis2)
+                Dim yAxis2 As New PsVector
+                oMainMat2.getYAxis(yAxis2)
+                Dim org2 As New PsPoint
+                Dim aMat2 As New PsMatrix
+
+                oMainMat2.getOrigin(org2)
+                org2 = MathTool.GetPointInDirection(org2, -yAxis2, gap / 2)
+                aMat2.SetCoordinateSystem(org2, xAxis2, yAxis2)
+
                 id = CreatePlate(mainPlateWidth, (mainPlateLength - gap) / 2,
-                                 AccessoryPlateThickness, 0, (mainPlateLength - gap) / 4 + gap / 2,
-                                 VerticalPosition.kDown, oMainMat2)
+                                 AccessoryPlateThickness, 0, (mainPlateLength - gap) / 4,
+                                 VerticalPosition.kDown, aMat2)
                 accessorySidePlates.Add(id)
                 CreateDrill(oMainMat2, id)
             ElseIf (AccessoryPlateThickness() < 0) Then
@@ -819,12 +842,12 @@ Public Class UserConnection
             oMainMat.SetCoordinateSystem(org1, xAxis, yAxis)
             Dim w As Double = (mainPlateWidth - param.FlangeThickness) / 2
             Dim pid As Long = CreatePlate(w, mainPlateLength, param.insidePlateThickness,
-                                          w / 2 + param.FlangeThickness / 2, gap / 2, VerticalPosition.kDown, oMainMat)
+                                          w / 2 + param.FlangeThickness / 2, 0, VerticalPosition.kDown, oMainMat)
             insideSidePlates.Add(pid)
             CreateDrill(oMainMat, pid)
 
             pid = CreatePlate(w, mainPlateLength, param.insidePlateThickness,
-                                         -w / 2 - param.FlangeThickness / 2, gap / 2, VerticalPosition.kDown, oMainMat)
+                                         -w / 2 - param.FlangeThickness / 2, 0, VerticalPosition.kDown, oMainMat)
             insideSidePlates.Add(pid)
             CreateDrill(oMainMat, pid)
         End Sub
