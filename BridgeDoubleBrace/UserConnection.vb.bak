@@ -786,7 +786,7 @@ Public Class UserConnection
                                  VerticalPosition.kDown, oMainMat2)
                 accessorySidePlates.Add(id)
                 CreateDrill(oMainMat2, id)
-            ElseIf (AccessoryPlateThickness() < 0) Then
+            ElseIf (AccessoryPlateThickness < 0) Then
                 'this should not happen. so just omit it.
                 'id = CreatePlate(mainPlateWidth, mainPlateLength / 2,
                 '                 Math.Abs(AccessoryPlateThickness), 0, -mainPlateLength / 4,
@@ -1260,8 +1260,19 @@ Public Class UserConnection
         connMat1.getZAxis(zDir1)
         connMat2.getZAxis(zDir2)
 
+        Dim dot As Double = MathTool.GetDotProductFrom(zDir1, zDir2)
+
+        'For i As Long = 0 To bottomHalf.Count - 1
+        '    Utility.drawBall(bottomHalf(i), 50)
+        'Next
+
         Dim TopHalf As New List(Of PsPoint)
         GetTopHalfProfileWithoutTopColumn(data, supportId1, supportId2, connMat1, connMat2, instPt1, instPt2, TopHalf)
+
+        'For i As Long = 0 To TopHalf.Count - 1
+        '    Utility.drawBall(TopHalf(i), 100)
+        'Next
+
         Dim oPoly As New PsPolygon
         oPoly.init()
 
@@ -1276,9 +1287,6 @@ Public Class UserConnection
         oPoly.Close()
         Return oPoly
     End Function
-
-
-
     Private Shared Sub SetFirstBottomFillet(oPoly As PsPolygon, r As Double)
         FilletPolyBetween(1, 2, 3, 4, oPoly, r)
     End Sub
@@ -1587,6 +1595,7 @@ Public Class UserConnection
 
             'oAdpt.ReadAddtionalObjects()
             'oAdpt.ReadCreatedObjectArray()
+            'recoverOriginSupporingShape(oAdpt)
 
             Dim oTrans As New PsTransaction
             Dim oConnection As PsConnection = Nothing
@@ -1597,6 +1606,12 @@ Public Class UserConnection
                 If oConnection IsNot Nothing Then
 
                     oConnection = RemoveModifications(oConnection)
+
+                    'For i As Integer = oConnection.AdditionalEntityCount - 1 To 0 Step -1
+                    '    Dim id As Long = oConnection.AdditionalObjectId(i)
+                    '    oEdit.SetObjectId(id)
+                    '    oEdit.DeleteAllCutPlanes()
+                    'Next
 
                     oConnection.RemoveAllAdditionalEntity(False)
 
@@ -1768,6 +1783,7 @@ Public Class UserConnection
             supportingShape2 = Selection.PickObject(RSS.RSS("M0001"))
             If supportingShape2 <= 0 Then Return 0
         Loop Until (IsWeldShape(supportingShape2))
+
 
         Dim connectingShape1 As Long
         Do

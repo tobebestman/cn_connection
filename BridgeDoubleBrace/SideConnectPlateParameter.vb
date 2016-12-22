@@ -141,7 +141,7 @@ Public Class SideConnectPlateParameter
         horHoleCount = 4
         verSideDistance = 50
         verDistance = 100
-        verHoleCount = 4
+        verHoleCount = 8
         outSidePlateThickness = 22
         insidePlateThickness = 26
     End Sub

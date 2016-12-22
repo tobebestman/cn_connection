@@ -439,9 +439,11 @@ Public Class UserConnection
                 data.mSecondRightcutIndex = IIf(cutIds(1) <> -1, cutIds(1), -1)
             End If
 
-            cutId = Utility.CutShapeInwards(connectingId1, instPt1, data.mConnect1CutBack + data.mConnectPlate1.gap)
+            cutId = Utility.CutShapeInwards(connectingId1, instPt1, data.mConnect1CutBack +
+                                                           data.mConnectPlate1.gap)
             data.mFirstCutBackCutIndex = IIf(cutId <> -1, cutId, -1)
-            cutId = Utility.CutShapeInwards(connectingId2, instPt2, data.mConnect2CutBack + data.mConnectPlate2.gap)
+            cutId = Utility.CutShapeInwards(connectingId2, instPt2, data.mConnect2CutBack +
+                                                           data.mConnectPlate2.gap)
             data.mSecondCutBackCutIndex = IIf(cutId <> -1, cutId, -1)
 
             Dim oPoly As PsPolygon = CreateSidePlateProfile(data,
@@ -466,11 +468,14 @@ Public Class UserConnection
                                                      GetConnectPlateInsertMatrix(connectingId2, instPt2))
             ConnectPlatesCreater2.Create()
 
-            Dim SideConnectPlatesCreater1 As New SideConnectPlatesCreater(supportingId1, connectingId1, data.mSideConnectPlate1,
+            Dim SideConnectPlatesCreater1 As New SideConnectPlatesCreater(supportingId1, connectingId1,
+                        data.mSideConnectPlate1,
                         SidePlateTopToCenterDistance(data, supportingId1),
                         (New ShapeAdapter(connectingId1).Height - data.mConnectPlate1.width) / 2,
                         data.mConnectPlate1.gap,
-                        GetSideConnectPlatesMatrix(data.mSideConnectPlate1, connectingId1, instPt1))
+                        GetSideConnectPlatesMatrix(data.mSideConnectPlate1,
+                                                   data.mConnectPlate1.gap,
+                                                   connectingId1, instPt1))
             SideConnectPlatesCreater1.Create()
             SideConnectPlatesCreater1.CreateDrill(SideConnectPlatesCreater1.FirstMainPlateMatrix, sidePlateCreator1.sidePlateId)
             SideConnectPlatesCreater1.CreateDrill(SideConnectPlatesCreater1.SecondMainPlateMatrix, sidePlateCreator2.sidePlateId)
@@ -483,7 +488,9 @@ Public Class UserConnection
                         SidePlateTopToCenterDistance(data, supportingId2),
                         (New ShapeAdapter(connectingId2).Height - data.mConnectPlate2.width) / 2,
                         data.mConnectPlate2.gap,
-                        GetSideConnectPlatesMatrix(data.mSideConnectPlate2, connectingId2, instPt2))
+                        GetSideConnectPlatesMatrix(data.mSideConnectPlate2,
+                                                   data.mConnectPlate2.gap,
+                                                   connectingId2, instPt2))
             SideConnectPlatesCreater2.Create()
             SideConnectPlatesCreater2.CreateDrill(SideConnectPlatesCreater2.FirstMainPlateMatrix, sidePlateCreator1.sidePlateId)
             SideConnectPlatesCreater2.CreateDrill(SideConnectPlatesCreater2.SecondMainPlateMatrix, sidePlateCreator2.sidePlateId)
@@ -926,6 +933,7 @@ Public Class UserConnection
     End Function
 
     Private Shared Function GetSideConnectPlatesMatrix(ConnectPlate As SideConnectPlateParameter,
+                                                       gap As Double,
                                                        connectingId1 As Long,
                                                        instPt1 As PsPoint) As PsMatrix
         Dim oMat As New PsMatrix
@@ -937,7 +945,7 @@ Public Class UserConnection
         xDir = adpt.XAxis
         Dim org As New PsPoint
         org = adpt.GetEndpointTo(instPt1)
-        org = MathTool.GetPointInDirection(org, zDir, 0)
+        org = MathTool.GetPointInDirection(org, -zDir, gap / 2)
         oMat.SetCoordinateSystem(org, xDir, zDir)
         Return oMat
     End Function
@@ -1050,22 +1058,22 @@ Public Class UserConnection
             Dim oMainMat As PsMatrix = FirstMainPlateMatrix()
             Dim oMainMat2 As PsMatrix = SecondMainPlateMatrix()
 
-            Dim id As Long = CreatePlate(mainPlateWidth, mainPlateLength, 10, 0, 0, VerticalPosition.kTop, oMainMat)
+            Dim id As Long = CreatePlate(mainPlateWidth, mainPlateLength, param.outSidePlateThickness, 0, 0, VerticalPosition.kTop, oMainMat)
             outsideSidePlates.Add(id)
             CreateDrill(oMainMat, id)
 
-            id = CreatePlate(mainPlateWidth, mainPlateLength, 10, 0, 0, VerticalPosition.kTop, oMainMat2)
+            id = CreatePlate(mainPlateWidth, mainPlateLength, param.outSidePlateThickness, 0, 0, VerticalPosition.kTop, oMainMat2)
             outsideSidePlates.Add(id)
             CreateDrill(oMainMat2, id)
 
             If (AccessoryPlateThickness() > 0) Then
-                id = CreatePlate(mainPlateWidth, mainPlateLength / 2,
-                                 AccessoryPlateThickness, 0, mainPlateLength / 4,
+                id = CreatePlate(mainPlateWidth, (mainPlateLength - gap) / 2,
+                                 AccessoryPlateThickness, 0, (mainPlateLength - gap) / 4 + gap / 2,
                                  VerticalPosition.kDown, oMainMat)
                 accessorySidePlates.Add(id)
                 CreateDrill(oMainMat, id)
-                id = CreatePlate(mainPlateWidth, mainPlateLength / 2,
-                                 AccessoryPlateThickness, 0, mainPlateLength / 4,
+                id = CreatePlate(mainPlateWidth, (mainPlateLength - gap) / 2,
+                                 AccessoryPlateThickness, 0, (mainPlateLength - gap) / 4 + gap / 2,
                                  VerticalPosition.kDown, oMainMat2)
                 accessorySidePlates.Add(id)
                 CreateDrill(oMainMat2, id)
@@ -1101,13 +1109,13 @@ Public Class UserConnection
             org1 = MathTool.GetPointInDirection(org1, zAxis, flangeThickness + AccessoryPlateThickness())
             oMainMat.SetCoordinateSystem(org1, xAxis, yAxis)
             Dim w As Double = (mainPlateWidth - param.FlangeThickness) / 2
-            Dim pid As Long = CreatePlate(w, mainPlateLength, 26,
-                                          w / 2 + param.FlangeThickness / 2, 0, VerticalPosition.kDown, oMainMat)
+            Dim pid As Long = CreatePlate(w, mainPlateLength, param.insidePlateThickness,
+                                          w / 2 + param.FlangeThickness / 2, gap / 2, VerticalPosition.kDown, oMainMat)
             insideSidePlates.Add(pid)
             CreateDrill(oMainMat, pid)
 
-            pid = CreatePlate(w, mainPlateLength, 26,
-                                         -w / 2 - param.FlangeThickness / 2, 0, VerticalPosition.kDown, oMainMat)
+            pid = CreatePlate(w, mainPlateLength, param.insidePlateThickness,
+                                         -w / 2 - param.FlangeThickness / 2, gap / 2, VerticalPosition.kDown, oMainMat)
             insideSidePlates.Add(pid)
             CreateDrill(oMainMat, pid)
         End Sub
@@ -1148,7 +1156,7 @@ Public Class UserConnection
             baseMatrix.getOrigin(org)
             baseMatrix.getYAxis(yAxis)
 
-            org = MathTool.GetPointInDirection(org, -yAxis, gap / 2)
+            org = MathTool.GetPointInDirection(org, -yAxis, 0)
             baseMatrix.getZAxis(zAxis)
             Dim outSideOrg = MathTool.GetPointInDirection(org, zAxis, sidePlateTopToCenterDistance)
             zAxis.SetFromPoints(outSideOrg, org)
@@ -1163,14 +1171,17 @@ Public Class UserConnection
         Private Function MainPlateLength() As Double
             Dim result = 2 * param.verSideDistance + (param.verHoleCount - 1) * param.verDistance
             result *= 2
+            result += gap
             Return result
         End Function
 
         Private Function MainPlateWidth() As Double
-            Dim shpAdpt As New ShapeAdapter(connectId)
-            'Dim result = 2 * param.horSideDistance + (param.horHoleCount - 1) * param.horDistance
-            'result *= 2
-            Dim result As Double = shpAdpt.Width
+
+            Dim result = param.horSideDistance + param.horHoleCount * param.horDistance
+            result *= 2
+
+            'Dim shpAdpt As New ShapeAdapter(connectId)
+            'Dim result As Double = shpAdpt.Width
             Return result
         End Function
 
