@@ -1010,11 +1010,20 @@ Public Class UserConnection
             oMat.getYAxis(yDir)
             oMat.getOrigin(org)
 
+            Dim xDist As Double
+            xDist = MainPlateWidth() / 2
+            xDist -= param.horSideDistance
+            xDist -= (param.horHoleCount * param.horDistance) / 2
+            
+
+            Dim yDist As Double
+            yDist = MainPlateLength() / 2 - param.verSideDistance - ((param.verHoleCount - 1) * param.verDistance) / 2
+
             For r As Integer = -1 To 1 Step 2
                 For c As Integer = -1 To 1 Step 2
 
-                    Dim pt As PsPoint = MathTool.GetPointInDirection(org, c * xDir, (MainPlateWidth() - 2 * param.horSideDistance) / 4)
-                    pt = MathTool.GetPointInDirection(pt, r * yDir, (MainPlateLength() - 2 * param.verSideDistance) / 4)
+                    Dim pt As PsPoint = MathTool.GetPointInDirection(org, c * xDir, xDist)
+                    pt = MathTool.GetPointInDirection(pt, r * yDir, yDist)
                     result.Add(pt)
                 Next
             Next
