@@ -249,6 +249,34 @@
         Me.imgBitmaps4 = New System.Windows.Forms.ImageList(Me.components)
         Me.imgBitmaps5 = New System.Windows.Forms.ImageList(Me.components)
         Me.imgBitmaps6 = New System.Windows.Forms.ImageList(Me.components)
+        Me.TabPageColumnWebConnPlate = New System.Windows.Forms.TabPage()
+        Me.GroupBox7 = New System.Windows.Forms.GroupBox()
+        Me.TextBox9 = New System.Windows.Forms.TextBox()
+        Me.Label90 = New System.Windows.Forms.Label()
+        Me.TextBox10 = New System.Windows.Forms.TextBox()
+        Me.Label91 = New System.Windows.Forms.Label()
+        Me.TextBox11 = New System.Windows.Forms.TextBox()
+        Me.Label92 = New System.Windows.Forms.Label()
+        Me.TabControl3 = New System.Windows.Forms.TabControl()
+        Me.TabPageWebPlate = New System.Windows.Forms.TabPage()
+        Me.TabPageHoleGroup = New System.Windows.Forms.TabPage()
+        Me.DataGridViewWebPlate = New System.Windows.Forms.DataGridView()
+        Me.ColumnDist = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColumnThk = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColumnHeight = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColumnLength = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.DataGridViewHoleGroup = New System.Windows.Forms.DataGridView()
+        Me.DataGridViewTextBoxColumn1 = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColumnCount = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.ColumnDistBtw = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.TextBox1 = New System.Windows.Forms.TextBox()
+        Me.Label75 = New System.Windows.Forms.Label()
+        Me.TextBox2 = New System.Windows.Forms.TextBox()
+        Me.Label83 = New System.Windows.Forms.Label()
+        Me.TextBox3 = New System.Windows.Forms.TextBox()
+        Me.Label84 = New System.Windows.Forms.Label()
+        Me.TextBox4 = New System.Windows.Forms.TextBox()
+        Me.Label85 = New System.Windows.Forms.Label()
         CType(Me.Picture2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picBitmap, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabStrip1.SuspendLayout()
@@ -271,6 +299,13 @@
         Me.TabPageWebConnPlate2.SuspendLayout()
         Me.GroupBox3.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
+        Me.TabPageColumnWebConnPlate.SuspendLayout()
+        Me.GroupBox7.SuspendLayout()
+        Me.TabControl3.SuspendLayout()
+        Me.TabPageWebPlate.SuspendLayout()
+        Me.TabPageHoleGroup.SuspendLayout()
+        CType(Me.DataGridViewWebPlate, System.ComponentModel.ISupportInitialize).BeginInit()
+        CType(Me.DataGridViewHoleGroup, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'cmdGetLengthFromLine
@@ -437,6 +472,7 @@
         Me.TabStrip1.Controls.Add(Me.TabPageConnPlate2)
         Me.TabStrip1.Controls.Add(Me.TabPageWebConnPlate1)
         Me.TabStrip1.Controls.Add(Me.TabPageWebConnPlate2)
+        Me.TabStrip1.Controls.Add(Me.TabPageColumnWebConnPlate)
         Me.TabStrip1.Location = New System.Drawing.Point(4, 9)
         Me.TabStrip1.Margin = New System.Windows.Forms.Padding(2)
         Me.TabStrip1.Name = "TabStrip1"
@@ -3154,6 +3190,321 @@
         Me.imgBitmaps6.TransparentColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.imgBitmaps6.Images.SetKeyName(0, "")
         '
+        'TabPageColumnWebConnPlate
+        '
+        Me.TabPageColumnWebConnPlate.Controls.Add(Me.TabControl3)
+        Me.TabPageColumnWebConnPlate.Controls.Add(Me.GroupBox7)
+        Me.TabPageColumnWebConnPlate.Location = New System.Drawing.Point(4, 22)
+        Me.TabPageColumnWebConnPlate.Name = "TabPageColumnWebConnPlate"
+        Me.TabPageColumnWebConnPlate.Size = New System.Drawing.Size(408, 330)
+        Me.TabPageColumnWebConnPlate.TabIndex = 16
+        Me.TabPageColumnWebConnPlate.Text = "D0900'Column Web Connect Plate"
+        Me.TabPageColumnWebConnPlate.UseVisualStyleBackColor = True
+        '
+        'GroupBox7
+        '
+        Me.GroupBox7.Controls.Add(Me.TextBox11)
+        Me.GroupBox7.Controls.Add(Me.Label92)
+        Me.GroupBox7.Controls.Add(Me.TextBox9)
+        Me.GroupBox7.Controls.Add(Me.Label90)
+        Me.GroupBox7.Controls.Add(Me.TextBox10)
+        Me.GroupBox7.Controls.Add(Me.Label91)
+        Me.GroupBox7.Location = New System.Drawing.Point(8, 5)
+        Me.GroupBox7.Name = "GroupBox7"
+        Me.GroupBox7.Size = New System.Drawing.Size(390, 77)
+        Me.GroupBox7.TabIndex = 170
+        Me.GroupBox7.TabStop = False
+        Me.GroupBox7.Text = "D0901'Dimension"
+        '
+        'TextBox9
+        '
+        Me.TextBox9.AcceptsReturn = True
+        Me.TextBox9.BackColor = System.Drawing.SystemColors.Window
+        Me.TextBox9.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.TextBox9.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.TextBox9.Location = New System.Drawing.Point(121, 18)
+        Me.TextBox9.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBox9.MaxLength = 0
+        Me.TextBox9.Name = "TextBox9"
+        Me.TextBox9.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.TextBox9.Size = New System.Drawing.Size(57, 20)
+        Me.TextBox9.TabIndex = 150
+        '
+        'Label90
+        '
+        Me.Label90.AutoSize = True
+        Me.Label90.BackColor = System.Drawing.Color.Transparent
+        Me.Label90.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label90.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label90.Location = New System.Drawing.Point(16, 21)
+        Me.Label90.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label90.Name = "Label90"
+        Me.Label90.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label90.Size = New System.Drawing.Size(108, 13)
+        Me.Label90.TabIndex = 151
+        Me.Label90.Text = "D0902'Outter PL Thk"
+        '
+        'TextBox10
+        '
+        Me.TextBox10.AcceptsReturn = True
+        Me.TextBox10.BackColor = System.Drawing.SystemColors.Window
+        Me.TextBox10.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.TextBox10.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.TextBox10.Location = New System.Drawing.Point(321, 18)
+        Me.TextBox10.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBox10.MaxLength = 0
+        Me.TextBox10.Name = "TextBox10"
+        Me.TextBox10.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.TextBox10.Size = New System.Drawing.Size(57, 20)
+        Me.TextBox10.TabIndex = 154
+        '
+        'Label91
+        '
+        Me.Label91.AutoSize = True
+        Me.Label91.BackColor = System.Drawing.Color.Transparent
+        Me.Label91.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label91.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label91.Location = New System.Drawing.Point(208, 21)
+        Me.Label91.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label91.Name = "Label91"
+        Me.Label91.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label91.Size = New System.Drawing.Size(103, 13)
+        Me.Label91.TabIndex = 155
+        Me.Label91.Text = "D0903'Inner PL Thk"
+        '
+        'TextBox11
+        '
+        Me.TextBox11.AcceptsReturn = True
+        Me.TextBox11.BackColor = System.Drawing.SystemColors.Window
+        Me.TextBox11.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.TextBox11.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.TextBox11.Location = New System.Drawing.Point(121, 45)
+        Me.TextBox11.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBox11.MaxLength = 0
+        Me.TextBox11.Name = "TextBox11"
+        Me.TextBox11.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.TextBox11.Size = New System.Drawing.Size(57, 20)
+        Me.TextBox11.TabIndex = 156
+        '
+        'Label92
+        '
+        Me.Label92.AutoSize = True
+        Me.Label92.BackColor = System.Drawing.Color.Transparent
+        Me.Label92.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label92.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label92.Location = New System.Drawing.Point(16, 48)
+        Me.Label92.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label92.Name = "Label92"
+        Me.Label92.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label92.Size = New System.Drawing.Size(114, 13)
+        Me.Label92.TabIndex = 157
+        Me.Label92.Text = "D0904'Column PL Thk"
+        '
+        'TabControl3
+        '
+        Me.TabControl3.Controls.Add(Me.TabPageWebPlate)
+        Me.TabControl3.Controls.Add(Me.TabPageHoleGroup)
+        Me.TabControl3.Location = New System.Drawing.Point(4, 89)
+        Me.TabControl3.Name = "TabControl3"
+        Me.TabControl3.SelectedIndex = 0
+        Me.TabControl3.Size = New System.Drawing.Size(401, 238)
+        Me.TabControl3.TabIndex = 171
+        '
+        'TabPageWebPlate
+        '
+        Me.TabPageWebPlate.Controls.Add(Me.TextBox3)
+        Me.TabPageWebPlate.Controls.Add(Me.Label84)
+        Me.TabPageWebPlate.Controls.Add(Me.TextBox4)
+        Me.TabPageWebPlate.Controls.Add(Me.Label85)
+        Me.TabPageWebPlate.Controls.Add(Me.DataGridViewWebPlate)
+        Me.TabPageWebPlate.Location = New System.Drawing.Point(4, 22)
+        Me.TabPageWebPlate.Name = "TabPageWebPlate"
+        Me.TabPageWebPlate.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPageWebPlate.Size = New System.Drawing.Size(393, 212)
+        Me.TabPageWebPlate.TabIndex = 0
+        Me.TabPageWebPlate.Text = "D0905'Web Plate"
+        Me.TabPageWebPlate.UseVisualStyleBackColor = True
+        '
+        'TabPageHoleGroup
+        '
+        Me.TabPageHoleGroup.Controls.Add(Me.TextBox1)
+        Me.TabPageHoleGroup.Controls.Add(Me.Label75)
+        Me.TabPageHoleGroup.Controls.Add(Me.TextBox2)
+        Me.TabPageHoleGroup.Controls.Add(Me.Label83)
+        Me.TabPageHoleGroup.Controls.Add(Me.DataGridViewHoleGroup)
+        Me.TabPageHoleGroup.Location = New System.Drawing.Point(4, 22)
+        Me.TabPageHoleGroup.Name = "TabPageHoleGroup"
+        Me.TabPageHoleGroup.Padding = New System.Windows.Forms.Padding(3)
+        Me.TabPageHoleGroup.Size = New System.Drawing.Size(393, 212)
+        Me.TabPageHoleGroup.TabIndex = 1
+        Me.TabPageHoleGroup.Text = "D0906'Hole Group"
+        Me.TabPageHoleGroup.UseVisualStyleBackColor = True
+        '
+        'DataGridViewWebPlate
+        '
+        Me.DataGridViewWebPlate.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DataGridViewWebPlate.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.ColumnDist, Me.ColumnThk, Me.ColumnHeight, Me.ColumnLength})
+        Me.DataGridViewWebPlate.Location = New System.Drawing.Point(0, 48)
+        Me.DataGridViewWebPlate.Name = "DataGridViewWebPlate"
+        Me.DataGridViewWebPlate.Size = New System.Drawing.Size(393, 164)
+        Me.DataGridViewWebPlate.TabIndex = 0
+        '
+        'ColumnDist
+        '
+        Me.ColumnDist.HeaderText = "Dist"
+        Me.ColumnDist.Name = "ColumnDist"
+        '
+        'ColumnThk
+        '
+        Me.ColumnThk.HeaderText = "Thk"
+        Me.ColumnThk.Name = "ColumnThk"
+        '
+        'ColumnHeight
+        '
+        Me.ColumnHeight.HeaderText = "H"
+        Me.ColumnHeight.Name = "ColumnHeight"
+        '
+        'ColumnLength
+        '
+        Me.ColumnLength.HeaderText = "L"
+        Me.ColumnLength.Name = "ColumnLength"
+        '
+        'DataGridViewHoleGroup
+        '
+        Me.DataGridViewHoleGroup.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DataGridViewHoleGroup.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.DataGridViewTextBoxColumn1, Me.ColumnCount, Me.ColumnDistBtw})
+        Me.DataGridViewHoleGroup.Location = New System.Drawing.Point(0, 48)
+        Me.DataGridViewHoleGroup.Name = "DataGridViewHoleGroup"
+        Me.DataGridViewHoleGroup.Size = New System.Drawing.Size(393, 164)
+        Me.DataGridViewHoleGroup.TabIndex = 0
+        '
+        'DataGridViewTextBoxColumn1
+        '
+        Me.DataGridViewTextBoxColumn1.HeaderText = "EdgeDist"
+        Me.DataGridViewTextBoxColumn1.Name = "DataGridViewTextBoxColumn1"
+        '
+        'ColumnCount
+        '
+        Me.ColumnCount.HeaderText = "Count"
+        Me.ColumnCount.Name = "ColumnCount"
+        '
+        'ColumnDistBtw
+        '
+        Me.ColumnDistBtw.HeaderText = "DistBtw"
+        Me.ColumnDistBtw.Name = "ColumnDistBtw"
+        '
+        'TextBox1
+        '
+        Me.TextBox1.AcceptsReturn = True
+        Me.TextBox1.BackColor = System.Drawing.SystemColors.Window
+        Me.TextBox1.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.TextBox1.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.TextBox1.Location = New System.Drawing.Point(120, 12)
+        Me.TextBox1.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBox1.MaxLength = 0
+        Me.TextBox1.Name = "TextBox1"
+        Me.TextBox1.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.TextBox1.Size = New System.Drawing.Size(57, 20)
+        Me.TextBox1.TabIndex = 156
+        '
+        'Label75
+        '
+        Me.Label75.AutoSize = True
+        Me.Label75.BackColor = System.Drawing.Color.Transparent
+        Me.Label75.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label75.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label75.Location = New System.Drawing.Point(15, 15)
+        Me.Label75.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label75.Name = "Label75"
+        Me.Label75.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label75.Size = New System.Drawing.Size(116, 13)
+        Me.Label75.TabIndex = 157
+        Me.Label75.Text = "D0906'Upper EdgeDist"
+        '
+        'TextBox2
+        '
+        Me.TextBox2.AcceptsReturn = True
+        Me.TextBox2.BackColor = System.Drawing.SystemColors.Window
+        Me.TextBox2.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.TextBox2.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.TextBox2.Location = New System.Drawing.Point(320, 12)
+        Me.TextBox2.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBox2.MaxLength = 0
+        Me.TextBox2.Name = "TextBox2"
+        Me.TextBox2.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.TextBox2.Size = New System.Drawing.Size(57, 20)
+        Me.TextBox2.TabIndex = 158
+        '
+        'Label83
+        '
+        Me.Label83.AutoSize = True
+        Me.Label83.BackColor = System.Drawing.Color.Transparent
+        Me.Label83.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label83.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label83.Location = New System.Drawing.Point(207, 15)
+        Me.Label83.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label83.Name = "Label83"
+        Me.Label83.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label83.Size = New System.Drawing.Size(116, 13)
+        Me.Label83.TabIndex = 159
+        Me.Label83.Text = "D0907'Lower EdgeDist"
+        '
+        'TextBox3
+        '
+        Me.TextBox3.AcceptsReturn = True
+        Me.TextBox3.BackColor = System.Drawing.SystemColors.Window
+        Me.TextBox3.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.TextBox3.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.TextBox3.Location = New System.Drawing.Point(120, 12)
+        Me.TextBox3.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBox3.MaxLength = 0
+        Me.TextBox3.Name = "TextBox3"
+        Me.TextBox3.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.TextBox3.Size = New System.Drawing.Size(57, 20)
+        Me.TextBox3.TabIndex = 160
+        '
+        'Label84
+        '
+        Me.Label84.AutoSize = True
+        Me.Label84.BackColor = System.Drawing.Color.Transparent
+        Me.Label84.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label84.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label84.Location = New System.Drawing.Point(15, 15)
+        Me.Label84.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label84.Name = "Label84"
+        Me.Label84.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label84.Size = New System.Drawing.Size(93, 13)
+        Me.Label84.TabIndex = 161
+        Me.Label84.Text = "D0908'Center Dist"
+        '
+        'TextBox4
+        '
+        Me.TextBox4.AcceptsReturn = True
+        Me.TextBox4.BackColor = System.Drawing.SystemColors.Window
+        Me.TextBox4.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.TextBox4.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.TextBox4.Location = New System.Drawing.Point(320, 12)
+        Me.TextBox4.Margin = New System.Windows.Forms.Padding(2)
+        Me.TextBox4.MaxLength = 0
+        Me.TextBox4.Name = "TextBox4"
+        Me.TextBox4.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.TextBox4.Size = New System.Drawing.Size(57, 20)
+        Me.TextBox4.TabIndex = 162
+        '
+        'Label85
+        '
+        Me.Label85.AutoSize = True
+        Me.Label85.BackColor = System.Drawing.Color.Transparent
+        Me.Label85.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label85.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label85.Location = New System.Drawing.Point(207, 15)
+        Me.Label85.Margin = New System.Windows.Forms.Padding(2, 0, 2, 0)
+        Me.Label85.Name = "Label85"
+        Me.Label85.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label85.Size = New System.Drawing.Size(74, 13)
+        Me.Label85.TabIndex = 163
+        Me.Label85.Text = "D0909'Radius"
+        '
         'UserConnectionForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -3218,6 +3569,16 @@
         Me.GroupBox3.PerformLayout()
         Me.GroupBox4.ResumeLayout(False)
         Me.GroupBox4.PerformLayout()
+        Me.TabPageColumnWebConnPlate.ResumeLayout(False)
+        Me.GroupBox7.ResumeLayout(False)
+        Me.GroupBox7.PerformLayout()
+        Me.TabControl3.ResumeLayout(False)
+        Me.TabPageWebPlate.ResumeLayout(False)
+        Me.TabPageWebPlate.PerformLayout()
+        Me.TabPageHoleGroup.ResumeLayout(False)
+        Me.TabPageHoleGroup.PerformLayout()
+        CType(Me.DataGridViewWebPlate, System.ComponentModel.ISupportInitialize).EndInit()
+        CType(Me.DataGridViewHoleGroup, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -3403,5 +3764,33 @@
     Public WithEvents txtColumnCutBack As Windows.Forms.TextBox
     Public WithEvents Label82 As Windows.Forms.Label
     Public WithEvents txtColumnGap As Windows.Forms.TextBox
+    Friend WithEvents TabPageColumnWebConnPlate As Windows.Forms.TabPage
+    Friend WithEvents GroupBox7 As Windows.Forms.GroupBox
+    Public WithEvents TextBox9 As Windows.Forms.TextBox
+    Public WithEvents Label90 As Windows.Forms.Label
+    Public WithEvents TextBox10 As Windows.Forms.TextBox
+    Public WithEvents Label91 As Windows.Forms.Label
+    Public WithEvents TextBox11 As Windows.Forms.TextBox
+    Public WithEvents Label92 As Windows.Forms.Label
+    Friend WithEvents TabControl3 As Windows.Forms.TabControl
+    Friend WithEvents TabPageWebPlate As Windows.Forms.TabPage
+    Friend WithEvents TabPageHoleGroup As Windows.Forms.TabPage
+    Friend WithEvents DataGridViewWebPlate As Windows.Forms.DataGridView
+    Friend WithEvents ColumnDist As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents ColumnThk As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents ColumnHeight As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents ColumnLength As Windows.Forms.DataGridViewTextBoxColumn
+    Public WithEvents TextBox1 As Windows.Forms.TextBox
+    Public WithEvents Label75 As Windows.Forms.Label
+    Public WithEvents TextBox2 As Windows.Forms.TextBox
+    Public WithEvents Label83 As Windows.Forms.Label
+    Friend WithEvents DataGridViewHoleGroup As Windows.Forms.DataGridView
+    Friend WithEvents DataGridViewTextBoxColumn1 As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents ColumnCount As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents ColumnDistBtw As Windows.Forms.DataGridViewTextBoxColumn
+    Public WithEvents TextBox3 As Windows.Forms.TextBox
+    Public WithEvents Label84 As Windows.Forms.Label
+    Public WithEvents TextBox4 As Windows.Forms.TextBox
+    Public WithEvents Label85 As Windows.Forms.Label
 #End Region
 End Class

@@ -20,25 +20,25 @@
 @D0105,"Angle 2",
 @D0107,"Angle 3",
 @D0109,"Angle 4",
-@D0110,"Bottom"
+@D0110,"Bottom",
 
 @D0111,"Hole Group 1",
 
 @D0112,"Hor Side Dist",
-@D0113,"Hor Dist"
-@D0114,"Hor Count"
+@D0113,"Hor Dist",
+@D0114,"Hor Count",
 
 @D0115,"Ver Side Dist",
-@D0116,"Ver Dist"
-@D0117,"Ver Count"
+@D0116,"Ver Dist",
+@D0117,"Ver Count",
 
 @D0118,"Hole Group 2",
 @D0119,"Outside PL thk",
 @D0120,"Inside PL thk",
 
-@D0121,"Brace Member"
-@D0122,"Column"
-@D0123,"Top"
+@D0121,"Brace Member",
+@D0122,"Column",
+@D0123,"Top",
 
 @D0200,"Hole",
 @D0201,"Distribution in Shape Direction",
@@ -71,12 +71,12 @@
 @D0403,"Connect Cut back 1",
 @D0404,"Connect Cut back 2",
 @D0405,"Main Chord Thk",
-@D0406,"Connect Flange Thk 1"
-@D0407,"Connect Flange Thk 2"
+@D0406,"Connect Flange Thk 1",
+@D0407,"Connect Flange Thk 2",
 @D0408,"Hole Dia",
-@D0409,"Connect Web Thk 1"
-@D0410,"Connect Web Thk 2"
-@D0411,"Column Cut back"
+@D0409,"Connect Web Thk 1",
+@D0410,"Connect Web Thk 2",
+@D0411,"Column Cut back",
 
 @D0500,"Arc Plate 1",
 @D0501,"Dist",
@@ -92,7 +92,7 @@
 @D0511,"Web Side Dist",
 @D0512,"Web Connect Plate",
 @D0513,"Gap 2",
-@D0514,"Gap 3"
+@D0514,"Gap 3",
 
 @D0600,"Arc Plate 2",
 
@@ -109,10 +109,22 @@
 @D0710,"Hor Count",
 @D0711,"Ver Dist",
 @D0712,"Ver Count",
-@D0713,"Inner Ver Edge Dist"
+@D0713,"Inner Ver Edge Dist",
 
 
 @D0800,"Web Connect Plate 2",
+
+@D0900,"Column Web Connect Plate",
+@D0901,"Dimension",
+@D0902,"Outter PL Thk",
+@D0903,"Inner PL Thk",
+@D0904,"Column PL Thk",
+@D0905,"Web Plate",
+@D0906,"Hole Group",
+@D0906,"Upper EdgeDist",
+@D0907,"Lower EdgeDist",
+@D0908,"Center Dist",
+@D0909,"Radius",
 
 @M0000,"Select supporting weld shape1",
 @M0001,"Select supporting weld shape2",

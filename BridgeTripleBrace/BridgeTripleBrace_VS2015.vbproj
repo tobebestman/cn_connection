@@ -131,6 +131,7 @@
       <Link>WebConnectPlateParameter.vb</Link>
     </Compile>
     <Compile Include="AddInMain.vb" />
+    <Compile Include="ColumnWebConnectPlateParameter.vb" />
     <Compile Include="ConnectionBuilder.vb" />
     <Compile Include="Constants.vb" />
     <Compile Include="KeyinCommands.vb" />
