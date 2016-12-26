@@ -107,6 +107,8 @@ Public Class Parameters
     Public mWebConnectPlate1 As WebConnectPlateParameter
     Public mWebConnectPlate2 As WebConnectPlateParameter
 
+    Public mColumnWebConnectPlate As ColumnWebConnectPlateParameter
+
     Public Sub WriteToConnectionId(ByVal ConnectionId As Long)
         Dim oTrans As New PsTransaction
         Dim eConn As PsConnection = Nothing
@@ -155,6 +157,8 @@ Public Class Parameters
 
         mWebConnectPlate1.WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
         mWebConnectPlate2.WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
+
+        mColumnWebConnectPlate.WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
     End Sub
 
     Public Sub WriteToConnection(ByRef eConnection As PsConnection,
@@ -222,6 +226,8 @@ Public Class Parameters
 
         mWebConnectPlate1.ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
         mWebConnectPlate2.ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
+
+        mColumnWebConnectPlate.ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
     End Sub
 
     Public Sub ReadFromConnection(eConnection As PsConnection,
@@ -273,8 +279,6 @@ Public Class Parameters
         mColumnGap = eConnection.Double(iDbl) : iDbl = iDbl + 1
     End Sub
 
-
-
     Public Sub WriteToTemplate(ByRef Template As PsTemplateManager) Implements IParameters.WriteToTemplate
         Template.DeleteAllBooleans()
         Template.DeleteAllDoubles()
@@ -323,6 +327,8 @@ Public Class Parameters
 
         mWebConnectPlate1.WriteToTemplate(Template)
         mWebConnectPlate2.WriteToTemplate(Template)
+
+        mColumnWebConnectPlate.WriteToTemplate(Template)
     End Sub
 
 
@@ -341,6 +347,7 @@ Public Class Parameters
         mWebConnectPlate1.ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
         mWebConnectPlate2.ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
 
+        mColumnWebConnectPlate.ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
     End Sub
 
     Public Sub ReadFromTemplate(Template As PsTemplateManager,
@@ -395,6 +402,8 @@ Public Class Parameters
 
         mWebConnectPlate1 = New WebConnectPlateParameter(Me)
         mWebConnectPlate2 = New WebConnectPlateParameter(Me)
+
+        mColumnWebConnectPlate = New ColumnWebConnectPlateParameter(Me)
     End Sub
 
     Protected Overrides Sub Finalize()
@@ -452,6 +461,8 @@ Public Class Parameters
 
         mWebConnectPlate1.SetToMetricDefaults()
         mWebConnectPlate2.SetToMetricDefaults()
+
+        mColumnWebConnectPlate.SetToMetricDefaults()
     End Sub
 
     Public Sub SetToImperialDefaults() Implements ISetToDefauts.SetToImperialDefaults

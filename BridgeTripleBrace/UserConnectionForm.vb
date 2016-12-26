@@ -346,6 +346,50 @@ Friend Class UserConnectionForm
         Data.mWebConnectPlate2.webConnectPlateInnerVerEdgeDist = UIConverter.ConvertToNumeric(txtWebConnectPlateInnerVerEdgeDist2.Text)
         Data.mWebConnectPlate2.gap = UIConverter.ConvertToNumeric(txtConnect2Gap.Text)
 
+        Data.mColumnWebConnectPlate.outterPlateThickness = UIConverter.ConvertToNumeric(txtOutterPLThickness.Text)
+        Data.mColumnWebConnectPlate.innerPlateThickness = UIConverter.ConvertToNumeric(txtInnerPLThickness.Text)
+        Data.mColumnWebConnectPlate.columnPlateThickness = UIConverter.ConvertToNumeric(txtColumnPLThickness.Text)
+        Data.mColumnWebConnectPlate.centerDistance = UIConverter.ConvertToNumeric(txtSlotCenterDist.Text)
+        Data.mColumnWebConnectPlate.radius = UIConverter.ConvertToNumeric(txtSlotRadius.Text)
+        Data.mColumnWebConnectPlate.HoleGrop.upperEdgeDistance = UIConverter.ConvertToNumeric(txtColumnUpperEdgeDist.Text)
+        Data.mColumnWebConnectPlate.HoleGrop.lowerEdgeDistance = UIConverter.ConvertToNumeric(txtColumnLowerEdgeDist.Text)
+
+        Data.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions.Clear()
+        For i As Integer = 0 To Me.DataGridViewHoleGroup.RowCount - 1
+            Try
+                Dim edgeDist As String = DataGridViewHoleGroup.Rows(i).Cells(0).Value
+                Dim YDesc As String = DataGridViewHoleGroup.Rows(i).Cells(1).Value
+
+                If edgeDist Is Nothing Or YDesc Is Nothing Then
+                    Continue For
+                End If
+
+                Data.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions.
+                Add(New HoleColumnDefinition(Integer.Parse(edgeDist), YDesc))
+            Catch ex As Exception
+                Debug.Assert(False)
+                Continue For
+            End Try
+        Next
+
+        Data.mColumnWebConnectPlate.XColumnWebs.Clear()
+        For i As Integer = 0 To Me.DataGridViewWebPlate.RowCount - 1
+            Try
+                Dim strEdgeDistance As String = DataGridViewWebPlate.Rows(i).Cells(0).Value
+                Dim strThickness As String = DataGridViewWebPlate.Rows(i).Cells(1).Value
+                Dim strHeight As String = DataGridViewWebPlate.Rows(i).Cells(2).Value
+                Dim strLength As String = DataGridViewWebPlate.Rows(i).Cells(3).Value
+
+                Dim oDef As New ColumnWebDefinition(Integer.Parse(strEdgeDistance),
+                                                     Integer.Parse(strThickness),
+                                                     Integer.Parse(strHeight),
+                                                     Integer.Parse(strLength))
+                Data.mColumnWebConnectPlate.XColumnWebs.Add(oDef)
+            Catch ex As Exception
+                Debug.Assert(False)
+            End Try
+        Next
+
     End Sub
 
     Private Sub WriteToDialog(ByRef Data As Parameters)
@@ -448,6 +492,26 @@ Friend Class UserConnectionForm
         txtWebConnectPlateVerCount2.Text = UIConverter.ConvertToText(Data.mWebConnectPlate2.webConnectPlateVerCount)
         txtWebConnectPlateInnerVerEdgeDist2.Text = UIConverter.ConvertToText(Data.mWebConnectPlate2.webConnectPlateInnerVerEdgeDist)
         txtConnect2Gap.Text = UIConverter.ConvertToText(Data.mWebConnectPlate2.gap)
+
+        txtOutterPLThickness.Text = UIConverter.ConvertToText(Data.mColumnWebConnectPlate.outterPlateThickness)
+        txtInnerPLThickness.Text = UIConverter.ConvertToText(Data.mColumnWebConnectPlate.innerPlateThickness)
+        txtColumnPLThickness.Text = UIConverter.ConvertToText(Data.mColumnWebConnectPlate.columnPlateThickness)
+        txtSlotCenterDist.Text = UIConverter.ConvertToText(Data.mColumnWebConnectPlate.centerDistance)
+        txtSlotRadius.Text = UIConverter.ConvertToText(Data.mColumnWebConnectPlate.radius)
+        txtColumnUpperEdgeDist.Text = UIConverter.ConvertToText(Data.mColumnWebConnectPlate.HoleGrop.upperEdgeDistance)
+        txtColumnLowerEdgeDist.Text = UIConverter.ConvertToText(Data.mColumnWebConnectPlate.HoleGrop.lowerEdgeDistance)
+
+        For i As Integer = 0 To Data.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions.Count - 1
+            DataGridViewHoleGroup.Rows.Add(Data.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions(i).horDistance.ToString(),
+                                           Data.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions(i).YDesc)
+        Next
+
+        For i As Integer = 0 To Data.mColumnWebConnectPlate.XColumnWebs.Count - 1
+            DataGridViewWebPlate.Rows.Add(Data.mColumnWebConnectPlate.XColumnWebs(i).edgeDistance.ToString(),
+                                           Data.mColumnWebConnectPlate.XColumnWebs(i).thickness.ToString(),
+                                           Data.mColumnWebConnectPlate.XColumnWebs(i).height.ToString(),
+                                           Data.mColumnWebConnectPlate.XColumnWebs(i).length.ToString())
+        Next
 
     End Sub
 
@@ -671,7 +735,7 @@ Friend Class UserConnectionForm
             txtWebConnectPlateInnerVerEdgeDist1.Leave, txtWebConnectPlateHorEdgeDist2.Leave,
             txtWebConnectPlateHorEdgeDist1.Leave, txtWebConnectPlateHorDist2.Leave,
             txtWebConnectPlateHorDist1.Leave, txtBoltGroupSpan2.Leave,
-            txtBoltGroupSpan1.Leave, txtBoltGroupHorSideDist2.Leave, txtConnect2WebThickness.Leave, txtConnect1WebThickness.Leave, txtTopFillet2.Leave, txtTopFillet1.Leave, txtColumnGap.Leave, txtColumnCutBack.Leave
+            txtBoltGroupSpan1.Leave, txtBoltGroupHorSideDist2.Leave, txtConnect2WebThickness.Leave, txtConnect1WebThickness.Leave, txtTopFillet2.Leave, txtTopFillet1.Leave, txtColumnGap.Leave, txtColumnCutBack.Leave, txtSlotRadius.Leave, txtSlotCenterDist.Leave, txtOutterPLThickness.Leave, txtInnerPLThickness.Leave, txtColumnUpperEdgeDist.Leave, txtColumnPLThickness.Leave, txtColumnLowerEdgeDist.Leave
 
         Dim oldValue As String = eventSender.Text
         eventSender.Text = oCheckInput.CheckPositive(eventSender.Text)
@@ -709,4 +773,75 @@ Friend Class UserConnectionForm
 
     End Sub
 
+    Private Function IsValidDescString(value As String) As Boolean
+        Dim parts As String() = value.Split("x")
+        If (parts.Length <> 2) Then
+            Return False
+        End If
+
+        Try
+            Dim count As Integer = Integer.Parse(parts(0))
+            Dim dist As Double = Integer.Parse(parts(1))
+
+            If (count > 0 And
+                dist > 0) Then
+                Return True
+            End If
+
+        Catch ex As Exception
+            Debug.Assert(False)
+        End Try
+        Return False
+    End Function
+
+
+    Private Sub DataGridViewWebPlate_CellValidating(sender As Object, e As DataGridViewCellValidatingEventArgs) Handles DataGridViewWebPlate.CellValidating, DataGridViewHoleGroup.CellValidating
+        Dim grid As DataGridView
+        grid = TryCast(sender, DataGridView)
+        If grid Is Nothing Then
+            Debug.Assert(False)
+            Return
+        End If
+
+        If (e.ColumnIndex < 0 Or e.RowIndex < 0) Then
+            Return
+        End If
+
+        Dim strValue As String = e.FormattedValue
+
+        Dim header As String = grid.Columns(e.ColumnIndex).HeaderText
+
+
+
+        Select Case header
+            Case "EdgeDist", "Dist", "Thk", "H", "L"
+                Try
+                    Dim value As Double = Double.Parse(strValue)
+                    If (value <= 0) Then
+                        e.Cancel = True
+                        grid.Rows(e.RowIndex).ErrorText = "Value should bigger than zero"
+                    End If
+                Catch ex As Exception
+                    e.Cancel = True
+                    grid.Rows(e.RowIndex).ErrorText = "Value should bigger than zero"
+                End Try
+
+            Case "YDesc"
+                If IsValidDescString(strValue) = False Then
+                    e.Cancel = True
+                    grid.Rows(e.RowIndex).ErrorText =
+                        "YDesc should be in NxDist format such as 2x100 format"
+                End If
+        End Select
+    End Sub
+
+    Private Sub DataGridViewWebPlate_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewWebPlate.CellEndEdit, DataGridViewHoleGroup.CellEndEdit
+        Dim grid As DataGridView
+        grid = TryCast(sender, DataGridView)
+        If grid Is Nothing Then
+            Debug.Assert(False)
+            Return
+        End If
+        grid.Rows(e.RowIndex).ErrorText = String.Empty
+    End Sub
 End Class
