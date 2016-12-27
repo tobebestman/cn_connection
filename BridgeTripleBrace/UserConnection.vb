@@ -519,6 +519,8 @@ Public Class UserConnection
             oConnAdpt.AppendAdditionalObjectId(connectingId1)
             oConnAdpt.AppendAdditionalObjectId(connectingId2)
 
+            oConnAdpt.AppendAdditionalObjectId(supportingColumnId)
+
             oConnAdpt.AppendCreatedObjectArray(0, sidePlateCreator1.sidePlateId)
             oConnAdpt.AppendCreatedObjectArray(0, sidePlateCreator2.sidePlateId)
             oConnAdpt.AppendCreatedObjectArray(1, ConnectPlatesCreater1.mainPlate)
@@ -748,29 +750,30 @@ Public Class UserConnection
                                                  supportingId2 As Long,
                                                  supportingColumnId As Long) As List(Of Integer)
 
-        Dim topSidePlateBoolPoints As List(Of PsPoint) =
-            GetTopHalfSidePlateBooleanCutBoundary(data,
-                                                  supportingId2,
-                                                  supportingColumnId)
-        Dim oMat As New PsMatrix
-        Dim oPtOrg As New PsPoint
-        Utility.GetIntersectPtAndUcsBySupportAndConnectMembers(supportingColumnId, supportingId2, oPtOrg, oMat)
+        'Dim topSidePlateBoolPoints As List(Of PsPoint) =
+        '    GetTopHalfSidePlateBooleanCutBoundary(data,
+        '                                          supportingId2,
+        '                                          supportingColumnId)
+        'Dim oMat As New PsMatrix
+        'Dim oPtOrg As New PsPoint
+        'Utility.GetIntersectPtAndUcsBySupportAndConnectMembers(supportingColumnId, supportingId2, oPtOrg, oMat)
 
-        Dim result As List(Of Integer) = BooleanCutColumnSide(data, supportingColumnId,
-                                      oPtOrg, oMat, topSidePlateBoolPoints)
+        'Dim result As List(Of Integer) = BooleanCutColumnSide(data, supportingColumnId,
+        '                              oPtOrg, oMat, topSidePlateBoolPoints)
 
-        Dim modIndex As Integer = BooleanCutColumnFlange(data, supportingColumnId, oMat,
-                                                          topSidePlateBoolPoints(0),
-                                                          topSidePlateBoolPoints(1),
-                                                          VerticalPosition.kDown)
-        result.Add(modIndex)
+        'Dim modIndex As Integer = BooleanCutColumnFlange(data, supportingColumnId, oMat,
+        '                                                  topSidePlateBoolPoints(0),
+        '                                                  topSidePlateBoolPoints(1),
+        '                                                  VerticalPosition.kDown)
+        'result.Add(modIndex)
 
-        modIndex = BooleanCutColumnFlange(data, supportingColumnId, oMat,
-                                           topSidePlateBoolPoints(2),
-                                           topSidePlateBoolPoints(3),
-                                           VerticalPosition.kTop)
+        'modIndex = BooleanCutColumnFlange(data, supportingColumnId, oMat,
+        '                                   topSidePlateBoolPoints(2),
+        '                                   topSidePlateBoolPoints(3),
+        '                                   VerticalPosition.kTop)
 
-        result.Add(modIndex)
+        'result.Add(modIndex)
+        Dim result = New List(Of Integer)
         Return result
     End Function
 
@@ -803,6 +806,8 @@ Public Class UserConnection
 
         Dim zAxis As New PsVector
         connMat3.getZAxis(zAxis)
+        Dim yAxis As New PsVector
+        connMat3.getYAxis(yAxis)
 
         Dim instPt2 As New PsPoint
         Dim connMat2 As New PsMatrix
@@ -818,12 +823,19 @@ Public Class UserConnection
 
         Dim ang As Double = zAxis2.GetAngleTo(zAxis)
 
-        Dim supportAdpt As New ShapeAdapter(supportingId2)
-        Dim pt As New PsPoint
-        pt = MathTool.GetPointInDirection(instPt2, -zAxis, supportAdpt.Height / 2 / Math.Sin(ang))
+        Dim columnAdpt As New ShapeAdapter(supportingColumnId)
+
+        Dim pt1 As New PsPoint
+        pt1 = MathTool.GetPointInDirection(instPt3, -yAxis, columnAdpt.Height / 2)
+
+        Dim pt2 As New PsPoint
+        pt2 = MathTool.GetPointInDirection(pt1, -zAxis, data.mColumnCutBack)
+
+        'drawBall(pt1, 50)
+        'drawBall(pt2, 100)
 
         Dim oPlane As New PsCutPlane
-        oPlane.InsertPoint = pt
+        oPlane.InsertPoint = pt2
         oPlane.Normal = yAxis2
 
         Dim oCut As New PsCutObjects
@@ -884,7 +896,7 @@ Public Class UserConnection
 
         Dim pt3 As New PsPoint
         pt3 = MathTool.GetPointInDirection(pt2, yAxis, colAdpt.Height)
-        pt3 = MathTool.GetPointInDirection(pt3, zAxis, colAdpt.Height * Math.Cos(ang))
+        pt3 = MathTool.GetPointInDirection(pt3, zAxis, colAdpt.Height / Math.Tan(ang))
 
         Dim pt4 As New PsPoint
         pt4 = MathTool.GetPointInDirection(instPt3, yAxis, colAdpt.Height / 2)
@@ -895,9 +907,9 @@ Public Class UserConnection
         result.Add(pt4)
 
         'drawBall(pt1, 100)
-        'drawBall(pt2, 100)
-        'drawBall(pt3, 100)
-        'drawBall(pt4, 100)
+        'drawBall(pt2, 150)
+        'drawBall(pt3, 200)
+        'drawBall(pt4, 250)
         Return result
     End Function
 
@@ -1013,8 +1025,8 @@ Public Class UserConnection
             Dim xDist As Double
             xDist = MainPlateWidth() / 2
             xDist -= param.horSideDistance
-            xDist -= (param.horHoleCount * param.horDistance) / 2
-            
+            xDist -= ((param.horHoleCount - 1) * param.horDistance) / 2
+
 
             Dim yDist As Double
             yDist = MainPlateLength() / 2 - param.verSideDistance - ((param.verHoleCount - 1) * param.verDistance) / 2
@@ -1605,7 +1617,7 @@ Public Class UserConnection
 
         oPoly.append(oPoly2, True, PRECISION)
 
-        'oPoly.draw(CoordSystem.kWcs, "0", "0", 1)
+        oPoly.draw(CoordSystem.kWcs, "0", "0", 1)
 
         Return oPoly
     End Function
@@ -1677,6 +1689,10 @@ Public Class UserConnection
             GetTopHalfSidePlateBooleanCutBoundary(data, supportId2, columnId)
 
         Debug.Assert(upperPoints.Count = 4)
+
+        For Each ppt As PsPoint In upperPoints
+            drawBall(ppt, 100)
+        Next
 
         Dim inst1 As New PsPoint
         If MathTool.IntersectLineWithLine(spt, mPt, upperPoints(0), upperPoints(1), 0, inst1) = False Then

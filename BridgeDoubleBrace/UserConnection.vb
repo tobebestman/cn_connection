@@ -723,8 +723,8 @@ Public Class UserConnection
             Dim xDist As Double
             xDist = MainPlateWidth() / 2
             xDist -= param.horSideDistance
-            xDist -= (param.horHoleCount * param.horDistance) / 2
-            
+            xDist -= ((param.horHoleCount - 1) * param.horDistance) / 2
+
 
             Dim yDist As Double
             yDist = MainPlateLength() / 2 - param.verSideDistance - ((param.verHoleCount - 1) * param.verDistance) / 2

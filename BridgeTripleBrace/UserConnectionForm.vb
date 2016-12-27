@@ -54,6 +54,8 @@ Friend Class UserConnectionForm
     Public mCallBack As UserConnection
     Public mIsCreatingConn As Boolean = False
 
+    Private RSS As New RSSReader(PLUGIN_IDENTIFIER)
+
     Private ConnectionId As Long
 
     Private CancelData As Parameters
@@ -104,7 +106,7 @@ Friend Class UserConnectionForm
 
         DisableUpdate = True
         Me.Hide()
-        Entity = Selection.PickObject(UserConnection.RSS.RSS("M0004"))
+        Entity = Selection.PickObject(UserConnection.RSS.RSS("M0005"))
         Me.Show(Owner)
 
         If Entity <> 0 Then
@@ -379,6 +381,13 @@ Friend Class UserConnectionForm
                 Dim strThickness As String = DataGridViewWebPlate.Rows(i).Cells(1).Value
                 Dim strHeight As String = DataGridViewWebPlate.Rows(i).Cells(2).Value
                 Dim strLength As String = DataGridViewWebPlate.Rows(i).Cells(3).Value
+
+                If strEdgeDistance Is Nothing Or
+                    strThickness Is Nothing Or
+                    strHeight Is Nothing Or
+                    strLength Is Nothing Then
+                    Continue For
+                End If
 
                 Dim oDef As New ColumnWebDefinition(Integer.Parse(strEdgeDistance),
                                                      Integer.Parse(strThickness),
@@ -811,26 +820,23 @@ Friend Class UserConnectionForm
 
         Dim header As String = grid.Columns(e.ColumnIndex).HeaderText
 
-
-
         Select Case header
             Case "EdgeDist", "Dist", "Thk", "H", "L"
                 Try
                     Dim value As Double = Double.Parse(strValue)
                     If (value <= 0) Then
                         e.Cancel = True
-                        grid.Rows(e.RowIndex).ErrorText = "Value should bigger than zero"
+                        grid.Rows(e.RowIndex).ErrorText = RSS.RSS("M0006")
                     End If
                 Catch ex As Exception
                     e.Cancel = True
-                    grid.Rows(e.RowIndex).ErrorText = "Value should bigger than zero"
+                    grid.Rows(e.RowIndex).ErrorText = RSS.RSS("M0006")
                 End Try
 
             Case "YDesc"
                 If IsValidDescString(strValue) = False Then
                     e.Cancel = True
-                    grid.Rows(e.RowIndex).ErrorText =
-                        "YDesc should be in NxDist format such as 2x100 format"
+                    grid.Rows(e.RowIndex).ErrorText = RSS.RSS("M0007")
                 End If
         End Select
     End Sub

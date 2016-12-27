@@ -8,7 +8,7 @@
 #ENDDIALOG
 
 #STRINGS
-@D0000,"Error - No right object was selected",
+
 @D0001,"Bridge K Brace Designer",
 
 @D0100,"Side Plate",
@@ -114,7 +114,7 @@
 @M0003,"Select connecting weld shape2",
 
 
-@M0004,"Select same connection you want to clone from: ",
+@M0005,"Select same connection you want to clone from: ",
 
 @T0003,"Length by line",
 

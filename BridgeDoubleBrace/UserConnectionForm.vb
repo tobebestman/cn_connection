@@ -104,7 +104,7 @@ Friend Class UserConnectionForm
 
         DisableUpdate = True
         Me.Hide()
-        Entity = Selection.PickObject(UserConnection.RSS.RSS("M0004"))
+        Entity = Selection.PickObject(UserConnection.RSS.RSS("M0005"))
         Me.Show(Owner)
 
         If Entity <> 0 Then

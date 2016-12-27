@@ -425,8 +425,8 @@ Public Class Parameters
     End Sub
 
     Public Sub SetToMetricDefaults() Implements ISetToDefauts.SetToMetricDefaults
-        mSupport1CutBack = 2800
-        mSupport2CutBack = 2800
+        mSupport1CutBack = 3800
+        mSupport2CutBack = 3800
 
         mConnect1CutBack = 2400
         mConnect2CutBack = 2400
@@ -444,7 +444,7 @@ Public Class Parameters
         mMainChordPlateThickness = 52
         mHoleDia = 30
 
-        mColumnCutBack = 1400
+        mColumnCutBack = 2600
 
         mTopAngle1 = 45
         mTopAngle2 = 45
