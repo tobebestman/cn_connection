@@ -613,6 +613,14 @@ Public Class UserConnection
                 oConnAdpt.AppendCreatedObjectId(id)
             Next
 
+            oConnAdpt.AppendCreatedObjectId(columnWebConnectCreater.higherPlates.innertPlateId)
+            oConnAdpt.AppendCreatedObjectId(columnWebConnectCreater.higherPlates.outterPlateId)
+            oConnAdpt.AppendCreatedObjectId(columnWebConnectCreater.higherPlates.accessoryPlateId)
+
+            oConnAdpt.AppendCreatedObjectId(columnWebConnectCreater.lowerPlates.innertPlateId)
+            oConnAdpt.AppendCreatedObjectId(columnWebConnectCreater.lowerPlates.outterPlateId)
+            oConnAdpt.AppendCreatedObjectId(columnWebConnectCreater.lowerPlates.accessoryPlateId)
+
             oConnAdpt.AppendSecondActiveObjectId(sidePlateCreator1.sidePlateId)
             oConnAdpt.AppendSecondActiveObjectId(sidePlateCreator2.sidePlateId)
 
@@ -1084,7 +1092,7 @@ Public Class UserConnection
         'bottom of the top half
 
         Dim upperPoints As List(Of PsPoint) =
-            Utility.GetTopHalfSidePlateBooleanCutBoundary(data, supportId2, columnId)
+            GetTopHalfSidePlateBooleanCutBoundary(data, supportId2, columnId)
 
         Debug.Assert(upperPoints.Count = 4)
 
@@ -1140,6 +1148,71 @@ Public Class UserConnection
 
     End Sub
 
+    ''' <summary>
+    '''                                   +   pt2
+    '''                                 / |
+    '''                                /  |
+    '''                          pt3  *   |
+    '''                               |   |
+    '''                          pt4  +---+  pt1
+    ''' </summary>
+    ''' <param name="data"></param>
+    ''' <param name="supportingId2"></param>
+    ''' <param name="supportingColumnId"></param>
+    ''' <returns></returns>
+    Public Shared Function GetTopHalfSidePlateBooleanCutBoundary(data As Parameters,
+                                                  supportingId2 As Long,
+                                                  supportingColumnId As Long) As List(Of PsPoint)
+        Dim result As New List(Of PsPoint)
+
+        Dim instPt3 As New PsPoint
+        Dim connMat3 As New PsMatrix
+        If Utility.GetIntersectPtAndUcsBySupportAndConnectMembers(
+            supportingColumnId, supportingId2, instPt3, connMat3) = False Then
+            Debug.Assert(False)
+        End If
+
+        Dim yAxis As New PsVector
+        Dim zAxis As New PsVector
+        connMat3.getYAxis(yAxis)
+        connMat3.getZAxis(zAxis)
+        Dim colAdpt As New ShapeAdapter(supportingColumnId)
+
+        Dim pt1 As New PsPoint
+        pt1 = MathTool.GetPointInDirection(instPt3, -yAxis, colAdpt.Height / 2 + data.mColumnWebConnectPlate.outterPlateThickness)
+
+        Dim pt2 As New PsPoint
+        pt2 = MathTool.GetPointInDirection(pt1, -zAxis, data.mColumnCutBack)
+
+        Dim instPt2 As New PsPoint
+        Dim connMat2 As New PsMatrix
+        If Utility.GetIntersectPtAndUcsBySupportAndConnectMembers(
+            supportingId2, supportingColumnId, instPt2, connMat2) = False Then
+            Debug.Assert(False)
+        End If
+
+        Dim zAxis2 As New PsVector
+        connMat2.getZAxis(zAxis2)
+        Dim ang As Double = zAxis2.GetAngleTo(zAxis)
+
+        Dim pt3 As New PsPoint
+        pt3 = MathTool.GetPointInDirection(pt2, yAxis, colAdpt.Height + data.mColumnWebConnectPlate.outterPlateThickness * 2)
+        pt3 = MathTool.GetPointInDirection(pt3, zAxis, (colAdpt.Height + data.mColumnWebConnectPlate.outterPlateThickness * 2) / Math.Tan(ang))
+
+        Dim pt4 As New PsPoint
+        pt4 = MathTool.GetPointInDirection(instPt3, yAxis, colAdpt.Height / 2 + data.mColumnWebConnectPlate.outterPlateThickness)
+
+        result.Add(pt1)
+        result.Add(pt2)
+        result.Add(pt3)
+        result.Add(pt4)
+
+        'drawBall(pt1, 100)
+        'drawBall(pt2, 150)
+        'drawBall(pt3, 200)
+        'drawBall(pt4, 250)
+        Return result
+    End Function
     Private Function GetBottomHalfPlateProfile(data As Parameters,
                                                supportId1 As Long, supportId2 As Long,
                                                connectingId1 As Long, connectingId2 As Long,

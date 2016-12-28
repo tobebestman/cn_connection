@@ -64,8 +64,8 @@ Public Class ColumnWebConnectPlateCreator
     Dim columnId As Long
     Dim param As Parameters
 
-    Dim higherPlates As CreatedColumnPlates
-    Dim lowerPlates As CreatedColumnPlates
+    Public higherPlates As CreatedColumnPlates
+    Public lowerPlates As CreatedColumnPlates
 
     Public Sub New(supportingId2 As Long,
                 columnId As Long,
@@ -176,7 +176,7 @@ Public Class ColumnWebConnectPlateCreator
         oPoly.appendVertex(-r, -l / 2, 1)
         oPoly.appendVertex(r, -l / 2, 0)
         oPoly.appendVertex(r, 0, 0)
-        oPoly.draw(CoordSystem.kWcs, "0", "0", 1)
+        'oPoly.draw(CoordSystem.kWcs, "0", "0", 1)
         Return oPoly
     End Function
 
@@ -263,7 +263,7 @@ Public Class ColumnWebConnectPlateCreator
 
     Private Function higherPlatesUcs() As PsMatrix
         Dim upperPoints As List(Of PsPoint) =
-            Utility.GetTopHalfSidePlateBooleanCutBoundary(param, supporingId2, columnId)
+            UserConnection.GetTopHalfSidePlateBooleanCutBoundary(param, supporingId2, columnId)
 
         Dim instPt As New PsPoint
         Dim oMat As New PsMatrix
@@ -289,7 +289,7 @@ Public Class ColumnWebConnectPlateCreator
 
     Private Function lowerPlatesUcs() As PsMatrix
         Dim upperPoints As List(Of PsPoint) =
-            Utility.GetTopHalfSidePlateBooleanCutBoundary(param, supporingId2, columnId)
+            UserConnection.GetTopHalfSidePlateBooleanCutBoundary(param, supporingId2, columnId)
 
         Dim instPt As New PsPoint
         Dim oMat As New PsMatrix
