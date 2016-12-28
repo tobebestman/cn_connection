@@ -81,15 +81,54 @@ Public Class ColumnWebConnectPlateCreator
     Public Sub Create()
         CreateHigherPlates()
         Dim highPlateMat As PsMatrix = higherPlatesUcs()
-
         AddSlotOnPlates(highPlateMat, higherPlates)
+        DrillSlotOnColumn(highPlateMat, higherPlates)
 
         CreateLowerPlates()
         Dim lowerPlateMat As PsMatrix = lowerPlatesUcs()
-
         AddSlotOnPlates(lowerPlateMat, lowerPlates)
+        DrillSlotOnColumn(lowerPlateMat, lowerPlates)
+    End Sub
+
+    Private Sub DrillSlotOnColumn(highPlateMat As PsMatrix, plates As CreatedColumnPlates)
+        Dim org As New PsPoint
+        highPlateMat.getOrigin(org)
+        Dim xDir As New PsVector
+        highPlateMat.getXAxis(xDir)
+        Dim yDir As New PsVector
+        highPlateMat.getYAxis(yDir)
+        Dim zDir As New PsVector
+        highPlateMat.getZAxis(zDir)
+
+        Dim oCreater As New PsCreatePlate
+        oCreater.SetToDefaults()
+        oCreater.SetFromPolygon(GetSlotPoly())
+        oCreater.SetInsertMatrix(highPlateMat)
+        oCreater.SetThickness(SlotCutThickness() * 2)
+        If oCreater.Create() = False Then
+            Debug.Assert(False)
+        End If
+        Dim boolPlate As Long = oCreater.ObjectId
+
+        Dim oBoolCut As New PsCutObjects
+        oBoolCut.SetToDefaults()
+        oBoolCut.SetAsBooleanCut(boolPlate)
+        oBoolCut.SetObjectId(columnId)
+        If oBoolCut.Apply() = -1 Then
+            Debug.Assert(False)
+        End If
+
+        plates.drillModifyIds.Add(oBoolCut.GetModifyIndex())
+
+        Utility.EraseObjectId(boolPlate)
 
     End Sub
+
+    Private Function SlotCutThickness() As Double
+        Return param.mColumnWebConnectPlate.columnPlateThickness +
+            param.mColumnWebConnectPlate.innerPlateThickness +
+            param.mColumnWebConnectPlate.outterPlateThickness
+    End Function
 
     Private Sub AddSlotOnPlates(highPlateMat As PsMatrix,
                                 plates As CreatedColumnPlates)
@@ -101,15 +140,10 @@ Public Class ColumnWebConnectPlateCreator
         Dim org As New PsPoint
         highPlateMat.getOrigin(org)
 
-        Dim cutDepth As Double =
-            param.mColumnWebConnectPlate.columnPlateThickness +
-            param.mColumnWebConnectPlate.innerPlateThickness +
-            param.mColumnWebConnectPlate.outterPlateThickness
-
         Dim oPolyCut As New PsCutObjects
         oPolyCut.SetToDefaults()
         oPolyCut.SetAsPolyCut(GetSlotPoly(),
-                                org, xDir, yDir, cutDepth)
+                                org, xDir, yDir, SlotCutThickness())
 
         oPolyCut.SetObjectId(plates.accessoryPlateId)
         oPolyCut.Apply()
