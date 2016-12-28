@@ -107,8 +107,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArcPlateParameter.vb" />
+    <Compile Include="ArcPlatesCreator.vb" />
     <Compile Include="SideConnectPlateParameter.vb" />
+    <Compile Include="SideConnectPlatesCreater.vb" />
+    <Compile Include="SidePlateCreator.vb" />
     <Compile Include="WebConnectPlateParameter.vb" />
+    <Compile Include="WebConnectPlatesCreater.vb" />
     <Content Include="BridgeDoubleBrace.keyins">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

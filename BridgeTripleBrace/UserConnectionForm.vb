@@ -783,23 +783,17 @@ Friend Class UserConnectionForm
     End Sub
 
     Private Function IsValidDescString(value As String) As Boolean
-        Dim parts As String() = value.Split("x")
-        If (parts.Length <> 2) Then
+        Dim boltParser As New BoltDescParser
+        If boltParser.Parse(value) = False Then
             Return False
         End If
 
-        Try
-            Dim count As Integer = Integer.Parse(parts(0))
-            Dim dist As Double = Integer.Parse(parts(1))
 
-            If (count > 0 And
-                dist > 0) Then
-                Return True
-            End If
+        If (boltParser.count > 0 And
+                boltParser.distance > 0) Then
+            Return True
+        End If
 
-        Catch ex As Exception
-            Debug.Assert(False)
-        End Try
         Return False
     End Function
 

@@ -377,5 +377,133 @@ Module Utility
         End If
     End Sub
 
+
+    Public Function CreatePlate(plateWidth As Double, plateLength As Double,
+                                 plateThickness As Double,
+                                 xOffset As Double, yOffset As Double,
+                                 vertPos As VerticalPosition, oMat As PsMatrix) As Long
+        Dim oCreatePlate As New PsCreatePlate
+        oCreatePlate.SetToDefaults()
+        oCreatePlate.SetAsRectangularPlate(plateWidth, plateLength)
+        oCreatePlate.SetNormalPosition(vertPos)
+        oCreatePlate.SetThickness(plateThickness)
+
+        oCreatePlate.SetXOffset(xOffset)
+        oCreatePlate.SetYOffset(yOffset)
+
+        Dim org As New PsPoint
+        oMat.getOrigin(org)
+
+        'Utility.CreateBall(org)
+
+        oCreatePlate.SetInsertMatrix(oMat)
+        If oCreatePlate.Create() = False Then
+            Debug.Assert(False)
+        End If
+        Dim plateId As Long = oCreatePlate.ObjectId
+        Return plateId
+    End Function
+    Public Function DoPolyCut(supportId As Long, cutHeight As Double,
+                                      oStart As PsPoint,
+                                      xAxis As PsVector,
+                                      yAxis As PsVector, oPoly As PsPolygon) As Integer
+        Dim oCut As New PsCutObjects
+        oCut.SetAsPolyCut(oPoly, oStart, xAxis, yAxis, cutHeight)
+        oCut.SetObjectId(supportId)
+
+        Dim result As Long = -1
+        If oCut.Apply() > 0 Then
+            result = oCut.GetModifyIndex()
+        End If
+        Return result
+    End Function
+
+    ''' <summary>
+    '''                                   +   pt2
+    '''                                 / |
+    '''                                /  |
+    '''                          pt3  *   |
+    '''                               |   |
+    '''                          pt4  +---+  pt1
+    ''' </summary>
+    ''' <param name="data"></param>
+    ''' <param name="supportingId2"></param>
+    ''' <param name="supportingColumnId"></param>
+    ''' <returns></returns>
+    Public Function GetTopHalfSidePlateBooleanCutBoundary(data As Parameters,
+                                                  supportingId2 As Long,
+                                                  supportingColumnId As Long) As List(Of PsPoint)
+        Dim result As New List(Of PsPoint)
+
+        Dim instPt3 As New PsPoint
+        Dim connMat3 As New PsMatrix
+        If Utility.GetIntersectPtAndUcsBySupportAndConnectMembers(
+            supportingColumnId, supportingId2, instPt3, connMat3) = False Then
+            Debug.Assert(False)
+        End If
+
+        Dim yAxis As New PsVector
+        Dim zAxis As New PsVector
+        connMat3.getYAxis(yAxis)
+        connMat3.getZAxis(zAxis)
+        Dim colAdpt As New ShapeAdapter(supportingColumnId)
+
+        Dim pt1 As New PsPoint
+        pt1 = MathTool.GetPointInDirection(instPt3, -yAxis, colAdpt.Height / 2 + data.mColumnWebConnectPlate.outterPlateThickness)
+
+        Dim pt2 As New PsPoint
+        pt2 = MathTool.GetPointInDirection(pt1, -zAxis, data.mColumnCutBack)
+
+        Dim instPt2 As New PsPoint
+        Dim connMat2 As New PsMatrix
+        If Utility.GetIntersectPtAndUcsBySupportAndConnectMembers(
+            supportingId2, supportingColumnId, instPt2, connMat2) = False Then
+            Debug.Assert(False)
+        End If
+
+        Dim zAxis2 As New PsVector
+        connMat2.getZAxis(zAxis2)
+        Dim ang As Double = zAxis2.GetAngleTo(zAxis)
+
+        Dim pt3 As New PsPoint
+        pt3 = MathTool.GetPointInDirection(pt2, yAxis, colAdpt.Height + data.mColumnWebConnectPlate.outterPlateThickness * 2)
+        pt3 = MathTool.GetPointInDirection(pt3, zAxis, (colAdpt.Height + data.mColumnWebConnectPlate.outterPlateThickness * 2) / Math.Tan(ang))
+
+        Dim pt4 As New PsPoint
+        pt4 = MathTool.GetPointInDirection(instPt3, yAxis, colAdpt.Height / 2 + data.mColumnWebConnectPlate.outterPlateThickness)
+
+        result.Add(pt1)
+        result.Add(pt2)
+        result.Add(pt3)
+        result.Add(pt4)
+
+        'drawBall(pt1, 100)
+        'drawBall(pt2, 150)
+        'drawBall(pt3, 200)
+        'drawBall(pt4, 250)
+        Return result
+    End Function
+
+    Public Class BoltDescParser
+        Public count As Integer
+        Public distance As Double
+
+        Public Function Parse(value As String) As Boolean
+            Dim parts As String() = value.Split("x")
+            If (parts.Length <> 2) Then
+                Return False
+            End If
+
+            Try
+                count = Integer.Parse(parts(0))
+                distance = Double.Parse(parts(1))
+                Return True
+            Catch e As Exception
+                Return False
+            End Try
+            Return False
+        End Function
+    End Class
+
 End Module
 

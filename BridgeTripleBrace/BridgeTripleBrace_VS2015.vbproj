@@ -112,6 +112,9 @@
     <Compile Include="..\BridgeDoubleBrace\ArcPlateParameter.vb">
       <Link>ArcPlateParameter.vb</Link>
     </Compile>
+    <Compile Include="..\BridgeDoubleBrace\ArcPlatesCreator.vb">
+      <Link>ArcPlatesCreator.vb</Link>
+    </Compile>
     <Compile Include="..\BridgeDoubleBrace\GeoHelper.vb">
       <Link>GeoHelper.vb</Link>
     </Compile>
@@ -124,13 +127,20 @@
     <Compile Include="..\BridgeDoubleBrace\SideConnectPlateParameter.vb">
       <Link>SideConnectPlateParameter.vb</Link>
     </Compile>
+    <Compile Include="..\BridgeDoubleBrace\SideConnectPlatesCreater.vb">
+      <Link>SideConnectPlatesCreater.vb</Link>
+    </Compile>
     <Compile Include="..\BridgeDoubleBrace\Utility.vb">
       <Link>Utility.vb</Link>
     </Compile>
     <Compile Include="..\BridgeDoubleBrace\WebConnectPlateParameter.vb">
       <Link>WebConnectPlateParameter.vb</Link>
     </Compile>
+    <Compile Include="..\BridgeDoubleBrace\WebConnectPlatesCreater.vb">
+      <Link>WebConnectPlatesCreater.vb</Link>
+    </Compile>
     <Compile Include="AddInMain.vb" />
+    <Compile Include="ColumnWebConnectPlateCreator.vb" />
     <Compile Include="ColumnWebConnectPlateParameter.vb" />
     <Compile Include="ConnectionBuilder.vb" />
     <Compile Include="Constants.vb" />
@@ -151,6 +161,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Parameters.vb" />
+    <Compile Include="SidePlateCreator.vb" />
     <Compile Include="UserConnection.vb" />
     <Compile Include="UserConnectionForm.designer.vb">
       <DependentUpon>UserConnectionForm.vb</DependentUpon>
