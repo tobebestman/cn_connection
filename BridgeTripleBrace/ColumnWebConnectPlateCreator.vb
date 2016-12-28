@@ -55,6 +55,8 @@ Public Class CreatedColumnPlates
     Public innertPlateId As Long
     Public outterPlateId As Long
     Public accessoryPlateId As Long
+
+    Public drillModifyIds As New List(Of Integer)
 End Class
 
 Public Class ColumnWebConnectPlateCreator
@@ -77,17 +79,152 @@ Public Class ColumnWebConnectPlateCreator
     End Sub
 
     Public Sub Create()
-        Utility.CreatePlate(Me.ColumWebConnectPlateWidth(),
-                              Me.ColumnWebConnectPlateHeight(),
-                              param.mColumnWebConnectPlate.outterPlateThickness,
-                              0, 0, VerticalPosition.kDown,
-                              higherPlatesUcs)
+        CreateHigherPlates()
+        Dim highPlateMat As PsMatrix = higherPlatesUcs()
 
-        Utility.CreatePlate(Me.ColumWebConnectPlateWidth(),
+        AddSlotOnPlates(highPlateMat, higherPlates)
+
+        CreateLowerPlates()
+        Dim lowerPlateMat As PsMatrix = lowerPlatesUcs()
+
+        AddSlotOnPlates(lowerPlateMat, lowerPlates)
+
+    End Sub
+
+    Private Sub AddSlotOnPlates(highPlateMat As PsMatrix,
+                                plates As CreatedColumnPlates)
+        Dim xDir As New PsVector
+        Dim yDir As New PsVector
+        Dim zDir As New PsVector
+        highPlateMat.getXAxis(xDir)
+        highPlateMat.getYAxis(yDir)
+        Dim org As New PsPoint
+        highPlateMat.getOrigin(org)
+
+        Dim cutDepth As Double =
+            param.mColumnWebConnectPlate.columnPlateThickness +
+            param.mColumnWebConnectPlate.innerPlateThickness +
+            param.mColumnWebConnectPlate.outterPlateThickness
+
+        Dim oPolyCut As New PsCutObjects
+        oPolyCut.SetToDefaults()
+        oPolyCut.SetAsPolyCut(GetSlotPoly(),
+                                org, xDir, yDir, cutDepth)
+
+        oPolyCut.SetObjectId(plates.accessoryPlateId)
+        oPolyCut.Apply()
+        oPolyCut.SetObjectId(plates.outterPlateId)
+        oPolyCut.Apply()
+        oPolyCut.SetObjectId(plates.innertPlateId)
+        oPolyCut.Apply()
+
+        org = MathTool.GetPointInDirection(org, yDir, param.mColumnGap / 2)
+
+        Dim oPlane As New PsCutPlane
+        oPlane.SetFromNormal(org, -yDir)
+        Dim oPlaneCut As New PsCutObjects
+        oPlaneCut.SetToDefaults()
+        oPlaneCut.SetAsPlaneCut(oPlane)
+        oPlaneCut.SetObjectId(plates.accessoryPlateId)
+        oPlaneCut.Apply()
+    End Sub
+
+    Private Function GetSlotPoly() As PsPolygon
+        Dim l As Double = param.mColumnWebConnectPlate.centerDistance
+        Dim r As Double = param.mColumnWebConnectPlate.radius
+
+        Dim oPoly As New PsPolygon
+
+        oPoly.appendVertex(r, 0, 0)
+        oPoly.appendVertex(r, l / 2, 1)
+        oPoly.appendVertex(-r, l / 2, 0)
+        oPoly.appendVertex(-r, 0, 0)
+        oPoly.appendVertex(-r, -l / 2, 1)
+        oPoly.appendVertex(r, -l / 2, 0)
+        oPoly.appendVertex(r, 0, 0)
+        oPoly.draw(CoordSystem.kWcs, "0", "0", 1)
+        Return oPoly
+    End Function
+
+    Private Sub CreateLowerPlates()
+        Dim lowerPlateMat As PsMatrix = lowerPlatesUcs()
+        lowerPlates.outterPlateId = Utility.CreatePlate(Me.ColumWebConnectPlateWidth(),
                               Me.ColumnWebConnectPlateHeight,
                               param.mColumnWebConnectPlate.outterPlateThickness,
                               0, 0, VerticalPosition.kDown,
-                              lowerPlatesUcs)
+                              lowerPlateMat)
+
+        Dim xDir2 As New PsVector
+        lowerPlateMat.getXAxis(xDir2)
+        Dim yDir2 As New PsVector
+        lowerPlateMat.getYAxis(yDir2)
+
+        Dim zDir2 As New PsVector
+        lowerPlateMat.getZAxis(zDir2)
+        Dim org2 As New PsPoint
+        lowerPlateMat.getOrigin(org2)
+        org2 = MathTool.GetPointInDirection(org2, zDir2, param.mColumnWebConnectPlate.innerPlateThickness +
+                                             param.mColumnWebConnectPlate.columnPlateThickness)
+        Dim lowerInnerMatrix As New PsMatrix
+        lowerInnerMatrix.SetCoordinateSystem(org2, xDir2, yDir2)
+        lowerPlates.innertPlateId = Utility.CreatePlate(Me.ColumWebConnectPlateWidth(),
+                      Me.ColumnWebConnectPlateHeight,
+                      param.mColumnWebConnectPlate.outterPlateThickness,
+                      0, 0, VerticalPosition.kDown,
+                      lowerInnerMatrix)
+
+        lowerPlateMat.getOrigin(org2)
+        org2 = MathTool.GetPointInDirection(org2, yDir2, param.mColumnGap / 2)
+        org2 = MathTool.GetPointInDirection(org2, zDir2, param.mColumnWebConnectPlate.outterPlateThickness)
+        Dim lowAccessoryMatrix As New PsMatrix
+        lowAccessoryMatrix.SetCoordinateSystem(org2, xDir2, yDir2)
+        lowerPlates.accessoryPlateId = Utility.CreatePlate(Me.ColumnWebAccessoryPlateWidth(),
+                                                              Me.ColumnWebAccessoryPlateHeight() * 2,
+                                                              param.mColumnWebConnectPlate.columnPlateThickness,
+                                                              0, 0,
+                                                              VerticalPosition.kDown, lowAccessoryMatrix)
+
+    End Sub
+
+    Private Sub CreateHigherPlates()
+        Dim oHighOutMat As PsMatrix = higherPlatesUcs()
+
+        higherPlates.outterPlateId = Utility.CreatePlate(Me.ColumWebConnectPlateWidth(),
+                              Me.ColumnWebConnectPlateHeight(),
+                              param.mColumnWebConnectPlate.outterPlateThickness,
+                              0, 0, VerticalPosition.kDown,
+                              oHighOutMat)
+
+        Dim xDir As New PsVector
+        oHighOutMat.getXAxis(xDir)
+        Dim yDir As New PsVector
+        oHighOutMat.getYAxis(yDir)
+
+        Dim zDir As New PsVector
+        oHighOutMat.getZAxis(zDir)
+        Dim org As New PsPoint
+        oHighOutMat.getOrigin(org)
+        org = MathTool.GetPointInDirection(org, zDir, param.mColumnWebConnectPlate.outterPlateThickness +
+                                             param.mColumnWebConnectPlate.columnPlateThickness)
+        Dim highInnerMatrix As New PsMatrix
+        highInnerMatrix.SetCoordinateSystem(org, xDir, yDir)
+        higherPlates.innertPlateId = Utility.CreatePlate(Me.ColumWebConnectPlateWidth(),
+                                                            Me.ColumnWebConnectPlateHeight(),
+                                                            param.mColumnWebConnectPlate.innerPlateThickness,
+                                                            0, 0, VerticalPosition.kDown, highInnerMatrix)
+
+        oHighOutMat.getOrigin(org)
+        org = MathTool.GetPointInDirection(org, yDir, param.mColumnGap / 2)
+        org = MathTool.GetPointInDirection(org, zDir, param.mColumnWebConnectPlate.outterPlateThickness)
+        Dim highAccessoryMatrix As New PsMatrix
+        highAccessoryMatrix.SetCoordinateSystem(org, xDir, yDir)
+        higherPlates.accessoryPlateId = Utility.CreatePlate(Me.ColumnWebAccessoryPlateWidth(),
+                                                              Me.ColumnWebAccessoryPlateHeight() * 2,
+                                                              param.mColumnWebConnectPlate.columnPlateThickness,
+                                                              0, 0,
+                                                              VerticalPosition.kDown, highAccessoryMatrix)
+
+
     End Sub
 
     Private Function higherPlatesUcs() As PsMatrix
@@ -104,13 +241,15 @@ Public Class ColumnWebConnectPlateCreator
         Dim zAxis As New PsVector
 
         oMat.getZAxis(yAxis)
+        Dim org As New PsPoint
+        org = MathTool.GetPointInDirection(upperPoints(1), -yAxis, param.mColumnGap / 2)
 
         oMat.getYAxis(zAxis)
         xAxis.SetFromCrossProduct(yAxis, zAxis)
         xAxis.Normalize()
 
         Dim oResult As New PsMatrix
-        oResult.SetCoordinateSystem(upperPoints(1), xAxis, yAxis)
+        oResult.SetCoordinateSystem(org, xAxis, yAxis)
         Return oResult
     End Function
 
@@ -128,15 +267,30 @@ Public Class ColumnWebConnectPlateCreator
         Dim zAxis As New PsVector
 
         oMat.getZAxis(yAxis)
-        yAxis = -yAxis
+        Dim org As New PsPoint
+        org = MathTool.GetPointInDirection(upperPoints(2), -yAxis, param.mColumnGap / 2)
 
         oMat.getYAxis(zAxis)
+        zAxis = -zAxis
         xAxis.SetFromCrossProduct(yAxis, zAxis)
         xAxis.Normalize()
 
         Dim oResult As New PsMatrix
         oResult.SetCoordinateSystem(upperPoints(2), xAxis, yAxis)
         Return oResult
+    End Function
+
+    Private Function ColumnWebAccessoryPlateHeight() As Double
+        Dim height As Double = ColumnWebConnectPlateHeight() - param.mColumnGap
+        height /= 2
+        Return height
+    End Function
+
+    Private Function ColumnWebAccessoryPlateWidth() As Double
+        Dim colAdpt As New ShapeAdapter(Me.columnId)
+        Dim width = colAdpt.Height
+        width -= 2 * param.mColumnWebConnectPlate.columnPlateThickness
+        Return width
     End Function
 
     Private Function ColumnWebConnectPlateHeight() As Double

@@ -830,10 +830,12 @@ Public Class UserConnection
         Dim columnAdpt As New ShapeAdapter(supportingColumnId)
 
         Dim pt1 As New PsPoint
-        pt1 = MathTool.GetPointInDirection(instPt3, -yAxis, columnAdpt.Height / 2 + data.mColumnWebConnectPlate.outterPlateThickness)
+        pt1 = MathTool.GetPointInDirection(instPt3, -yAxis, columnAdpt.Height / 2 +
+                                           data.mColumnWebConnectPlate.outterPlateThickness)
 
         Dim pt2 As New PsPoint
-        pt2 = MathTool.GetPointInDirection(pt1, -zAxis, data.mColumnCutBack)
+        pt2 = MathTool.GetPointInDirection(pt1, -zAxis, data.mColumnCutBack +
+                                           data.mColumnGap)
 
         'drawBall(pt1, 50)
         'drawBall(pt2, 100)
@@ -1013,7 +1015,7 @@ Public Class UserConnection
 
         oPoly.append(oPoly2, True, PRECISION)
 
-        oPoly.draw(CoordSystem.kWcs, "0", "0", 1)
+        'oPoly.draw(CoordSystem.kWcs, "0", "0", 1)
 
         Return oPoly
     End Function
