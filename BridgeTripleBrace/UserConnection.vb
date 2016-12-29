@@ -514,6 +514,11 @@ Public Class UserConnection
                 supportingId2, supportingColumnId, data)
             columnWebConnectCreater.Create()
 
+            data.mColumnSlotCutIndex1 = IIf(columnWebConnectCreater.higherPlates.drillModifyIds(0) <> -1,
+                                             columnWebConnectCreater.higherPlates.drillModifyIds(0), -1)
+
+            data.mColumnSlotCutIndex2 = IIf(columnWebConnectCreater.lowerPlates.drillModifyIds(0) <> -1,
+                                             columnWebConnectCreater.lowerPlates.drillModifyIds(0), -1)
             oConnAdpt = Nothing
 
             oConnAdpt = New ConnectionAdapter(ConnectionId)
@@ -1576,6 +1581,16 @@ Public Class UserConnection
         If (param.mColumnBoolCutIndex4 <> -1) Then
             oModify.SetObjectId(columnId)
             oModify.DeleteSubBody(param.mColumnBoolCutIndex4)
+        End If
+
+        If (param.mColumnSlotCutIndex1 <> -1) Then
+            oModify.SetObjectId(columnId)
+            oModify.DeleteSubBody(param.mColumnSlotCutIndex1)
+        End If
+
+        If (param.mColumnSlotCutIndex2 <> -1) Then
+            oModify.SetObjectId(columnId)
+            oModify.DeleteSubBody(param.mColumnSlotCutIndex2)
         End If
 
         Dim connectId1 As Long = oConnection.AdditionalObjectId(2)

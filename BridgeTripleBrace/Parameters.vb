@@ -67,6 +67,9 @@ Public Class Parameters
     Public mColumnBoolCutIndex3 As Integer
     Public mColumnBoolCutIndex4 As Integer
 
+    Public mColumnSlotCutIndex1 As Integer
+    Public mColumnSlotCutIndex2 As Integer
+
     Public mCreateGroup As Boolean
 
     Public mSupport1CutBack As Double
@@ -182,6 +185,9 @@ Public Class Parameters
         eConnection.Number(iNum) = mColumnBoolCutIndex3 : iNum = iNum + 1
         eConnection.Number(iNum) = mColumnBoolCutIndex4 : iNum = iNum + 1
 
+        eConnection.Number(iNum) = mColumnSlotCutIndex1 : iNum = iNum + 1
+        eConnection.Number(iNum) = mColumnSlotCutIndex2 : iNum = iNum + 1
+
         eConnection.Double(iDbl) = mSupport1CutBack : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mSupport2CutBack : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mConnect1CutBack : iDbl = iDbl + 1
@@ -250,6 +256,9 @@ Public Class Parameters
         mColumnBoolCutIndex2 = eConnection.Number(iNum) : iNum = iNum + 1
         mColumnBoolCutIndex3 = eConnection.Number(iNum) : iNum = iNum + 1
         mColumnBoolCutIndex4 = eConnection.Number(iNum) : iNum = iNum + 1
+
+        mColumnSlotCutIndex1 = eConnection.Number(iNum) : iNum = iNum + 1
+        mColumnSlotCutIndex2 = eConnection.Number(iNum) : iNum = iNum + 1
 
         mSupport1CutBack = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mSupport2CutBack = eConnection.Double(iDbl) : iDbl = iDbl + 1
