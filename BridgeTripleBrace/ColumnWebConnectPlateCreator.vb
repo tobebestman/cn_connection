@@ -83,11 +83,101 @@ Public Class ColumnWebConnectPlateCreator
         Dim highPlateMat As PsMatrix = higherPlatesUcs()
         AddSlotOnPlates(highPlateMat, higherPlates)
         DrillSlotOnColumn(highPlateMat, higherPlates)
+        DrillHoles(highPlateMat, higherPlates)
 
         CreateLowerPlates()
         Dim lowerPlateMat As PsMatrix = lowerPlatesUcs()
         AddSlotOnPlates(lowerPlateMat, lowerPlates)
         DrillSlotOnColumn(lowerPlateMat, lowerPlates)
+        DrillHoles(lowerPlateMat, lowerPlates)
+    End Sub
+    Private Sub DrillHoles(highPlateMat As PsMatrix, plates As CreatedColumnPlates)
+        Dim org As New PsPoint
+        highPlateMat.getOrigin(org)
+        Dim xDir As New PsVector
+        highPlateMat.getXAxis(xDir)
+        Dim yDir As New PsVector
+        highPlateMat.getYAxis(yDir)
+        Dim zDir As New PsVector
+        highPlateMat.getZAxis(zDir)
+
+        Dim width As Double = ColumnWebConnectPlateWidth()
+        Dim height As Double = ColumnWebConnectPlateHeight()
+        Dim drillLoc As PsPoint = MathTool.GetPointInDirection(org, -xDir, width / 2)
+        drillLoc = MathTool.GetPointInDirection(drillLoc, yDir,
+                height / 2 - param.mColumnWebConnectPlate.HoleGrop.upperEdgeDistance)
+
+        Dim oDriller As New PsDrillObject
+        oDriller.SetToDefaults()
+        oDriller.SetXYPlane(xDir, yDir)
+        oDriller.SetHoleType(HoleType.kHoleLenLimited)
+        oDriller.SetHoleDepth(Me.SlotCutThickness)
+        Dim parser As New Utility.BoltDescParser
+        For Each oDef In param.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions
+            'drawBall(drillLoc, 20)
+            drillLoc = MathTool.GetPointInDirection(drillLoc, xDir, oDef.horDistance)
+            oDriller.SetInsertPoint(drillLoc)
+            oDriller.SetLinearHoleField(param.mHoleDia, "1*0", oDef.YDesc.Replace("x", "*"))
+            parser.Parse(oDef.YDesc)
+            Dim len As Double = parser.count * parser.distance / 2
+            oDriller.SetYOffset(-len)
+            oDriller.SetObjectId(plates.outterPlateId)
+            oDriller.Apply()
+            oDriller.SetObjectId(plates.innertPlateId)
+            oDriller.Apply()
+            oDriller.SetObjectId(plates.accessoryPlateId)
+            oDriller.Apply()
+        Next
+
+        '------drill the upper part-------------------
+        Dim drillLoc2 As PsPoint = MathTool.GetPointInDirection(org, -xDir, width / 2)
+        drillLoc2 = MathTool.GetPointInDirection(drillLoc2, -yDir,
+                height / 2 - param.mColumnWebConnectPlate.HoleGrop.upperEdgeDistance)
+
+        Dim colAdpt As New ShapeAdapter(columnId)
+
+        Dim oDriller2 As New PsDrillObject
+        oDriller2.SetToDefaults()
+        oDriller2.SetXYPlane(xDir, yDir)
+        oDriller2.SetIgnoreInnerContour(True)
+        Dim parser2 As New Utility.BoltDescParser
+        For Each oDef In param.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions
+            'drawBall(drillLoc2, 20)
+
+            oDriller2.SetHoleType(HoleType.kHoleLenLimited)
+            oDriller2.SetHoleDepth(Me.SlotCutThickness)
+            oDriller2.SetDrillType(DrillType.kDrillFlangeBoth)
+
+            drillLoc2 = MathTool.GetPointInDirection(drillLoc2, xDir, oDef.horDistance)
+            oDriller2.SetInsertPoint(drillLoc2)
+            oDriller2.SetLinearHoleField(param.mHoleDia, "1*0", oDef.YDesc.Replace("x", "*"))
+            parser2.Parse(oDef.YDesc)
+            Dim len As Double = parser2.count * parser2.distance / 2
+            oDriller2.SetYOffset(len)
+            oDriller2.SetObjectId(plates.outterPlateId)
+            oDriller2.Apply()
+            oDriller2.SetObjectId(plates.innertPlateId)
+            oDriller2.Apply()
+
+            If GeoHelper.IsInSameDirection(colAdpt.YAxis, zDir) Then
+                oDriller2.SetDrillType(DrillType.kDrillFlangeTop)
+            Else
+                oDriller2.SetDrillType(DrillType.kDrillFlangeDown)
+            End If
+            oDriller2.SetObjectId(columnId)
+
+            'Because of the bug in the PS for handling the drill on the
+            'welding shape, we make a decision do not drill the column
+            'any more.
+            'If oDriller2.Apply() < 0 Then
+            '    Debug.Assert(False)
+            '    plates.drillModifyIds.Add(-1)
+            'Else
+            '    Dim id As Integer = oDriller2.GetModifyIndex()
+            '    plates.drillModifyIds.Add(id)
+            'End If
+        Next
+
     End Sub
 
     Private Sub DrillSlotOnColumn(highPlateMat As PsMatrix, plates As CreatedColumnPlates)
@@ -182,7 +272,7 @@ Public Class ColumnWebConnectPlateCreator
 
     Private Sub CreateLowerPlates()
         Dim lowerPlateMat As PsMatrix = lowerPlatesUcs()
-        lowerPlates.outterPlateId = Utility.CreatePlate(Me.ColumWebConnectPlateWidth(),
+        lowerPlates.outterPlateId = Utility.CreatePlate(Me.ColumnWebConnectPlateWidth(),
                               Me.ColumnWebConnectPlateHeight,
                               param.mColumnWebConnectPlate.outterPlateThickness,
                               0, 0, VerticalPosition.kDown,
@@ -201,7 +291,7 @@ Public Class ColumnWebConnectPlateCreator
                                              param.mColumnWebConnectPlate.columnPlateThickness)
         Dim lowerInnerMatrix As New PsMatrix
         lowerInnerMatrix.SetCoordinateSystem(org2, xDir2, yDir2)
-        lowerPlates.innertPlateId = Utility.CreatePlate(Me.ColumWebConnectPlateWidth(),
+        lowerPlates.innertPlateId = Utility.CreatePlate(Me.ColumnWebConnectPlateWidth(),
                       Me.ColumnWebConnectPlateHeight,
                       param.mColumnWebConnectPlate.outterPlateThickness,
                       0, 0, VerticalPosition.kDown,
@@ -223,7 +313,7 @@ Public Class ColumnWebConnectPlateCreator
     Private Sub CreateHigherPlates()
         Dim oHighOutMat As PsMatrix = higherPlatesUcs()
 
-        higherPlates.outterPlateId = Utility.CreatePlate(Me.ColumWebConnectPlateWidth(),
+        higherPlates.outterPlateId = Utility.CreatePlate(Me.ColumnWebConnectPlateWidth(),
                               Me.ColumnWebConnectPlateHeight(),
                               param.mColumnWebConnectPlate.outterPlateThickness,
                               0, 0, VerticalPosition.kDown,
@@ -242,7 +332,7 @@ Public Class ColumnWebConnectPlateCreator
                                              param.mColumnWebConnectPlate.columnPlateThickness)
         Dim highInnerMatrix As New PsMatrix
         highInnerMatrix.SetCoordinateSystem(org, xDir, yDir)
-        higherPlates.innertPlateId = Utility.CreatePlate(Me.ColumWebConnectPlateWidth(),
+        higherPlates.innertPlateId = Utility.CreatePlate(Me.ColumnWebConnectPlateWidth(),
                                                             Me.ColumnWebConnectPlateHeight(),
                                                             param.mColumnWebConnectPlate.innerPlateThickness,
                                                             0, 0, VerticalPosition.kDown, highInnerMatrix)
@@ -354,7 +444,7 @@ Public Class ColumnWebConnectPlateCreator
         Return result
     End Function
 
-    Private Function ColumWebConnectPlateWidth() As Double
+    Private Function ColumnWebConnectPlateWidth() As Double
         Dim dist As Double = 0
         For i As Integer = 0 To param.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions.Count - 1
             Dim def As HoleColumnDefinition =

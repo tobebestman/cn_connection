@@ -220,9 +220,9 @@ Public Class HoleGroupDefinition
         HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "3x100"))
         HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "3x100"))
         HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "4x100"))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(200, "6x100"))
-
         HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100"))
+
+        HoleColumnDefinitions.Add(New HoleColumnDefinition(200, "6x100"))
         HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100"))
         HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100"))
         HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100"))

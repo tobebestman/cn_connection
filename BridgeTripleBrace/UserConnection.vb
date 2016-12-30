@@ -519,6 +519,13 @@ Public Class UserConnection
 
             data.mColumnSlotCutIndex2 = IIf(columnWebConnectCreater.lowerPlates.drillModifyIds(0) <> -1,
                                              columnWebConnectCreater.lowerPlates.drillModifyIds(0), -1)
+
+            'data.mColumnDrillIndex1 = IIf(columnWebConnectCreater.higherPlates.drillModifyIds(1) <> -1,
+            '                                 columnWebConnectCreater.higherPlates.drillModifyIds(1), -1)
+
+            'data.mColumnDrillIndex2 = IIf(columnWebConnectCreater.lowerPlates.drillModifyIds(1) <> -1,
+            '                                 columnWebConnectCreater.lowerPlates.drillModifyIds(1), -1)
+
             oConnAdpt = Nothing
 
             oConnAdpt = New ConnectionAdapter(ConnectionId)
@@ -1592,6 +1599,16 @@ Public Class UserConnection
             oModify.SetObjectId(columnId)
             oModify.DeleteSubBody(param.mColumnSlotCutIndex2)
         End If
+
+        'If (param.mColumnDrillIndex1 <> -1) Then
+        '    oModify.SetObjectId(columnId)
+        '    oModify.DeleteHoleField(param.mColumnDrillIndex1)
+        'End If
+
+        'If (param.mColumnDrillIndex2 <> -1) Then
+        '    oModify.SetObjectId(columnId)
+        '    oModify.DeleteHoleField(param.mColumnDrillIndex2)
+        'End If
 
         Dim connectId1 As Long = oConnection.AdditionalObjectId(2)
         Dim connectId2 As Long = oConnection.AdditionalObjectId(3)
