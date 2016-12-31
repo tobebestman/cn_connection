@@ -132,7 +132,7 @@
 @M0004,"Select supporting weld column",
 
 @M0005,"Select same connection you want to clone from: ",
-@M0006,"Value should bigger than zero",
+@M0006,"Value should bigger tha or equal to zero",
 @M0007,"YDesc should be in NxDist format such as 2x100 format",
 
 @T0003,"Length by line",

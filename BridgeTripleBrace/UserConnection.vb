@@ -625,13 +625,8 @@ Public Class UserConnection
                 oConnAdpt.AppendCreatedObjectId(id)
             Next
 
-            oConnAdpt.AppendCreatedObjectId(columnWebConnectCreater.higherPlates.innertPlateId)
-            oConnAdpt.AppendCreatedObjectId(columnWebConnectCreater.higherPlates.outterPlateId)
-            oConnAdpt.AppendCreatedObjectId(columnWebConnectCreater.higherPlates.accessoryPlateId)
-
-            oConnAdpt.AppendCreatedObjectId(columnWebConnectCreater.lowerPlates.innertPlateId)
-            oConnAdpt.AppendCreatedObjectId(columnWebConnectCreater.lowerPlates.outterPlateId)
-            oConnAdpt.AppendCreatedObjectId(columnWebConnectCreater.lowerPlates.accessoryPlateId)
+            AddColumnWebPlatesToConnection(oConnAdpt, columnWebConnectCreater.higherPlates)
+            AddColumnWebPlatesToConnection(oConnAdpt, columnWebConnectCreater.lowerPlates)
 
             oConnAdpt.AppendSecondActiveObjectId(sidePlateCreator1.sidePlateId)
             oConnAdpt.AppendSecondActiveObjectId(sidePlateCreator2.sidePlateId)
@@ -649,6 +644,17 @@ Public Class UserConnection
         Catch ex As Exception
             MessageBox.Show(ex.Message)
         End Try
+    End Sub
+
+    Private Shared Sub AddColumnWebPlatesToConnection(oConnAdpt As ConnectionAdapter, plates As CreatedColumnPlates)
+        For Each id As Long In plates.innertPlateIds
+            oConnAdpt.AppendCreatedObjectId(id)
+        Next
+        oConnAdpt.AppendCreatedObjectId(plates.outterPlateId)
+        oConnAdpt.AppendCreatedObjectId(plates.accessoryPlateId)
+        For Each id As Long In plates.innerWebPlateIds
+            oConnAdpt.AppendCreatedObjectId(id)
+        Next
     End Sub
 
     Private Function BooleanCutColumnSide(data As Parameters,

@@ -52,9 +52,11 @@ Imports PlugInBase.PlugInCommon
 Imports PlugInBase.PlugInCommon.CommonFunctions
 
 Public Class CreatedColumnPlates
-    Public innertPlateId As Long
+    Public innertPlateIds As New List(Of Long)
     Public outterPlateId As Long
     Public accessoryPlateId As Long
+
+    Public innerWebPlateIds As New List(Of Long)
 
     Public drillModifyIds As New List(Of Integer)
 End Class
@@ -79,18 +81,43 @@ Public Class ColumnWebConnectPlateCreator
     End Sub
 
     Public Sub Create()
-        CreateHigherPlates()
-        Dim highPlateMat As PsMatrix = higherPlatesUcs()
-        AddSlotOnPlates(highPlateMat, higherPlates)
-        DrillSlotOnColumn(highPlateMat, higherPlates)
-        DrillHoles(highPlateMat, higherPlates)
+        Dim higherPlateMat As PsMatrix = higherPlatesUcs()
+        CreatePlates(higherPlateMat, higherPlates)
+        AddSlotOnPlates(higherPlateMat, higherPlates)
+        DrillSlotOnColumn(higherPlateMat, higherPlates)
+        DrillHoles(higherPlateMat, higherPlates)
 
-        CreateLowerPlates()
         Dim lowerPlateMat As PsMatrix = lowerPlatesUcs()
+        CreatePlates(lowerPlateMat, lowerPlates)
         AddSlotOnPlates(lowerPlateMat, lowerPlates)
         DrillSlotOnColumn(lowerPlateMat, lowerPlates)
         DrillHoles(lowerPlateMat, lowerPlates)
     End Sub
+
+    Private Function DistanceToUpperOfShape(pt As PsPoint) As Double
+        Dim instPt As New PsPoint
+        Dim ucs As New PsMatrix
+        Utility.GetIntersectPtAndUcsBySupportAndConnectMembers(supporingId2, columnId, instPt, ucs)
+
+        Dim colAdpt As New ShapeAdapter(columnId)
+        Dim colDir As New PsVector
+        colDir.SetFromPoints(colAdpt.MidLineMid, colAdpt.GetEndpointTo(instPt))
+        colDir.Normalize()
+
+        Dim yDir As New PsVector
+        ucs.getYAxis(yDir)
+        instPt = MathTool.GetPointInDirection(instPt, -yDir, New ShapeAdapter(supporingId2).Height / 2)
+
+        Dim endPoint As New PsPoint
+        MathTool.IntersectLineWithPlane(pt, MathTool.GetPointInDirection(pt, colDir, 10),
+                    instPt, -yDir, endPoint)
+
+        'drawBall(pt, 20)
+        'drawBall(endPoint, 40)
+        Dim dist As Double = MathTool.GetDistanceBetween(endPoint, pt)
+        Return dist
+    End Function
+
     Private Sub DrillHoles(highPlateMat As PsMatrix, plates As CreatedColumnPlates)
         Dim org As New PsPoint
         highPlateMat.getOrigin(org)
@@ -103,6 +130,7 @@ Public Class ColumnWebConnectPlateCreator
 
         Dim width As Double = ColumnWebConnectPlateWidth()
         Dim height As Double = ColumnWebConnectPlateHeight()
+
         Dim drillLoc As PsPoint = MathTool.GetPointInDirection(org, -xDir, width / 2)
         drillLoc = MathTool.GetPointInDirection(drillLoc, yDir,
                 height / 2 - param.mColumnWebConnectPlate.HoleGrop.upperEdgeDistance)
@@ -123,8 +151,15 @@ Public Class ColumnWebConnectPlateCreator
             oDriller.SetYOffset(-len)
             oDriller.SetObjectId(plates.outterPlateId)
             oDriller.Apply()
-            oDriller.SetObjectId(plates.innertPlateId)
-            oDriller.Apply()
+
+            For i As Integer = 0 To plates.innertPlateIds.Count - 1
+                If (oDef.groupId <> i) Then
+                    Continue For
+                End If
+                oDriller.SetObjectId(plates.innertPlateIds(i))
+                oDriller.Apply()
+            Next
+
             oDriller.SetObjectId(plates.accessoryPlateId)
             oDriller.Apply()
         Next
@@ -156,19 +191,24 @@ Public Class ColumnWebConnectPlateCreator
             oDriller2.SetYOffset(len)
             oDriller2.SetObjectId(plates.outterPlateId)
             oDriller2.Apply()
-            oDriller2.SetObjectId(plates.innertPlateId)
-            oDriller2.Apply()
 
-            If GeoHelper.IsInSameDirection(colAdpt.YAxis, zDir) Then
-                oDriller2.SetDrillType(DrillType.kDrillFlangeTop)
-            Else
-                oDriller2.SetDrillType(DrillType.kDrillFlangeDown)
-            End If
-            oDriller2.SetObjectId(columnId)
+            For i As Integer = 0 To plates.innertPlateIds.Count - 1
+                If (oDef.groupId <> i) Then
+                    Continue For
+                End If
+                oDriller2.SetObjectId(plates.innertPlateIds(i))
+                oDriller2.Apply()
+            Next
 
-            'Because of the bug in the PS for handling the drill on the
-            'welding shape, we make a decision do not drill the column
-            'any more.
+            ''''''Because of the bug in the PS for handling the drill on the
+            ''''''welding shape, we make a decision do not drill the column
+            ''''''any more.
+            'If GeoHelper.IsInSameDirection(colAdpt.YAxis, zDir) Then
+            '    oDriller2.SetDrillType(DrillType.kDrillFlangeTop)
+            'Else
+            '    oDriller2.SetDrillType(DrillType.kDrillFlangeDown)
+            'End If
+            'oDriller2.SetObjectId(columnId)
             'If oDriller2.Apply() < 0 Then
             '    Debug.Assert(False)
             '    plates.drillModifyIds.Add(-1)
@@ -239,18 +279,36 @@ Public Class ColumnWebConnectPlateCreator
         oPolyCut.Apply()
         oPolyCut.SetObjectId(plates.outterPlateId)
         oPolyCut.Apply()
-        oPolyCut.SetObjectId(plates.innertPlateId)
-        oPolyCut.Apply()
 
-        org = MathTool.GetPointInDirection(org, yDir, param.mColumnGap / 2)
+        For Each plateId As Long In plates.innertPlateIds
+            oPolyCut.SetObjectId(plateId)
+            oPolyCut.Apply()
+        Next
+
+        'org = MathTool.GetPointInDirection(org, yDir, param.mColumnGap / 2)
+        Dim shpAdpt As New ShapeAdapter(supporingId2)
+        Dim pt As PsPoint = MathTool.OrthoProjectPointToLine(org, shpAdpt.MidLineStart, shpAdpt.MidLineEnd)
+        Dim cutDir As New PsVector
+        cutDir.SetFromPoints(pt, org)
+        cutDir.Normalize()
+
+        Dim upperPoints As List(Of PsPoint) =
+            UserConnection.GetTopHalfSidePlateBooleanCutBoundary(param, supporingId2, columnId)
 
         Dim oPlane As New PsCutPlane
-        oPlane.SetFromNormal(org, -yDir)
+        oPlane.SetFromNormal(upperPoints(1), cutDir)
         Dim oPlaneCut As New PsCutObjects
         oPlaneCut.SetToDefaults()
         oPlaneCut.SetAsPlaneCut(oPlane)
         oPlaneCut.SetObjectId(plates.accessoryPlateId)
         oPlaneCut.Apply()
+
+
+        'For Each id In plates.innerWebPlateIds
+        '    oPlaneCut.SetObjectId(id)
+        '    oPlaneCut.Apply()
+        'Next
+
     End Sub
 
     Private Function GetSlotPoly() As PsPolygon
@@ -270,84 +328,140 @@ Public Class ColumnWebConnectPlateCreator
         Return oPoly
     End Function
 
-    Private Sub CreateLowerPlates()
-        Dim lowerPlateMat As PsMatrix = lowerPlatesUcs()
-        lowerPlates.outterPlateId = Utility.CreatePlate(Me.ColumnWebConnectPlateWidth(),
-                              Me.ColumnWebConnectPlateHeight,
-                              param.mColumnWebConnectPlate.outterPlateThickness,
-                              0, 0, VerticalPosition.kDown,
-                              lowerPlateMat)
+    Private Sub CreatePlates(oPlateMat As PsMatrix, plates As CreatedColumnPlates)
 
-        Dim xDir2 As New PsVector
-        lowerPlateMat.getXAxis(xDir2)
-        Dim yDir2 As New PsVector
-        lowerPlateMat.getYAxis(yDir2)
-
-        Dim zDir2 As New PsVector
-        lowerPlateMat.getZAxis(zDir2)
-        Dim org2 As New PsPoint
-        lowerPlateMat.getOrigin(org2)
-        org2 = MathTool.GetPointInDirection(org2, zDir2, param.mColumnWebConnectPlate.innerPlateThickness +
-                                             param.mColumnWebConnectPlate.columnPlateThickness)
-        Dim lowerInnerMatrix As New PsMatrix
-        lowerInnerMatrix.SetCoordinateSystem(org2, xDir2, yDir2)
-        lowerPlates.innertPlateId = Utility.CreatePlate(Me.ColumnWebConnectPlateWidth(),
-                      Me.ColumnWebConnectPlateHeight,
-                      param.mColumnWebConnectPlate.outterPlateThickness,
-                      0, 0, VerticalPosition.kDown,
-                      lowerInnerMatrix)
-
-        lowerPlateMat.getOrigin(org2)
-        org2 = MathTool.GetPointInDirection(org2, yDir2, param.mColumnGap / 2)
-        org2 = MathTool.GetPointInDirection(org2, zDir2, param.mColumnWebConnectPlate.outterPlateThickness)
-        Dim lowAccessoryMatrix As New PsMatrix
-        lowAccessoryMatrix.SetCoordinateSystem(org2, xDir2, yDir2)
-        lowerPlates.accessoryPlateId = Utility.CreatePlate(Me.ColumnWebAccessoryPlateWidth(),
-                                                              Me.ColumnWebAccessoryPlateHeight() * 2,
-                                                              param.mColumnWebConnectPlate.columnPlateThickness,
-                                                              0, 0,
-                                                              VerticalPosition.kDown, lowAccessoryMatrix)
-
-    End Sub
-
-    Private Sub CreateHigherPlates()
-        Dim oHighOutMat As PsMatrix = higherPlatesUcs()
-
-        higherPlates.outterPlateId = Utility.CreatePlate(Me.ColumnWebConnectPlateWidth(),
+        plates.outterPlateId = Utility.CreatePlate(Me.ColumnWebConnectPlateWidth(),
                               Me.ColumnWebConnectPlateHeight(),
                               param.mColumnWebConnectPlate.outterPlateThickness,
                               0, 0, VerticalPosition.kDown,
-                              oHighOutMat)
+                              oPlateMat)
 
+        CreateInnerPlates(oPlateMat, plates)
+
+        CreateAccessoryPlate(oPlateMat, plates)
+
+        CreateInnerWebPlates(oPlateMat, plates)
+    End Sub
+
+
+    Private Sub CreateInnerWebPlates(oPlateMat As PsMatrix, plates As CreatedColumnPlates)
         Dim xDir As New PsVector
-        oHighOutMat.getXAxis(xDir)
+        oPlateMat.getXAxis(xDir)
         Dim yDir As New PsVector
-        oHighOutMat.getYAxis(yDir)
-
+        oPlateMat.getYAxis(yDir)
         Dim zDir As New PsVector
-        oHighOutMat.getZAxis(zDir)
+        oPlateMat.getZAxis(zDir)
         Dim org As New PsPoint
-        oHighOutMat.getOrigin(org)
+        oPlateMat.getOrigin(org)
+
+        org = MathTool.GetPointInDirection(org, zDir, param.mColumnWebConnectPlate.outterPlateThickness +
+                                             param.mColumnWebConnectPlate.columnPlateThickness +
+                                             param.mColumnWebConnectPlate.innerPlateThickness)
+        org = MathTool.GetPointInDirection(org, yDir, param.mColumnGap / 2)
+        Dim highInnerMatrix As New PsMatrix
+
+        Dim colAdpt As New ShapeAdapter(columnId)
+        org = MathTool.GetPointInDirection(org, -xDir, colAdpt.Width / 2)
+
+        Dim plateOrg As PsPoint
+        Dim dist As Double = 0
+        Dim webMat As New PsMatrix
+        For Each oDef As ColumnWebDefinition In param.mColumnWebConnectPlate.XColumnWebs
+            dist += oDef.edgeDistance
+            plateOrg = MathTool.GetPointInDirection(org, xDir, dist)
+            webMat.SetCoordinateSystem(plateOrg, yDir, zDir)
+            Dim id As Long = Utility.CreatePlate(oDef.length, oDef.height, oDef.thickness,
+                                                   -oDef.length / 2, -oDef.height / 2, VerticalPosition.kDown, webMat)
+            plates.innerWebPlateIds.Add(id)
+            dist += oDef.thickness
+        Next
+    End Sub
+
+    Private Sub CreateInnerPlates(oPlateMat As PsMatrix, plates As CreatedColumnPlates)
+        Dim xDir As New PsVector
+        oPlateMat.getXAxis(xDir)
+        Dim yDir As New PsVector
+        oPlateMat.getYAxis(yDir)
+        Dim zDir As New PsVector
+        oPlateMat.getZAxis(zDir)
+        Dim org As New PsPoint
+        oPlateMat.getOrigin(org)
+
         org = MathTool.GetPointInDirection(org, zDir, param.mColumnWebConnectPlate.outterPlateThickness +
                                              param.mColumnWebConnectPlate.columnPlateThickness)
         Dim highInnerMatrix As New PsMatrix
-        highInnerMatrix.SetCoordinateSystem(org, xDir, yDir)
-        higherPlates.innertPlateId = Utility.CreatePlate(Me.ColumnWebConnectPlateWidth(),
-                                                            Me.ColumnWebConnectPlateHeight(),
-                                                            param.mColumnWebConnectPlate.innerPlateThickness,
-                                                            0, 0, VerticalPosition.kDown, highInnerMatrix)
 
-        oHighOutMat.getOrigin(org)
-        org = MathTool.GetPointInDirection(org, yDir, param.mColumnGap / 2)
-        org = MathTool.GetPointInDirection(org, zDir, param.mColumnWebConnectPlate.outterPlateThickness)
+        Dim currentGroup = -1
+        Dim edgeDist As Double = 0
+
+        Dim holeLoc As Double = 0
+
+        Dim startEdge As Double = 0
+        Dim endEdge As Double = 0
+
+        Dim plateOrg As PsPoint
+
+        Dim innerOrg As PsPoint =
+            MathTool.GetPointInDirection(org, -xDir, Me.ColumnWebConnectPlateWidth() / 2)
+
+        Dim plateId As Long
+        For i = 0 To Me.param.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions.Count - 1
+            Dim def As HoleColumnDefinition = param.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions(i)
+            If currentGroup = -1 Then
+                currentGroup = def.groupId
+                holeLoc = def.horDistance
+                edgeDist = def.horDistance
+            ElseIf currentGroup = def.groupId Then
+                holeLoc += def.horDistance
+            ElseIf currentGroup = def.groupId - 1 Then
+                'we start the new group
+                endEdge = holeLoc + edgeDist
+                plateOrg = MathTool.GetPointInDirection(innerOrg, xDir, startEdge + (endEdge - startEdge) / 2)
+                'drawBall(plateOrg, 20)
+                highInnerMatrix.SetCoordinateSystem(plateOrg, xDir, yDir)
+                plateId = Utility.CreatePlate(endEdge - startEdge,
+                                                          Me.ColumnWebConnectPlateHeight(),
+                                                          param.mColumnWebConnectPlate.innerPlateThickness,
+                                                          0, 0, VerticalPosition.kDown, highInnerMatrix)
+                plates.innertPlateIds.Add(plateId)
+
+                holeLoc += def.horDistance
+                startEdge = holeLoc - edgeDist
+                endEdge = startEdge
+                currentGroup = def.groupId
+            End If
+        Next
+        endEdge = holeLoc + edgeDist
+        plateOrg = MathTool.GetPointInDirection(innerOrg, xDir, startEdge + (endEdge - startEdge) / 2)
+        'drawBall(plateOrg, 20)
+        highInnerMatrix.SetCoordinateSystem(plateOrg, xDir, yDir)
+        plateId = Utility.CreatePlate(endEdge - startEdge,
+                                                          Me.ColumnWebConnectPlateHeight(),
+                                                          param.mColumnWebConnectPlate.innerPlateThickness,
+                                                          0, 0, VerticalPosition.kDown, highInnerMatrix)
+        plates.innertPlateIds.Add(plateId)
+    End Sub
+
+    Private Sub CreateAccessoryPlate(oPlateMat As PsMatrix, plates As CreatedColumnPlates)
+
+        Dim xDir2 As New PsVector
+        oPlateMat.getXAxis(xDir2)
+        Dim yDir2 As New PsVector
+        oPlateMat.getYAxis(yDir2)
+        Dim zDir2 As New PsVector
+        oPlateMat.getZAxis(zDir2)
+        Dim org2 As New PsPoint
+
+        oPlateMat.getOrigin(org2)
+        org2 = MathTool.GetPointInDirection(org2, zDir2, param.mColumnWebConnectPlate.outterPlateThickness)
+        'drawBall(org, 20)
         Dim highAccessoryMatrix As New PsMatrix
-        highAccessoryMatrix.SetCoordinateSystem(org, xDir, yDir)
-        higherPlates.accessoryPlateId = Utility.CreatePlate(Me.ColumnWebAccessoryPlateWidth(),
-                                                              Me.ColumnWebAccessoryPlateHeight() * 2,
+        highAccessoryMatrix.SetCoordinateSystem(org2, xDir2, yDir2)
+        plates.accessoryPlateId = Utility.CreatePlate(Me.ColumnWebAccessoryPlateWidth(),
+                                                              Me.ColumnWebAccessoryPlateHeight(org2) * 2,
                                                               param.mColumnWebConnectPlate.columnPlateThickness,
                                                               0, 0,
                                                               VerticalPosition.kDown, highAccessoryMatrix)
-
 
     End Sub
 
@@ -374,6 +488,9 @@ Public Class ColumnWebConnectPlateCreator
 
         Dim oResult As New PsMatrix
         oResult.SetCoordinateSystem(org, xAxis, yAxis)
+
+        'drawUcs(oResult)
+
         Return oResult
     End Function
 
@@ -400,13 +517,17 @@ Public Class ColumnWebConnectPlateCreator
         xAxis.Normalize()
 
         Dim oResult As New PsMatrix
-        oResult.SetCoordinateSystem(upperPoints(2), xAxis, yAxis)
+        oResult.SetCoordinateSystem(org, xAxis, yAxis)
+
+        'drawUcs(oResult)
+
         Return oResult
     End Function
 
-    Private Function ColumnWebAccessoryPlateHeight() As Double
-        Dim height As Double = ColumnWebConnectPlateHeight() - param.mColumnGap
-        height /= 2
+    Private Function ColumnWebAccessoryPlateHeight(pt As PsPoint) As Double
+        'Dim height As Double = ColumnWebConnectPlateHeight() - param.mColumnGap
+        'height /= 2
+        Dim height As Double = Me.DistanceToUpperOfShape(pt)
         Return height
     End Function
 

@@ -109,10 +109,12 @@ Public Class HoleColumnDefinition
 
     Public horDistance As Double
     Public YDesc As String
+    Public groupId As Integer
 
-    Public Sub New(horDistance As Double, YDesc As String)
+    Public Sub New(horDistance As Double, YDesc As String, groupId As Integer)
         Me.horDistance = horDistance
         Me.YDesc = YDesc
+        Me.groupId = groupId
     End Sub
 
     Public Sub New()
@@ -122,21 +124,25 @@ Public Class HoleColumnDefinition
     Public Sub ReadFromConnection(eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromConnection
         Me.horDistance = eConnection.Double(iDbl) : iDbl = iDbl + 1
         Me.YDesc = eConnection.String(iStr) : iStr = iStr + 1
+        Me.groupId = eConnection.Number(iNum) : iNum = iNum + 1
     End Sub
 
     Public Sub ReadFromTemplate(Template As PsTemplateManager, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromTemplate
         Me.horDistance = Template.Double(iDbl) : iDbl = iDbl + 1
         Me.YDesc = Template.String(iStr) : iStr = iStr + 1
+        Me.groupId = Template.Number(iNum) : iNum = iNum + 1
     End Sub
 
     Public Sub WriteToConnection(ByRef eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.WriteToConnection
         eConnection.Double(iDbl) = Me.horDistance : iDbl = iDbl + 1
         eConnection.String(iStr) = Me.YDesc : iStr = iStr + 1
+        eConnection.Number(iNum) = Me.groupId : iNum = iNum + 1
     End Sub
 
     Public Sub WriteToTemplate(ByRef Template As PsTemplateManager) Implements IParameters.WriteToTemplate
         Template.AppendDouble(Me.horDistance)
         Template.AppendString(Me.YDesc)
+        Template.AppendNumber(Me.groupId)
     End Sub
 
     Public Sub SetToImperialDefaults() Implements ISetToDefauts.SetToImperialDefaults
@@ -146,6 +152,7 @@ Public Class HoleColumnDefinition
     Public Sub SetToMetricDefaults() Implements ISetToDefauts.SetToMetricDefaults
         horDistance = 0
         YDesc = ""
+        groupId = 0
     End Sub
 End Class
 
@@ -209,24 +216,24 @@ Public Class HoleGroupDefinition
         lowerEdgeDistance = 100
 
         HoleColumnDefinitions = New List(Of HoleColumnDefinition)
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(50, "6x100"))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100"))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100"))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100"))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100"))
+        HoleColumnDefinitions.Add(New HoleColumnDefinition(50, "6x100", 0))
+        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100", 0))
+        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100", 0))
+        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100", 0))
+        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100", 0))
 
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(200, "6x100"))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "4x100"))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "3x100"))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "3x100"))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "4x100"))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100"))
+        HoleColumnDefinitions.Add(New HoleColumnDefinition(200, "6x100", 1))
+        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "4x100", 1))
+        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "3x100", 1))
+        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "3x100", 1))
+        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "4x100", 1))
+        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100", 1))
 
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(200, "6x100"))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100"))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100"))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100"))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100"))
+        HoleColumnDefinitions.Add(New HoleColumnDefinition(200, "6x100", 2))
+        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100", 2))
+        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100", 2))
+        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100", 2))
+        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100", 2))
     End Sub
 End Class
 

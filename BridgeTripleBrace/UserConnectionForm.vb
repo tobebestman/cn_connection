@@ -361,13 +361,14 @@ Friend Class UserConnectionForm
             Try
                 Dim edgeDist As String = DataGridViewHoleGroup.Rows(i).Cells(0).Value
                 Dim YDesc As String = DataGridViewHoleGroup.Rows(i).Cells(1).Value
+                Dim GroupId As String = DataGridViewHoleGroup.Rows(i).Cells(2).Value
 
                 If edgeDist Is Nothing Or YDesc Is Nothing Then
                     Continue For
                 End If
 
                 Data.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions.
-                Add(New HoleColumnDefinition(Integer.Parse(edgeDist), YDesc))
+                Add(New HoleColumnDefinition(Integer.Parse(edgeDist), YDesc, Integer.Parse(GroupId)))
             Catch ex As Exception
                 Debug.Assert(False)
                 Continue For
@@ -512,7 +513,8 @@ Friend Class UserConnectionForm
 
         For i As Integer = 0 To Data.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions.Count - 1
             DataGridViewHoleGroup.Rows.Add(Data.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions(i).horDistance.ToString(),
-                                           Data.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions(i).YDesc)
+                                           Data.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions(i).YDesc,
+                                           Data.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions(i).groupId.ToString())
         Next
 
         For i As Integer = 0 To Data.mColumnWebConnectPlate.XColumnWebs.Count - 1
@@ -815,10 +817,10 @@ Friend Class UserConnectionForm
         Dim header As String = grid.Columns(e.ColumnIndex).HeaderText
 
         Select Case header
-            Case "EdgeDist", "Dist", "Thk", "H", "L"
+            Case "EdgeDist", "Dist", "Thk", "H", "L", "GroupID"
                 Try
                     Dim value As Double = Double.Parse(strValue)
-                    If (value <= 0) Then
+                    If (value < 0) Then
                         e.Cancel = True
                         grid.Rows(e.RowIndex).ErrorText = RSS.RSS("M0006")
                     End If
