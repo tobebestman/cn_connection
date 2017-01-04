@@ -354,24 +354,51 @@ Public Class ColumnWebConnectPlateCreator
         Dim org As New PsPoint
         oPlateMat.getOrigin(org)
 
-        org = MathTool.GetPointInDirection(org, zDir, param.mColumnWebConnectPlate.outterPlateThickness +
+        Dim webOrg As PsPoint = MathTool.GetPointInDirection(org, zDir, param.mColumnWebConnectPlate.outterPlateThickness +
                                              param.mColumnWebConnectPlate.columnPlateThickness +
                                              param.mColumnWebConnectPlate.innerPlateThickness)
-        org = MathTool.GetPointInDirection(org, yDir, param.mColumnGap / 2)
-        Dim highInnerMatrix As New PsMatrix
+        webOrg = MathTool.GetPointInDirection(webOrg, yDir, param.mColumnGap / 2)
 
         Dim colAdpt As New ShapeAdapter(columnId)
-        org = MathTool.GetPointInDirection(org, -xDir, colAdpt.Width / 2)
+        webOrg = MathTool.GetPointInDirection(webOrg, -xDir, colAdpt.Width / 2)
+
+        Dim shpAdpt As New ShapeAdapter(supporingId2)
+
+        Dim pt As PsPoint = MathTool.OrthoProjectPointToLine(org, shpAdpt.MidLineStart, shpAdpt.MidLineEnd)
+        Dim cutDir As New PsVector
+        cutDir.SetFromPoints(pt, org)
+        cutDir.Normalize()
+
+        Dim upperPoints As List(Of PsPoint) =
+            UserConnection.GetTopHalfSidePlateBooleanCutBoundary(param, supporingId2, columnId)
+
+        Dim oPlane As New PsCutPlane
+        Dim oPlane2 As New PsCutPlane
+        oPlane.SetFromNormal(upperPoints(1), cutDir)
+        Dim oPlaneCut As New PsCutObjects
+        Dim oPlaneCut2 As New PsCutObjects
 
         Dim plateOrg As PsPoint
         Dim dist As Double = 0
         Dim webMat As New PsMatrix
         For Each oDef As ColumnWebDefinition In param.mColumnWebConnectPlate.XColumnWebs
             dist += oDef.edgeDistance
-            plateOrg = MathTool.GetPointInDirection(org, xDir, dist)
+            plateOrg = MathTool.GetPointInDirection(webOrg, xDir, dist)
             webMat.SetCoordinateSystem(plateOrg, yDir, zDir)
-            Dim id As Long = Utility.CreatePlate(oDef.length, oDef.height, oDef.thickness,
-                                                   -oDef.length / 2, -oDef.height / 2, VerticalPosition.kDown, webMat)
+            Dim id As Long = Utility.CreatePlate(oDef.length * 3 + param.mColumnGap, oDef.height, oDef.thickness,
+                                                   0, -oDef.height / 2, VerticalPosition.kDown, webMat)
+
+            oPlaneCut.SetToDefaults()
+            oPlaneCut.SetAsPlaneCut(oPlane)
+            oPlaneCut.SetObjectId(id)
+            oPlaneCut.Apply()
+
+            oPlaneCut2.SetToDefaults()
+            oPlane2.SetFromNormal(MathTool.GetPointInDirection(upperPoints(1), yDir, oDef.length), -cutDir)
+            oPlaneCut2.SetAsPlaneCut(oPlane2)
+            oPlaneCut2.SetObjectId(id)
+            oPlaneCut2.Apply()
+
             plates.innerWebPlateIds.Add(id)
             dist += oDef.thickness
         Next
