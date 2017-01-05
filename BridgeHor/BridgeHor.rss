@@ -1,0 +1,141 @@
+#MENUES
+@dummy,1
+"Dummy",0,0,"",
+#ENDMENUES
+
+#DIALOG
+@dm1,"Dummy",AM,AM,
+#ENDDIALOG
+
+#STRINGS
+
+@D0001,"Bridge Hor Brace Designer",
+
+@D0100,"Side Plate",
+@D0101,"Thickness",
+
+@D0102,"Fillet 1",
+@D0103,"Angle 1",
+@D0104,"Fillet 2",
+@D0105,"Angle 2",
+@D0107,"Angle 3",
+@D0109,"Angle 4",
+@D0110,"Bottom"
+
+@D0111,"Hole Group 1",
+
+@D0112,"Hor Side Dist",
+@D0113,"Hor Dist"
+@D0114,"Hor Count"
+
+@D0115,"Ver Side Dist",
+@D0116,"Ver Dist"
+@D0117,"Ver Count"
+
+@D0118,"Hole Group 2",
+@D0119,"Outside PL thk",
+@D0120,"Inside PL thk",
+
+@D0200,"Hole",
+@D0201,"Distribution in Shape Direction",
+@D0202,"Number",
+@D0203,"Edge Distance",
+@D0204,"Distance Between",
+@D0205,"Distribution in Cross Shape Direction",
+@D0206,"Number",
+@D0207,"Edge Distance",
+@D0208,"Distance Between",
+@D0209,"Hole/Slot",
+@D0210,"Hole Diameter",
+@D0211,"Work Loose",
+@D0212,"Slot Rotation",
+@D0213,"Slot Length",
+
+@D0300,"Bolt/Weld",
+@D0301,"Bolt",
+@D0302,"Bolt Style",
+@D0303,"Turn Bolts",
+@D0304,"Weld",
+@D0305,"Weld Style",
+@D0306,"Create Holes/Slots with Bolts",
+@D0307,"Create just Holes/Slots",
+@D0308,"Weld",
+
+@D0400,"Main",
+@D0401,"Hor Cut back",
+@D0402,"Hor Flange Cut back",
+@D0403,"Diagnal Cut back",
+@D0404,"Hor Gap",
+@D0405,"Main Chord Thk",
+@D0406,"Diagnal Gap"
+@D0407,"Connect Flange Thk 2"
+@D0408,"Hole Dia",
+@D0409,"Connect Web Thk 1"
+@D0410,"Connect Web Thk 2"
+
+@D0500,"Arc Plate 1",
+@D0501,"Dist",
+@D0502,"Radius",
+@D0503,"Gap 1",
+@D0504,"Length",
+@D0505,"Width",
+@D0506,"Thickness",
+@D0507,"Angle",
+@D0508,"Web Height",
+@D0509,"Web Thickness",
+@D0510,"Web Count",
+@D0511,"Web Side Dist",
+@D0512,"Web Connect Plate",
+@D0513,"Gap 2",
+
+@D0600,"Arc Plate 2",
+
+@D0700,"Web Connect Plate 1",
+@D0701,"Thickness",
+@D0702,"Bolt Group",
+@D0703,"Ver Side Dist",
+@D0704,"Hor Side Dist",
+@D0705,"Group Dist",
+@D0706,"Plate",
+@D0707,"Edge Hor Dist",
+@D0708,"Edge Ver Dist",
+@D0709,"Hor Dist",
+@D0710,"Hor Count",
+@D0711,"Ver Dist",
+@D0712,"Ver Count",
+@D0713,"Inner Ver Edge Dist"
+
+
+@D0800,"Web Connect Plate 2",
+
+@M0000,"Select horizontal weld shape1",
+@M0001,"Select diagnal weld shape2",
+@M0002,"Select supporting plate",
+
+@M0005,"Select same connection you want to clone from: ",
+
+@T0003,"Length by line",
+
+@S1000,"OK",
+@S1001,"Cancel",
+@S1003,"Force Update",
+@S1004,"Template",
+@S1006,"Help",
+@S1007,"Clone From",
+@S1008,"Show Illustration",
+@S1009,"Hide Illustration",
+@S1010,"Update Display",
+@S1011,"Switch Rollover",
+
+@S0090,"Select element to edit",
+@S0091,"Select material for elements",
+@S0092,"Select detail style for elements",
+@S0093,"Select display class for elements",
+@S0094,"Select area class for elements",
+@S0095,"Select family class for elements",
+@S0096,"Select description for elements",
+@S0097,"Select layer for elements",
+@S0098,"Specify item number for elements",
+
+@S0100,"Plate",
+@S0101,"Gusset",
