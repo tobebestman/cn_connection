@@ -110,6 +110,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <Compile Include="..\BridgeDoubleBrace\Utility.vb">
+      <Link>Utility.vb</Link>
+    </Compile>
     <Compile Include="AddInMain.vb" />
     <Compile Include="ConnectionBuilder.vb" />
     <Compile Include="Constants.vb" />
@@ -133,6 +136,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="Parameters.vb" />
+    <Compile Include="SidePlateParameter.vb" />
     <Compile Include="UserConnection.vb" />
     <Compile Include="UserConnectionForm.designer.vb">
       <DependentUpon>UserConnectionForm.vb</DependentUpon>
@@ -140,7 +144,6 @@
     <Compile Include="UserConnectionForm.vb">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Utility.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">

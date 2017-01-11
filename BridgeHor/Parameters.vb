@@ -67,6 +67,8 @@ Public Class Parameters
     Public mHorPlateThickness As Double
     Public mHoleDia As Double
 
+    Public mSidePlate As SidePlateParameter
+
     Public Sub WriteToConnectionId(ByVal ConnectionId As Long)
         Dim oTrans As New PsTransaction
         Dim eConn As PsConnection = Nothing
@@ -106,6 +108,8 @@ Public Class Parameters
         iDbl = 0 : iNum = 0 : iBln = 0 : iStr = 0
 
         WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
+
+        mSidePlate.WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
     End Sub
 
     Public Sub WriteToConnection(ByRef eConnection As PsConnection,
@@ -127,6 +131,8 @@ Public Class Parameters
 
         eConnection.Double(iDbl) = mHorPlateThickness : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mHoleDia : iDbl = iDbl + 1
+
+        mSidePlate.WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
     End Sub
 
     Public Sub ReadFromConnection(ByRef eConnection As PsConnection, Optional ByVal forClone As Boolean = False)
@@ -158,6 +164,8 @@ Public Class Parameters
 
         mHorPlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mHoleDia = eConnection.Double(iDbl) : iDbl = iDbl + 1
+
+        mSidePlate.ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
     End Sub
 
     Public Sub WriteToTemplate(ByRef Template As PsTemplateManager) Implements IParameters.WriteToTemplate
@@ -177,6 +185,8 @@ Public Class Parameters
 
         Template.AppendDouble(mHorPlateThickness)
         Template.AppendDouble(mHoleDia)
+
+        mSidePlate.WriteToTemplate(Template)
     End Sub
 
 
@@ -202,11 +212,15 @@ Public Class Parameters
 
         mHorPlateThickness = Template.Double(iDbl) : iDbl = iDbl + 1
         mHoleDia = Template.Double(iDbl) : iDbl = iDbl + 1
+
+        mSidePlate.ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
     End Sub
 
 
     Public Sub New()
         MyBase.New()
+
+        mSidePlate = New SidePlateParameter()
     End Sub
 
     Protected Overrides Sub Finalize()
@@ -239,6 +253,7 @@ Public Class Parameters
         mHorPlateThickness = 52
         mHoleDia = 30
 
+        mSidePlate.SetToMetricDefaults()
     End Sub
 
     Public Sub SetToImperialDefaults() Implements ISetToDefauts.SetToImperialDefaults

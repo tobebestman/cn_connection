@@ -14,27 +14,15 @@
 @D0100,"Side Plate",
 @D0101,"Thickness",
 
-@D0102,"Fillet 1",
-@D0103,"Angle 1",
-@D0104,"Fillet 2",
-@D0105,"Angle 2",
-@D0107,"Angle 3",
-@D0109,"Angle 4",
-@D0110,"Bottom"
+@D0102,"Hor Fillet",
+@D0103,"Hor Angle",
+@D0104,"Diag Fillet",
+@D0105,"Diag Angle",
+@D0107,"Hor Dist",
+@D0109,"Diag Dist",
 
-@D0111,"Hole Group 1",
-
-@D0112,"Hor Side Dist",
-@D0113,"Hor Dist"
-@D0114,"Hor Count"
-
-@D0115,"Ver Side Dist",
-@D0116,"Ver Dist"
-@D0117,"Ver Count"
-
-@D0118,"Hole Group 2",
-@D0119,"Outside PL thk",
-@D0120,"Inside PL thk",
+@D0110,"Outside PL thk",
+@D0111,"Inside PL thk",
 
 @D0200,"Hole",
 @D0201,"Distribution in Shape Direction",
@@ -66,7 +54,7 @@
 @D0402,"Hor Flange Cut back",
 @D0403,"Diagnal Cut back",
 @D0404,"Hor Gap",
-@D0405,"Main Chord Thk",
+@D0405,"Main Chord PL Thk",
 @D0406,"Diagnal Gap"
 @D0407,"Connect Flange Thk 2"
 @D0408,"Hole Dia",

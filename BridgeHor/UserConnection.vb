@@ -114,25 +114,23 @@ Public Class UserConnection
                                         ByRef connUcs1 As PsMatrix,
                                         ByRef connUcs2 As PsMatrix) As Boolean
 
-        Dim supportId1 As Long = mBuilder.getOriginHorShapeIdFromAdapter(oConnAdpt)
-        If supportId1 = 0 Then
+        Dim horId As Long = mBuilder.getOriginHorShapeIdFromAdapter(oConnAdpt)
+        If horId = 0 Then
             Return False
         End If
-        Dim supportId2 As Long = mBuilder.getOriginDiagnalShapeIdFromAdapter(oConnAdpt)
-        If supportId2 = 0 Then
-            Return False
-        End If
-
-        Dim connectId1 As Long = mBuilder.getOriginSidePlateIdFromAdapter(oConnAdpt)
-        If connectId1 = 0 Then
+        Dim diagnalId As Long = mBuilder.getOriginDiagnalShapeIdFromAdapter(oConnAdpt)
+        If diagnalId = 0 Then
             Return False
         End If
 
-        If Utility.GetIntersectPtAndUcsBySupportAndConnectMembers(supportId1, connectId1, instPt1, connUcs1) = False Then
+        Dim plateId As Long = mBuilder.getOriginSidePlateIdFromAdapter(oConnAdpt)
+        If plateId = 0 Then
             Return False
         End If
 
-        If Utility.GetIntersectPtAndUcsBySupportAndConnectMembers(supportId2, connectId1, instPt2, connUcs2) = False Then
+        If Utility.GetIntersectPtAndUcsByShapeAndPlate(horId, diagnalId, plateId,
+                                                       instPt1, connUcs1,
+                                                       instPt2, connUcs2) = False Then
             Return False
         End If
 
@@ -377,12 +375,24 @@ Public Class UserConnection
             Dim connMat1 As PsMatrix = New PsMatrix
             Dim connMat2 As PsMatrix = New PsMatrix
 
-            'If GetConnectionIntersectPtAndUcs(oConnAdpt,
-            '                                  instPt1, instPt2,
-            '                                  connMat1, connMat2) = False Then
-            '    Return
-            'End If
+            If GetConnectionIntersectPtAndUcs(oConnAdpt,
+                                              instPt1, instPt2,
+                                              connMat1, connMat2) = False Then
+                Return
+            End If
 
+            'Utility.drawUcs(connMat1)
+            'Utility.drawUcs(connMat2)
+
+            Dim cBdr As New ConnectionBuilder
+
+            Dim foldLine As List(Of PsPoint) = CalculateFoldingLine(cBdr.getOriginHorShapeIdFromAdapter(oConnAdpt),
+                                                                    cBdr.getOriginDiagnalShapeIdFromAdapter(oConnAdpt),
+                                                                    data, connMat1, connMat2)
+            Debug.Assert(foldLine.Count = 4)
+
+            'drawUcs(connMat2)
+            'drawUcs(connMat1)
 
             oConnAdpt = Nothing
 
@@ -405,6 +415,116 @@ Public Class UserConnection
         Catch ex As Exception
             MessageBox.Show(ex.Message)
         End Try
+    End Sub
+
+    Private Function GetSidePlane(id As Long, connMat As PsMatrix) As List(Of PsCutPlane)
+        Dim result As New List(Of PsCutPlane)
+
+        Dim shpAdpt As New ShapeAdapter(id)
+        Dim yDir As New PsVector
+        Dim org As New PsPoint
+
+        connMat.getYAxis(yDir)
+        connMat.getOrigin(org)
+
+        Dim oPlanePos As New PsCutPlane
+        oPlanePos.SetFromNormal(MathTool.GetPointInDirection(org, yDir, shpAdpt.Height / 2), yDir)
+
+        Dim oPlaneNeg As New PsCutPlane
+        oPlaneNeg.SetFromNormal(MathTool.GetPointInDirection(org, -yDir, shpAdpt.Height / 2), yDir)
+
+        result.Add(oPlanePos)
+        result.Add(oPlaneNeg)
+        Return result
+    End Function
+
+    Private Function CalculateFoldingLine(horId As Long, diagId As Long,
+                                          param As Parameters,
+                                          connMat1 As PsMatrix, connMat2 As PsMatrix) As List(Of PsPoint)
+        Dim result As New List(Of PsPoint)
+
+        Dim diagSidePlanes As List(Of PsCutPlane) = GetSidePlane(diagId, connMat2)
+
+        'drawBall(diagSidePlanes(0).InsertPoint, 20)
+        'drawBall(diagSidePlanes(1).InsertPoint, 40)
+
+        CalculatePositiveFoldLine(horId, param, connMat1, result, diagSidePlanes)
+        CalculateNegtiveFoldLine(horId, param, connMat1, result, diagSidePlanes)
+
+        Dim oLine As New PsGeoLine
+        oLine.StartPoint = result(0)
+        oLine.EndPoint = result(1)
+        oLine.DrawLine(CoordSystem.kWcs, "0", "0", 1, 1)
+
+        oLine.StartPoint = result(2)
+        oLine.EndPoint = result(3)
+        oLine.DrawLine(CoordSystem.kWcs, "0", "0", 3, 1)
+
+
+        'oLine.StartPoint = highPt1
+        'oLine.EndPoint = highPt2
+        'oLine.DrawLine(CoordSystem.kWcs, "0", "0", 3, 1)
+
+        'oLine.StartPoint = highPt2
+        'oLine.EndPoint = highInst
+        'oLine.DrawLine(CoordSystem.kWcs, "0", "0", 3, 1)
+        Return result
+    End Function
+
+    Private Shared Sub CalculatePositiveFoldLine(horId As Long, param As Parameters, connMat1 As PsMatrix, result As List(Of PsPoint), diagSidePlanes As List(Of PsCutPlane))
+        Dim yDir As New PsVector
+        Dim org As New PsPoint
+        connMat1.getYAxis(yDir)
+        connMat1.getOrigin(org)
+
+        Dim zDir As New PsVector
+        connMat1.getZAxis(zDir)
+        Dim horAdpt As New ShapeAdapter(horId)
+        Dim ptPosLow As PsPoint = MathTool.GetPointInDirection(org, yDir, horAdpt.Height / 2)
+        Dim ptPosHight As PsPoint = MathTool.GetPointInDirection(ptPosLow, -zDir, param.mHorCutback)
+
+        Dim xDir As New PsVector
+        connMat1.getXAxis(xDir)
+        Dim foldPoslow As New PsPoint
+
+        Utility.drawLine(ptPosLow, MathTool.GetPointInDirection(ptPosLow, xDir, 2000), 1, 1)
+        MathTool.IntersectLineWithPlane(ptPosLow, MathTool.GetPointInDirection(ptPosLow, xDir, 2000),
+                                        diagSidePlanes(0).InsertPoint, diagSidePlanes(0).Normal, foldPoslow)
+        Dim foldPosHigh As New PsPoint
+
+        Utility.drawLine(ptPosHight, MathTool.GetPointInDirection(ptPosHight, xDir, 2000), 2, 1)
+        MathTool.IntersectLineWithPlane(ptPosHight, MathTool.GetPointInDirection(ptPosHight, xDir, 2000),
+                                        diagSidePlanes(0).InsertPoint, diagSidePlanes(0).Normal, foldPosHigh)
+
+        result.Add(foldPoslow)
+        result.Add(foldPosHigh)
+    End Sub
+
+    Private Shared Sub CalculateNegtiveFoldLine(horId As Long, param As Parameters, connMat1 As PsMatrix, result As List(Of PsPoint), diagSidePlanes As List(Of PsCutPlane))
+        Dim yDir As New PsVector
+        Dim org As New PsPoint
+        connMat1.getYAxis(yDir)
+        connMat1.getOrigin(org)
+
+        Dim zDir As New PsVector
+        connMat1.getZAxis(zDir)
+        Dim horAdpt As New ShapeAdapter(horId)
+        Dim ptPosLow As PsPoint = MathTool.GetPointInDirection(org, -yDir, horAdpt.Height / 2)
+        Dim ptPosHight As PsPoint = MathTool.GetPointInDirection(ptPosLow, -zDir, param.mHorCutback)
+
+        Dim xDir As New PsVector
+        connMat1.getXAxis(xDir)
+        Dim foldPoslow As New PsPoint
+        Utility.drawLine(ptPosLow, MathTool.GetPointInDirection(ptPosLow, xDir, 2000), 1, 1)
+        MathTool.IntersectLineWithPlane(ptPosLow, MathTool.GetPointInDirection(ptPosLow, xDir, 2000),
+                                        diagSidePlanes(1).InsertPoint, diagSidePlanes(1).Normal, foldPoslow)
+        Dim foldPosHigh As New PsPoint
+        Utility.drawLine(ptPosHight, MathTool.GetPointInDirection(ptPosHight, xDir, 2000), 2, 1)
+        MathTool.IntersectLineWithPlane(ptPosHight, MathTool.GetPointInDirection(ptPosHight, xDir, 2000),
+                                        diagSidePlanes(1).InsertPoint, diagSidePlanes(1).Normal, foldPosHigh)
+
+        result.Add(foldPoslow)
+        result.Add(foldPosHigh)
     End Sub
 
     Private Shared Function SidePlateTopToCenterDistance(data As Parameters, supportingId1 As Long)

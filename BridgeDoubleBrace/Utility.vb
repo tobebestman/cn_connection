@@ -89,6 +89,13 @@ Module Utility
         oPrim.CreateSphere(100)
     End Sub
 
+    Public Sub drawLine(pt1 As PsPoint, pt2 As PsPoint, color As Integer, thickness As Integer)
+        Dim oLine As New PsGeoLine
+        oLine.StartPoint = pt1
+        oLine.EndPoint = pt2
+        oLine.DrawLine(CoordSystem.kWcs, "0", "0", color, thickness)
+    End Sub
+
     Public Sub drawUcs(oMat As PsMatrix)
         Dim org As New PsPoint
         oMat.getOrigin(org)
@@ -119,6 +126,143 @@ Module Utility
         Dim shapeClass As Integer = shapeInfo.SectionClass
         IsPipe = (shapeClass = kShapeClassROUNDPIPE OrElse shapeClass = kShapeClassEDGEPIPE)
         shapeInfo = Nothing
+    End Function
+
+    ''' <summary>
+    ''' get the intersection point by the shape and the plate. 
+    ''' the returned point is the "inner" intersect of the shape/plate
+    ''' both ends of the shape shoe be at one side of the plate.
+    ''' </summary>
+    ''' <param name="mainShape"></param>
+    ''' <param name="plateId"></param>
+    ''' <returns></returns>
+    Public Function GetShapePlateIntersetPoint(mainShape As Long, plateId As Long) As PsPoint
+        Dim shpAdpt As New ShapeAdapter(mainShape)
+        Dim plateAdpt As New PlateAdapter(plateId)
+        Return GetShapePlateIntersectPoint(shpAdpt, plateAdpt)
+    End Function
+
+    Private Function GetShapePlateIntersectPoint(shpAdpt As ShapeAdapter, plateAdpt As PlateAdapter) As PsPoint
+        Dim pt1 As New PsPoint
+        MathTool.IntersectLineWithPlane(shpAdpt.MidLineStart, shpAdpt.MidLineEnd,
+                                        plateAdpt.MidLineStart, plateAdpt.GetDirection(), pt1)
+        Dim pt2 As New PsPoint
+        MathTool.IntersectLineWithPlane(shpAdpt.MidLineStart, shpAdpt.MidLineEnd,
+                                        plateAdpt.MidLineEnd, plateAdpt.GetDirection(), pt2)
+
+        Dim dist1 As Double = MathTool.GetDistanceBetween(pt1, shpAdpt.MidLineMid)
+        Dim dist2 As Double = MathTool.GetDistanceBetween(pt2, shpAdpt.MidLineMid)
+
+        If dist1 <= dist2 Then
+            Return pt1
+        Else
+            Return pt2
+        End If
+    End Function
+
+    Public Function GetIntersectPtAndUcsByShapeAndPlate(mainShape As Long,
+                                                        secondShape As Long,
+                                                        plateId As Long,
+                                                        ByRef instPt1 As PsPoint,
+                                                        ByRef connUcs1 As PsMatrix,
+                                                        ByRef instPt2 As PsPoint,
+                                                        ByRef connUcs2 As PsMatrix) As Boolean
+        If mainShape <= 0 Or
+            plateId <= 0 Or secondShape <= 0 Then
+            Return False
+        End If
+
+        Dim shpAdpt As New ShapeAdapter(mainShape)
+        Dim plateAdpt As New PlateAdapter(plateId)
+
+        instPt1 = GetShapePlateIntersectPoint(shpAdpt, plateAdpt)
+
+        Dim zAxis As New PsVector
+        zAxis.SetFromPoints(shpAdpt.MidLineMid, instPt1)
+        zAxis.Normalize()
+
+        Dim secondAdpt As New ShapeAdapter(secondShape)
+        Dim secondMidPrjPt As PsPoint = MathTool.OrthoProjectPointToPlane(secondAdpt.MidLineMid, instPt1, plateAdpt.GetDirection)
+
+        Dim distX = MathTool.GetDistanceToPlane(instPt1, secondMidPrjPt, shpAdpt.XAxis)
+        Dim distY = MathTool.GetDistanceToPlane(instPt1, secondMidPrjPt, shpAdpt.YAxis)
+
+        Dim xAxis As PsVector
+        If distX >= distY Then
+            xAxis = shpAdpt.XAxis
+        Else
+            xAxis = shpAdpt.YAxis
+        End If
+
+        xAxis = MakeVertexPointsTo(xAxis, instPt1, secondMidPrjPt)
+
+        Dim yAxis = New PsVector
+        yAxis.SetFromCrossProduct(zAxis, xAxis)
+
+        connUcs1.SetCoordinateSystem(instPt1, xAxis, yAxis)
+        Debug.Assert(Math.Sin(Math.Abs(yAxis.GetAngleTo(shpAdpt.YAxis))) < PRECISION)
+
+        Dim basePt As PsPoint = MathTool.GetPointInDirection(shpAdpt.MidLineMid, xAxis, 1000)
+        Dim yPtPositive As PsPoint = MathTool.GetPointInDirection(secondAdpt.MidLineMid, secondAdpt.YAxis, secondAdpt.Height / 2)
+        Dim yPtNegtive As PsPoint = MathTool.GetPointInDirection(secondAdpt.MidLineMid, -secondAdpt.YAxis, secondAdpt.Height / 2)
+        Dim yInstPtPositive As PsPoint = MathTool.OrthoProjectPointToPlane(basePt, yPtPositive, secondAdpt.YAxis)
+        Dim yInstPtNegtive As PsPoint = MathTool.OrthoProjectPointToPlane(basePt, yPtNegtive, secondAdpt.YAxis)
+        Dim yDistPositive As Double = yInstPtPositive.get_DistanceTo(basePt)
+        Dim yDistNegtive As Double = yInstPtNegtive.get_DistanceTo(basePt)
+
+        Dim yAxis2 As PsVector
+        If yDistPositive < yDistNegtive Then
+            yAxis2 = secondAdpt.YAxis
+        Else
+            yAxis2 = -secondAdpt.YAxis
+        End If
+
+        instPt2 = GetShapePlateIntersectPoint(secondAdpt, plateAdpt)
+        Dim zAxis2 As New PsVector
+        zAxis2.SetFromPoints(secondAdpt.MidLineMid, instPt2)
+        zAxis2.Normalize()
+
+        Dim xAxis2 As New PsVector
+        xAxis2.SetFromCrossProduct(yAxis2, zAxis2)
+
+        connUcs2.SetCoordinateSystem(instPt2, xAxis2, yAxis2)
+
+        Return True
+    End Function
+
+    Private Function MakeVertexPointsTo(yAxis As PsVector, instPt1 As PsPoint, secondMidPrjPt As PsPoint) As PsVector
+        'now we get the axis that may point the internal
+        'of the yaxis, but we need make sure the yaxis points
+        'to the middle of the two member.
+        Dim ptInYDir As PsPoint = MathTool.GetPointInDirection(instPt1, yAxis, 10)
+        Dim tmpDist As Double = MathTool.GetDistanceBetween(instPt1, secondMidPrjPt) -
+            MathTool.GetDistanceBetween(ptInYDir, secondMidPrjPt)
+
+        If tmpDist < 0 Then
+            yAxis = -yAxis
+        End If
+
+        Return yAxis
+    End Function
+
+    Public Function IsPlate(ByVal objId As Integer) As Boolean
+        Dim oTrans As New PsTransaction
+        Dim oPlate As PsPlate = Nothing
+        Try
+            If oTrans.GetObject(objId, PsOpenMode.kForRead, oPlate) = False Then
+                Return False
+            End If
+
+            Dim testBool As Boolean = oPlate.RectangleMode
+
+            'Return oShape.CrossSectionType = ShapeType.kWeldType
+            'just for test on the std-shape purposes
+            Return True
+        Catch ex As Exception
+            Return False
+        Finally
+            oTrans.Close()
+        End Try
     End Function
 
     Public Function IsAngle(ByVal objId As Integer) As Boolean
