@@ -51,7 +51,7 @@
 
 @D0400,"Main",
 @D0401,"Hor Cut back",
-@D0402,"Hor Flange Cut back",
+@D0402,"Hor Web Cut back",
 @D0403,"Diagnal Cut back",
 @D0404,"Hor Gap",
 @D0405,"Main Chord PL Thk",
@@ -99,6 +99,9 @@
 @M0000,"Select horizontal weld shape1",
 @M0001,"Select diagnal weld shape2",
 @M0002,"Select supporting plate",
+
+@M0003,"Select side direction of the horizontal shape",
+@M0004,"Select side direction of the diagnal shape",
 
 @M0005,"Select same connection you want to clone from: ",
 

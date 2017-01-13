@@ -89,6 +89,15 @@ Module Utility
         oPrim.CreateSphere(100)
     End Sub
 
+    Public Sub drawPlane(plane As PsCutPlane, color As Integer, thickness As Integer)
+        Dim oLine As New PsGeoLine
+        oLine.StartPoint = plane.InsertPoint
+        oLine.EndPoint = MathTool.GetPointInDirection(plane.InsertPoint, plane.Normal, 200)
+
+        drawBall(oLine.StartPoint, 30)
+        oLine.DrawLine(CoordSystem.kWcs, "0", "0", color, thickness)
+    End Sub
+
     Public Sub drawLine(pt1 As PsPoint, pt2 As PsPoint, color As Integer, thickness As Integer)
         Dim oLine As New PsGeoLine
         oLine.StartPoint = pt1
@@ -174,60 +183,54 @@ Module Utility
 
         Dim shpAdpt As New ShapeAdapter(mainShape)
         Dim plateAdpt As New PlateAdapter(plateId)
-
         instPt1 = GetShapePlateIntersectPoint(shpAdpt, plateAdpt)
-
         Dim zAxis As New PsVector
         zAxis.SetFromPoints(shpAdpt.MidLineMid, instPt1)
         zAxis.Normalize()
 
         Dim secondAdpt As New ShapeAdapter(secondShape)
-        Dim secondMidPrjPt As PsPoint = MathTool.OrthoProjectPointToPlane(secondAdpt.MidLineMid, instPt1, plateAdpt.GetDirection)
-
-        Dim distX = MathTool.GetDistanceToPlane(instPt1, secondMidPrjPt, shpAdpt.XAxis)
-        Dim distY = MathTool.GetDistanceToPlane(instPt1, secondMidPrjPt, shpAdpt.YAxis)
-
-        Dim xAxis As PsVector
-        If distX >= distY Then
-            xAxis = shpAdpt.XAxis
-        Else
-            xAxis = shpAdpt.YAxis
-        End If
-
-        xAxis = MakeVertexPointsTo(xAxis, instPt1, secondMidPrjPt)
-
-        Dim yAxis = New PsVector
-        yAxis.SetFromCrossProduct(zAxis, xAxis)
-
-        connUcs1.SetCoordinateSystem(instPt1, xAxis, yAxis)
-        Debug.Assert(Math.Sin(Math.Abs(yAxis.GetAngleTo(shpAdpt.YAxis))) < PRECISION)
-
-        Dim basePt As PsPoint = MathTool.GetPointInDirection(shpAdpt.MidLineMid, xAxis, 1000)
-        Dim yPtPositive As PsPoint = MathTool.GetPointInDirection(secondAdpt.MidLineMid, secondAdpt.YAxis, secondAdpt.Height / 2)
-        Dim yPtNegtive As PsPoint = MathTool.GetPointInDirection(secondAdpt.MidLineMid, -secondAdpt.YAxis, secondAdpt.Height / 2)
-        Dim yInstPtPositive As PsPoint = MathTool.OrthoProjectPointToPlane(basePt, yPtPositive, secondAdpt.YAxis)
-        Dim yInstPtNegtive As PsPoint = MathTool.OrthoProjectPointToPlane(basePt, yPtNegtive, secondAdpt.YAxis)
-        Dim yDistPositive As Double = yInstPtPositive.get_DistanceTo(basePt)
-        Dim yDistNegtive As Double = yInstPtNegtive.get_DistanceTo(basePt)
-
-        Dim yAxis2 As PsVector
-        If yDistPositive < yDistNegtive Then
-            yAxis2 = secondAdpt.YAxis
-        Else
-            yAxis2 = -secondAdpt.YAxis
-        End If
-
         instPt2 = GetShapePlateIntersectPoint(secondAdpt, plateAdpt)
         Dim zAxis2 As New PsVector
         zAxis2.SetFromPoints(secondAdpt.MidLineMid, instPt2)
         zAxis2.Normalize()
 
-        Dim xAxis2 As New PsVector
-        xAxis2.SetFromCrossProduct(yAxis2, zAxis2)
+        Dim commDir As New PsVector
+        commDir.SetFromCrossProduct(zAxis, zAxis2)
+        commDir.Normalize()
 
-        connUcs2.SetCoordinateSystem(instPt2, xAxis2, yAxis2)
+        connUcs1 = CalculateUCSByCommonDir(instPt1, shpAdpt, zAxis, commDir)
+        connUcs2 = CalculateUCSByCommonDir(instPt2, secondAdpt, zAxis2, commDir)
 
         Return True
+
+    End Function
+
+    Private Function CalculateUCSByCommonDir(instPt1 As PsPoint, shpAdpt As ShapeAdapter, zAxis As PsVector, commDir As PsVector) As PsMatrix
+
+        Dim connUCS As New PsMatrix
+
+        Dim angX As Double = shpAdpt.XAxis.GetAngleTo(commDir)
+        Dim angY As Double = shpAdpt.YAxis.GetAngleTo(commDir)
+
+        If angX > Math.PI / 2 Then
+            angX = Math.PI - angX
+        End If
+
+        If angY > Math.PI / 2 Then
+            angY = Math.PI / angY
+        End If
+
+        Dim sideDir As PsVector
+        If (angX < angY) Then
+            sideDir = shpAdpt.XAxis
+        Else
+            sideDir = shpAdpt.YAxis
+        End If
+
+        Dim xDir As PsVector = MathTool.GetCrossProductFrom(sideDir, zAxis)
+        xDir.Normalize()
+        connUCS.SetCoordinateSystem(instPt1, xDir, sideDir)
+        Return connUCS
     End Function
 
     Private Function MakeVertexPointsTo(yAxis As PsVector, instPt1 As PsPoint, secondMidPrjPt As PsPoint) As PsVector

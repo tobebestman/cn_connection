@@ -384,15 +384,13 @@ Public Class UserConnection
             'Utility.drawUcs(connMat1)
             'Utility.drawUcs(connMat2)
 
-            Dim cBdr As New ConnectionBuilder
+            CutHorMember(horId, connMat1, data)
 
-            Dim foldLine As List(Of PsPoint) = CalculateFoldingLine(cBdr.getOriginHorShapeIdFromAdapter(oConnAdpt),
-                                                                    cBdr.getOriginDiagnalShapeIdFromAdapter(oConnAdpt),
-                                                                    data, connMat1, connMat2)
-            Debug.Assert(foldLine.Count = 4)
-
-            'drawUcs(connMat2)
-            'drawUcs(connMat1)
+            'Dim cBdr As New ConnectionBuilder
+            'Dim foldLine As List(Of PsPoint) = CalculateFoldingLine(cBdr.getOriginHorShapeIdFromAdapter(oConnAdpt),
+            '                                                        cBdr.getOriginDiagnalShapeIdFromAdapter(oConnAdpt),
+            '                                                        data, connMat1, connMat2)
+            'Debug.Assert(foldLine.Count = 4)
 
             oConnAdpt = Nothing
 
@@ -415,6 +413,59 @@ Public Class UserConnection
         Catch ex As Exception
             MessageBox.Show(ex.Message)
         End Try
+    End Sub
+
+    Private Sub CutHorMember(id As Long, connMat As PsMatrix, param As Parameters)
+        Dim shpAdpt As New ShapeAdapter(id)
+        Dim org As New PsPoint
+        Dim xDir As New PsVector
+        Dim yDir As New PsVector
+
+        connMat.getOrigin(org)
+        connMat.getZAxis(xDir)
+        connMat.getYAxis(yDir)
+
+        Dim width As Double = param.mHorFlangeCutback * 2
+        Dim height As Double = 0
+        If (GeoHelper.IsInSameDirection(shpAdpt.XAxis, yDir) Or
+            GeoHelper.IsInSameDirection(-shpAdpt.XAxis, yDir)) Then
+            height = shpAdpt.Width - param.mHorPlateThickness * 2
+        ElseIf (GeoHelper.IsInSameDirection(shpAdpt.YAxis, ydir) Or
+                 GeoHelper.IsInSameDirection(-shpAdpt.XAxis, ydir)) Then
+            height = shpAdpt.Height - param.mHorPlateThickness * 2
+        Else
+            Debug.Assert(False)
+            height = shpAdpt.Height
+        End If
+
+        Dim oPoly As New PsPolygon
+        oPoly.createRectangle(width, height)
+
+        Dim cut As New PsCutObjects
+        cut.SetToDefaults()
+        Dim cutNormal As New PsVector
+        cutNormal.SetFromCrossProduct(xDir, yDir)
+        cut.SetAsPolyCut(oPoly, MathTool.GetPointInDirection(org, cutNormal, height * 2), xDir, yDir, height * 4)
+        cut.SetObjectId(id)
+        If cut.Apply() > 0 Then
+            param.mHorWebCutIndex = cut.GetModifyIndex()
+        Else
+            Debug.Assert(False)
+        End If
+
+        cut.SetToDefaults()
+        Dim oPlane As New PsCutPlane
+        oPlane.InsertPoint = MathTool.GetPointInDirection(org, -xDir, param.mHorCutback)
+        oPlane.Normal = xDir
+        cut.SetAsPlaneCut(oPlane)
+        cut.SetObjectId(id)
+        If cut.Apply() > 0 Then
+            param.mHorCutbackCutIndex = cut.GetModifyIndex()
+        Else
+            Debug.Assert(False)
+        End If
+
+        Return
     End Sub
 
     Private Function GetSidePlane(id As Long, connMat As PsMatrix) As List(Of PsCutPlane)
@@ -445,11 +496,8 @@ Public Class UserConnection
 
         Dim diagSidePlanes As List(Of PsCutPlane) = GetSidePlane(diagId, connMat2)
 
-        'drawBall(diagSidePlanes(0).InsertPoint, 20)
-        'drawBall(diagSidePlanes(1).InsertPoint, 40)
-
-        CalculatePositiveFoldLine(horId, param, connMat1, result, diagSidePlanes)
-        CalculateNegtiveFoldLine(horId, param, connMat1, result, diagSidePlanes)
+        CalculateFoldLine(horId, param, connMat1, result, diagSidePlanes(0))
+        CalculateFoldLine(horId, param, connMat1, result, diagSidePlanes(1))
 
         Dim oLine As New PsGeoLine
         oLine.StartPoint = result(0)
@@ -471,7 +519,7 @@ Public Class UserConnection
         Return result
     End Function
 
-    Private Shared Sub CalculatePositiveFoldLine(horId As Long, param As Parameters, connMat1 As PsMatrix, result As List(Of PsPoint), diagSidePlanes As List(Of PsCutPlane))
+    Private Shared Sub CalculateFoldLine(horId As Long, param As Parameters, connMat1 As PsMatrix, result As List(Of PsPoint), plane As PsCutPlane)
         Dim yDir As New PsVector
         Dim org As New PsPoint
         connMat1.getYAxis(yDir)
@@ -480,7 +528,12 @@ Public Class UserConnection
         Dim zDir As New PsVector
         connMat1.getZAxis(zDir)
         Dim horAdpt As New ShapeAdapter(horId)
-        Dim ptPosLow As PsPoint = MathTool.GetPointInDirection(org, yDir, horAdpt.Height / 2)
+        Dim ptPosLow1 As PsPoint = MathTool.GetPointInDirection(org, yDir, horAdpt.Height / 2)
+        Dim ptPosLow2 As PsPoint = MathTool.GetPointInDirection(org, -yDir, horAdpt.Height / 2)
+
+        Dim ptPosLow = IIf(ptPosLow1.get_DistanceTo(plane.InsertPoint) < ptPosLow2.get_DistanceTo(plane.InsertPoint),
+                            ptPosLow1, ptPosLow2)
+
         Dim ptPosHight As PsPoint = MathTool.GetPointInDirection(ptPosLow, -zDir, param.mHorCutback)
 
         Dim xDir As New PsVector
@@ -489,39 +542,12 @@ Public Class UserConnection
 
         Utility.drawLine(ptPosLow, MathTool.GetPointInDirection(ptPosLow, xDir, 2000), 1, 1)
         MathTool.IntersectLineWithPlane(ptPosLow, MathTool.GetPointInDirection(ptPosLow, xDir, 2000),
-                                        diagSidePlanes(0).InsertPoint, diagSidePlanes(0).Normal, foldPoslow)
+                                        plane.InsertPoint, plane.Normal, foldPoslow)
         Dim foldPosHigh As New PsPoint
 
         Utility.drawLine(ptPosHight, MathTool.GetPointInDirection(ptPosHight, xDir, 2000), 2, 1)
         MathTool.IntersectLineWithPlane(ptPosHight, MathTool.GetPointInDirection(ptPosHight, xDir, 2000),
-                                        diagSidePlanes(0).InsertPoint, diagSidePlanes(0).Normal, foldPosHigh)
-
-        result.Add(foldPoslow)
-        result.Add(foldPosHigh)
-    End Sub
-
-    Private Shared Sub CalculateNegtiveFoldLine(horId As Long, param As Parameters, connMat1 As PsMatrix, result As List(Of PsPoint), diagSidePlanes As List(Of PsCutPlane))
-        Dim yDir As New PsVector
-        Dim org As New PsPoint
-        connMat1.getYAxis(yDir)
-        connMat1.getOrigin(org)
-
-        Dim zDir As New PsVector
-        connMat1.getZAxis(zDir)
-        Dim horAdpt As New ShapeAdapter(horId)
-        Dim ptPosLow As PsPoint = MathTool.GetPointInDirection(org, -yDir, horAdpt.Height / 2)
-        Dim ptPosHight As PsPoint = MathTool.GetPointInDirection(ptPosLow, -zDir, param.mHorCutback)
-
-        Dim xDir As New PsVector
-        connMat1.getXAxis(xDir)
-        Dim foldPoslow As New PsPoint
-        Utility.drawLine(ptPosLow, MathTool.GetPointInDirection(ptPosLow, xDir, 2000), 1, 1)
-        MathTool.IntersectLineWithPlane(ptPosLow, MathTool.GetPointInDirection(ptPosLow, xDir, 2000),
-                                        diagSidePlanes(1).InsertPoint, diagSidePlanes(1).Normal, foldPoslow)
-        Dim foldPosHigh As New PsPoint
-        Utility.drawLine(ptPosHight, MathTool.GetPointInDirection(ptPosHight, xDir, 2000), 2, 1)
-        MathTool.IntersectLineWithPlane(ptPosHight, MathTool.GetPointInDirection(ptPosHight, xDir, 2000),
-                                        diagSidePlanes(1).InsertPoint, diagSidePlanes(1).Normal, foldPosHigh)
+                                        plane.InsertPoint, plane.Normal, foldPosHigh)
 
         result.Add(foldPoslow)
         result.Add(foldPosHigh)
@@ -549,10 +575,6 @@ Public Class UserConnection
         oMat.SetCoordinateSystem(org, xDir, zDir)
         Return oMat
     End Function
-
-
-
-
 
     Private Shared Function CalculatePositiveXSidePlateMatrix(data As Parameters, supportId As Long, connMat As PsMatrix) As PsMatrix
         Dim org As New PsPoint
@@ -935,9 +957,14 @@ Public Class UserConnection
             oModify.DeletePolyCut(param.mHorCutbackCutIndex)
         End If
 
-        If (param.mHorFlangeCutIndex <> -1) Then
+        If (param.mHorWebCutIndex <> -1) Then
             oModify.SetObjectId(support1)
-            oModify.DeletePolyCut(param.mHorFlangeCutIndex)
+            oModify.DeletePolyCut(param.mHorWebCutIndex)
+        End If
+
+        If (param.mHorCutbackCutIndex <> -1) Then
+            oModify.SetObjectId(support1)
+            oModify.DeletePolyCut(param.mHorCutbackCutIndex)
         End If
 
         If (param.mDiagnalCutbackCutIndex <> -1) Then
@@ -1014,6 +1041,7 @@ Public Class UserConnection
         connAdpt.AppendAdditionalObjectId(horId)
         connAdpt.AppendAdditionalObjectId(diagnalId)
         connAdpt.AppendAdditionalObjectId(plateId)
+
         connAdpt.CommitAppendObjects()
 
         Dim data As New Parameters

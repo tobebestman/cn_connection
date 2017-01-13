@@ -52,7 +52,7 @@ Public Class Parameters
     'version 1
     Public mVersionNumber As Integer
     Public mHorCutbackCutIndex As Integer
-    Public mHorFlangeCutIndex As Integer
+    Public mHorWebCutIndex As Integer
     Public mDiagnalCutbackCutIndex As Integer
 
     Public mCreateGroup As Boolean
@@ -103,6 +103,7 @@ Public Class Parameters
         eConnection.DeleteAllNumbers()
         eConnection.DeleteAllBools()
         eConnection.DeleteAllStrings()
+        eConnection.DeleteAllVectors()
 
         Dim iDbl, iNum, iBln, iStr As Integer
         iDbl = 0 : iNum = 0 : iBln = 0 : iStr = 0
@@ -119,7 +120,7 @@ Public Class Parameters
                                   ByRef iStr As Integer) Implements IParameters.WriteToConnection
         eConnection.Number(iNum) = mVersionNumber : iNum = iNum + 1
         eConnection.Number(iNum) = mHorCutbackCutIndex : iNum = iNum + 1
-        eConnection.Number(iNum) = mHorFlangeCutIndex : iNum = iNum + 1
+        eConnection.Number(iNum) = mHorWebCutIndex : iNum = iNum + 1
         eConnection.Number(iNum) = mDiagnalCutbackCutIndex : iNum = iNum + 1
 
         eConnection.Double(iDbl) = mHorCutback : iDbl = iDbl + 1
@@ -140,9 +141,7 @@ Public Class Parameters
 
         Dim iDbl, iNum, iBln, iStr As Integer
         iDbl = 0 : iNum = 0 : iBln = 0 : iStr = 0
-
         ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
-
     End Sub
 
     Public Sub ReadFromConnection(eConnection As PsConnection,
@@ -152,7 +151,7 @@ Public Class Parameters
                                    ByRef iStr As Integer) Implements IParameters.ReadFromConnection
         mVersionNumber = eConnection.Number(iNum) : iNum = iNum + 1
         mHorCutbackCutIndex = eConnection.Number(iNum) : iNum = iNum + 1
-        mHorFlangeCutIndex = eConnection.Number(iNum) : iNum = iNum + 1
+        mHorWebCutIndex = eConnection.Number(iNum) : iNum = iNum + 1
         mDiagnalCutbackCutIndex = eConnection.Number(iNum) : iNum = iNum + 1
 
         mHorCutback = eConnection.Double(iDbl) : iDbl = iDbl + 1
