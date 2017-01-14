@@ -61,11 +61,11 @@
 @D0409,"Connect Web Thk 1"
 @D0410,"Connect Web Thk 2"
 
-@D0500,"Arc Plate 1",
-@D0501,"Dist",
-@D0502,"Radius",
-@D0503,"Gap 1",
-@D0504,"Length",
+@D0500,"Middle Web Plates",
+@D0501,"Chord Side Thk",
+@D0502,"Brace Side Thk",
+@D0503,"Brace Side Len",
+@D0504,"Support Plate Offset",
 @D0505,"Width",
 @D0506,"Thickness",
 @D0507,"Angle",

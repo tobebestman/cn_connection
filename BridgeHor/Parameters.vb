@@ -68,6 +68,7 @@ Public Class Parameters
     Public mHoleDia As Double
 
     Public mSidePlate As SidePlateParameter
+    Public mWebPlates As WebPlatesParameter
 
     Public Sub WriteToConnectionId(ByVal ConnectionId As Long)
         Dim oTrans As New PsTransaction
@@ -109,8 +110,6 @@ Public Class Parameters
         iDbl = 0 : iNum = 0 : iBln = 0 : iStr = 0
 
         WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
-
-        mSidePlate.WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
     End Sub
 
     Public Sub WriteToConnection(ByRef eConnection As PsConnection,
@@ -134,6 +133,7 @@ Public Class Parameters
         eConnection.Double(iDbl) = mHoleDia : iDbl = iDbl + 1
 
         mSidePlate.WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
+        mWebPlates.WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
     End Sub
 
     Public Sub ReadFromConnection(ByRef eConnection As PsConnection, Optional ByVal forClone As Boolean = False)
@@ -165,6 +165,7 @@ Public Class Parameters
         mHoleDia = eConnection.Double(iDbl) : iDbl = iDbl + 1
 
         mSidePlate.ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
+        mWebPlates.ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
     End Sub
 
     Public Sub WriteToTemplate(ByRef Template As PsTemplateManager) Implements IParameters.WriteToTemplate
@@ -186,8 +187,8 @@ Public Class Parameters
         Template.AppendDouble(mHoleDia)
 
         mSidePlate.WriteToTemplate(Template)
+        mWebPlates.WriteToTemplate(Template)
     End Sub
-
 
     Public Sub ReadFromTemplate(ByRef Template As PsTemplateManager)
         Dim iDbl, iNum, iBln, iStr As Integer
@@ -213,6 +214,7 @@ Public Class Parameters
         mHoleDia = Template.Double(iDbl) : iDbl = iDbl + 1
 
         mSidePlate.ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
+        mWebPlates.ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
     End Sub
 
 
@@ -220,6 +222,7 @@ Public Class Parameters
         MyBase.New()
 
         mSidePlate = New SidePlateParameter()
+        mWebPlates = New WebPlatesParameter()
     End Sub
 
     Protected Overrides Sub Finalize()
@@ -249,10 +252,11 @@ Public Class Parameters
         mHorGap = 40
         mDiagnalGap = 40
 
-        mHorPlateThickness = 52
+        mHorPlateThickness = 24
         mHoleDia = 30
 
         mSidePlate.SetToMetricDefaults()
+        mWebPlates.SetToMetricDefaults()
     End Sub
 
     Public Sub SetToImperialDefaults() Implements ISetToDefauts.SetToImperialDefaults

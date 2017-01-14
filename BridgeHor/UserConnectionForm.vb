@@ -266,6 +266,12 @@ Friend Class UserConnectionForm
         Data.mSidePlate.mOutsidePlateThickness = UIConverter.ConvertToNumeric(txtOutsidePlateThickness.Text)
         Data.mSidePlate.mInsidePlateThickness = UIConverter.ConvertToNumeric(txtInsidePlateThickness.Text)
 
+        Data.mWebPlates.mChordSidePlateThickness = UIConverter.ConvertToNumeric(txtChordSideWebPlateThickness.Text)
+        Data.mWebPlates.mBraceSidePlateThickness = UIConverter.ConvertToNumeric(txtBraceSideWebPlateThickness.Text)
+        Data.mWebPlates.mBraceSidePlateLength = UIConverter.ConvertToNumeric(txtBraceSideWebPlateLength.Text)
+        Data.mWebPlates.mSupportPlateOffset = UIConverter.ConvertToNumeric(txtSupportPlateOffset.Text)
+        Data.mWebPlates.mSupportPlateThickness = UIConverter.ConvertToNumeric(txtSupportPlateThickness.Text)
+
     End Sub
 
     Private Sub WriteToDialog(ByRef Data As Parameters)
@@ -288,6 +294,12 @@ Friend Class UserConnectionForm
         txtDiagDist.Text = UIConverter.ConvertToText(Data.mSidePlate.mDiagDist)
         txtOutsidePlateThickness.Text = UIConverter.ConvertToText(Data.mSidePlate.mOutsidePlateThickness)
         txtInsidePlateThickness.Text = UIConverter.ConvertToText(Data.mSidePlate.mInsidePlateThickness)
+
+        txtChordSideWebPlateThickness.Text = UIConverter.ConvertToText(Data.mWebPlates.mChordSidePlateThickness)
+        txtBraceSideWebPlateThickness.Text = UIConverter.ConvertToText(Data.mWebPlates.mBraceSidePlateThickness)
+        txtBraceSideWebPlateLength.Text = UIConverter.ConvertToText(Data.mWebPlates.mBraceSidePlateLength)
+        txtSupportPlateOffset.Text = UIConverter.ConvertToText(Data.mWebPlates.mSupportPlateOffset)
+        txtSupportPlateThickness.Text = UIConverter.ConvertToText(Data.mWebPlates.mSupportPlateThickness)
 
     End Sub
 
@@ -487,16 +499,16 @@ Friend Class UserConnectionForm
     End Sub
 
     Private Sub txtDoubleValue_leave(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) _
-    Handles txtWebConnectPlateVerEdgeDist2.Leave, txtWebConnectPlateVerEdgeDist1.Leave, txtWebConnectPlateVerDist2.Leave, txtWebConnectPlateVerDist1.Leave, txtWebConnectPlateThickness2.Leave, txtWebConnectPlateThickness1.Leave, txtWebConnectPlateInnerVerEdgeDist2.Leave, txtWebConnectPlateInnerVerEdgeDist1.Leave, txtWebConnectPlateHorEdgeDist2.Leave, txtWebConnectPlateHorEdgeDist1.Leave, txtWebConnectPlateHorDist2.Leave, txtWebConnectPlateHorDist1.Leave, txtHorPlateThickness.Leave, txtHorGap.Leave, txtHorFlangeCutBack.Leave, txtHorCutBack.Leave, txtDiagFillet.Leave, txtHorFillet.Leave, txtDiagnalCutback.Leave, txtConnect2Width.Leave, txtConnect2Thickness.Leave, txtConnect2SideDistance.Leave, txtConnect2Radius.Leave, txtConnect2Length.Leave, txtConnect2innerWebThickness.Leave, txtConnect2InnerWebHeight.Leave, txtConnect2innerWebDist.Leave, txtConnect1Width.Leave, txtConnect1Thickness.Leave, txtConnect1SideDistance.Leave, txtConnect1Radius.Leave, txtConnect1Length.Leave, txtConnect1innerWebThickness.Leave, txtConnect1InnerWebHeight.Leave, txtConnect1innerWebDist.Leave, txtBoltGroupSpan2.Leave, txtBoltGroupSpan1.Leave, txtBoltGroupHorSideDist2.Leave, txtBoltGroupHorSideDist1.Leave,
+    Handles txtWebConnectPlateVerEdgeDist2.Leave, txtWebConnectPlateVerEdgeDist1.Leave, txtWebConnectPlateVerDist2.Leave, txtWebConnectPlateVerDist1.Leave, txtWebConnectPlateThickness2.Leave, txtWebConnectPlateThickness1.Leave, txtWebConnectPlateInnerVerEdgeDist2.Leave, txtWebConnectPlateInnerVerEdgeDist1.Leave, txtWebConnectPlateHorEdgeDist2.Leave, txtWebConnectPlateHorEdgeDist1.Leave, txtWebConnectPlateHorDist2.Leave, txtWebConnectPlateHorDist1.Leave, txtHorPlateThickness.Leave, txtHorGap.Leave, txtHorFlangeCutBack.Leave, txtHorCutBack.Leave, txtDiagFillet.Leave, txtHorFillet.Leave, txtDiagnalCutback.Leave, txtConnect2Width.Leave, txtConnect2Thickness.Leave, txtConnect2SideDistance.Leave, txtConnect2Radius.Leave, txtConnect2Length.Leave, txtConnect2innerWebThickness.Leave, txtConnect2InnerWebHeight.Leave, txtConnect2innerWebDist.Leave, txtSupportPlateOffset.Leave, txtSupportPlateThickness.Leave, txtChordSideWebPlateThickness.Leave, txtBraceSideWebPlateThickness.Leave, txtBraceSideWebPlateLength.Leave, txtConnect1innerWebThickness.Leave, txtConnect1InnerWebHeight.Leave, txtConnect1innerWebDist.Leave, txtBoltGroupSpan2.Leave, txtBoltGroupSpan1.Leave, txtBoltGroupHorSideDist2.Leave, txtBoltGroupHorSideDist1.Leave,
         txtDiagnalCutback.Leave, txtHorGap.Leave,
         txtHorCutBack.Leave, txtHorFlangeCutBack.Leave,
         txtHorFillet.Leave, txtDiagFillet.Leave, txtConnect2Width.Leave,
         txtConnect2Thickness.Leave, txtConnect2SideDistance.Leave,
         txtConnect2Radius.Leave, txtConnect2Length.Leave,
         txtConnect2innerWebThickness.Leave, txtConnect2InnerWebHeight.Leave,
-        txtConnect2innerWebDist.Leave, txtConnect1Width.Leave,
-        txtConnect1Thickness.Leave, txtConnect1SideDistance.Leave,
-        txtConnect1Radius.Leave, txtConnect1Length.Leave,
+        txtConnect2innerWebDist.Leave, txtSupportPlateOffset.Leave,
+        txtSupportPlateThickness.Leave, txtChordSideWebPlateThickness.Leave,
+        txtBraceSideWebPlateThickness.Leave, txtBraceSideWebPlateLength.Leave,
         txtConnect1innerWebThickness.Leave, txtConnect1InnerWebHeight.Leave,
         txtConnect1innerWebDist.Leave, txtBoltGroupHorSideDist1.Leave,
         txtWebConnectPlateVerEdgeDist2.Leave,
