@@ -392,6 +392,9 @@ Public Class UserConnection
             '                                                        data, connMat1, connMat2)
             'Debug.Assert(foldLine.Count = 4)
 
+            Dim webPlatesCtor As New WebPlatesCreator(horId, data, connMat1)
+            webPlatesCtor.CreatePlates()
+
             oConnAdpt = Nothing
 
             oConnAdpt = New ConnectionAdapter(ConnectionId)
@@ -399,6 +402,9 @@ Public Class UserConnection
             oConnAdpt.AppendAdditionalObjectId(horId)
             oConnAdpt.AppendAdditionalObjectId(diagnalId)
             oConnAdpt.AppendAdditionalObjectId(sidPlateId)
+
+            oConnAdpt.AppendCreatedObjectId(webPlatesCtor.ChordSidePlateId)
+            oConnAdpt.AppendCreatedObjectId(webPlatesCtor.BraceSidePlateId)
 
             oConnAdpt.SetBuilt(True)
             oConnAdpt.CommitAppendObjects()
@@ -414,8 +420,9 @@ Public Class UserConnection
             MessageBox.Show(ex.Message)
         End Try
     End Sub
-
-    Private Sub CutHorMember(id As Long, connMat As PsMatrix, param As Parameters)
+    Public Shared Function GetHorMemberWebHeight(id As Long,
+                                                 connMat As PsMatrix,
+                                                 param As Parameters) As Double
         Dim shpAdpt As New ShapeAdapter(id)
         Dim org As New PsPoint
         Dim xDir As New PsVector
@@ -430,13 +437,28 @@ Public Class UserConnection
         If (GeoHelper.IsInSameDirection(shpAdpt.XAxis, yDir) Or
             GeoHelper.IsInSameDirection(-shpAdpt.XAxis, yDir)) Then
             height = shpAdpt.Width - param.mHorPlateThickness * 2
-        ElseIf (GeoHelper.IsInSameDirection(shpAdpt.YAxis, ydir) Or
-                 GeoHelper.IsInSameDirection(-shpAdpt.XAxis, ydir)) Then
+        ElseIf (GeoHelper.IsInSameDirection(shpAdpt.YAxis, yDir) Or
+                 GeoHelper.IsInSameDirection(-shpAdpt.XAxis, yDir)) Then
             height = shpAdpt.Height - param.mHorPlateThickness * 2
         Else
             Debug.Assert(False)
             height = shpAdpt.Height
         End If
+        Return height
+    End Function
+
+    Private Sub CutHorMember(id As Long, connMat As PsMatrix, param As Parameters)
+        Dim shpAdpt As New ShapeAdapter(id)
+        Dim org As New PsPoint
+        Dim xDir As New PsVector
+        Dim yDir As New PsVector
+
+        connMat.getOrigin(org)
+        connMat.getZAxis(xDir)
+        connMat.getYAxis(yDir)
+
+        Dim width As Double = param.mHorFlangeCutback * 2
+        Dim height As Double = GetHorMemberWebHeight(id, connMat, param)
 
         Dim oPoly As New PsPolygon
         oPoly.createRectangle(width, height)
@@ -455,7 +477,8 @@ Public Class UserConnection
 
         cut.SetToDefaults()
         Dim oPlane As New PsCutPlane
-        oPlane.InsertPoint = MathTool.GetPointInDirection(org, -xDir, param.mHorCutback)
+        oPlane.InsertPoint = MathTool.GetPointInDirection(org, -xDir,
+                                param.mHorCutback + param.mHorGap)
         oPlane.Normal = xDir
         cut.SetAsPlaneCut(oPlane)
         cut.SetObjectId(id)
