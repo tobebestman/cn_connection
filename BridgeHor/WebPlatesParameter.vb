@@ -54,6 +54,15 @@ Public Class WebPlatesParameter
     Public mBraceSidePlateLength As Double
     Public mSupportPlateOffset As Double
     Public mSupportPlateThickness As Double
+    Public mConnectPlateThickness As Double
+
+    Public mHoleDiameter As Double
+    Public mHorHoleDist As Double
+    Public mHorHoleEdgeDist As Double
+    Public mVerHoleDist As Double
+    Public mVerHoleEdgeDist As Double
+    Public mHorHoleCount As Integer
+    Public mVerHoleCount As Integer
 
     Public Sub ReadFromConnection(eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromConnection
         mChordSidePlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
@@ -61,6 +70,16 @@ Public Class WebPlatesParameter
         mBraceSidePlateLength = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mSupportPlateOffset = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mSupportPlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
+
+        mHoleDiameter = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mHorHoleDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mHorHoleEdgeDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mVerHoleDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mVerHoleEdgeDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mConnectPlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
+
+        mHorHoleCount = eConnection.Number(iNum) : iNum = iNum + 1
+        mVerHoleCount = eConnection.Number(iNum) : iNum = iNum + 1
     End Sub
 
     Public Sub ReadFromTemplate(Template As PsTemplateManager, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromTemplate
@@ -69,6 +88,16 @@ Public Class WebPlatesParameter
         mBraceSidePlateLength = Template.Double(iDbl) : iDbl = iDbl + 1
         mSupportPlateOffset = Template.Double(iDbl) : iDbl = iDbl + 1
         mSupportPlateThickness = Template.Double(iDbl) : iDbl = iDbl + 1
+
+        mHoleDiameter = Template.Double(iDbl) : iDbl = iDbl + 1
+        mHorHoleDist = Template.Double(iDbl) : iDbl = iDbl + 1
+        mHorHoleEdgeDist = Template.Double(iDbl) : iDbl = iDbl + 1
+        mVerHoleDist = Template.Double(iDbl) : iDbl = iDbl + 1
+        mVerHoleEdgeDist = Template.Double(iDbl) : iDbl = iDbl + 1
+        mConnectPlateThickness = Template.Double(iDbl) : iDbl = iDbl + 1
+
+        mHorHoleCount = Template.Number(iNum) : iNum = iNum + 1
+        mVerHoleCount = Template.Number(iNum) : iNum = iNum + 1
     End Sub
 
     Public Sub SetToImperialDefaults() Implements ISetToDefauts.SetToImperialDefaults
@@ -81,6 +110,16 @@ Public Class WebPlatesParameter
         mBraceSidePlateLength = 400
         mSupportPlateOffset = 100
         mSupportPlateThickness = 24
+
+        mHoleDiameter = 30
+        mHorHoleDist = 80
+        mHorHoleEdgeDist = 60
+        mVerHoleDist = 80
+        mVerHoleEdgeDist = 60
+        mConnectPlateThickness = 25
+
+        mHorHoleCount = 2
+        mVerHoleCount = 11
     End Sub
 
     Public Sub WriteToConnection(ByRef eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.WriteToConnection
@@ -89,6 +128,16 @@ Public Class WebPlatesParameter
         eConnection.Double(iDbl) = mBraceSidePlateLength : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mSupportPlateOffset : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mSupportPlateThickness : iDbl = iDbl + 1
+
+        eConnection.Double(iDbl) = mHoleDiameter : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mHorHoleDist : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mHorHoleEdgeDist : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mVerHoleDist : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mVerHoleEdgeDist : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mConnectPlateThickness : iDbl = iDbl + 1
+
+        eConnection.Number(iNum) = mHorHoleCount : iNum = iNum + 1
+        eConnection.Number(iNum) = mVerHoleCount : iNum = iNum + 1
     End Sub
 
     Public Sub WriteToTemplate(ByRef Template As PsTemplateManager) Implements IParameters.WriteToTemplate
@@ -97,5 +146,15 @@ Public Class WebPlatesParameter
         Template.AppendDouble(mBraceSidePlateLength)
         Template.AppendDouble(mSupportPlateOffset)
         Template.AppendDouble(mSupportPlateThickness)
+
+        Template.AppendDouble(mHoleDiameter)
+        Template.AppendDouble(mHorHoleDist)
+        Template.AppendDouble(mHorHoleEdgeDist)
+        Template.AppendDouble(mVerHoleDist)
+        Template.AppendDouble(mVerHoleEdgeDist)
+        Template.AppendDouble(mConnectPlateThickness)
+
+        Template.AppendNumber(mHorHoleCount)
+        Template.AppendNumber(mVerHoleCount)
     End Sub
 End Class

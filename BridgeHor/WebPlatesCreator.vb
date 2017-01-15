@@ -54,7 +54,12 @@ Public Class WebPlatesCreator
 
     Public ChordSidePlateId As Long
     Public BraceSidePlateId As Long
-    Public SupportPlateIds As List(Of Long)
+    Public SupportPlateId1 As Long
+    Public SupportPlateId2 As Long
+
+    Public ConnectPlateIds As New List(Of Long)
+
+    Private MathTool As New PsGeometryFunctions
 
     Private mParam As Parameters
     Private mBaseUcs As PsMatrix
@@ -98,7 +103,178 @@ Public Class WebPlatesCreator
     End Property
 
 
-    Private MathTool As New PsGeometryFunctions
+    Private Sub DrillPlates()
+
+        Dim xDir As New PsVector
+        Dim yDir As New PsVector
+        Dim zDir As New PsVector
+        Dim org As New PsPoint
+
+        mBaseUcs.getOrigin(org)
+        mBaseUcs.getZAxis(xDir)
+        mBaseUcs.getYAxis(yDir)
+        mBaseUcs.getXAxis(zDir)
+
+        Dim plateOrg As PsPoint = MathTool.GetPointInDirection(org, -xDir,
+                 (mParam.mHorCutback + mParam.mHorGap / 2))
+
+        Dim drillOrg As PsPoint = MathTool.GetPointInDirection(plateOrg, -zDir,
+                         (mParam.mWebPlates.mChordSidePlateThickness / 2 + mParam.mWebPlates.mConnectPlateThickness))
+
+        Dim oDriller As New PsDrillObject
+        oDriller.SetToDefaults()
+        oDriller.SetInsertPoint(drillOrg)
+        oDriller.SetXYPlane(xDir, yDir)
+        Dim xDesc As String
+        xDesc = mParam.mWebPlates.mHorHoleCount.ToString() + "x" + mParam.mWebPlates.mHorHoleDist.ToString() + "," +
+                (2 * mParam.mWebPlates.mHorHoleEdgeDist + mParam.mHorGap).ToString() + "," +
+                mParam.mWebPlates.mHorHoleCount.ToString() + "x" + mParam.mWebPlates.mHorHoleDist.ToString()
+
+        oDriller.SetLinearHoleField(mParam.mWebPlates.mHoleDiameter, xDesc,
+                                     mParam.mWebPlates.mVerHoleCount.ToString() + "x" + mParam.mWebPlates.mVerHoleDist.ToString())
+
+        oDriller.SetObjectId(Me.ChordSidePlateId)
+        oDriller.Apply()
+        oDriller.SetObjectId(Me.BraceSidePlateId)
+        oDriller.Apply()
+
+        For Each id As Long In Me.ConnectPlateIds
+            oDriller.SetObjectId(id)
+            oDriller.Apply()
+        Next
+
+    End Sub
+
+    Private Sub CreateConnectPlates()
+
+        Dim plateWidth = 2 * ((mParam.mWebPlates.mHorHoleCount - 1) *
+                          mParam.mWebPlates.mHorHoleDist +
+                          2 * mParam.mWebPlates.mHorHoleEdgeDist) +
+                          mParam.mHorGap
+
+        Dim plateLength = (mParam.mWebPlates.mVerHoleCount - 1) *
+                          mParam.mWebPlates.mVerHoleDist +
+                          2 * mParam.mWebPlates.mVerHoleEdgeDist
+
+        Dim xDir As New PsVector
+        Dim yDir As New PsVector
+        Dim zDir As New PsVector
+        Dim org As New PsPoint
+
+        mBaseUcs.getOrigin(org)
+        mBaseUcs.getZAxis(xDir)
+        mBaseUcs.getYAxis(yDir)
+        mBaseUcs.getXAxis(zDir)
+
+        Dim plateOrg As PsPoint = MathTool.GetPointInDirection(org, -xDir,
+                 (mParam.mHorCutback + mParam.mHorGap / 2))
+
+        If ConnectPlateIds.Count > 0 Then
+            ConnectPlateIds.Clear()
+            Debug.Assert(False)
+        End If
+
+        Dim plateUcs As New PsMatrix
+        plateUcs.SetCoordinateSystem(
+                MathTool.GetPointInDirection(plateOrg, zDir,
+                         (mParam.mWebPlates.mChordSidePlateThickness + mParam.mWebPlates.mConnectPlateThickness) / 2),
+                         xDir, yDir)
+        Dim plateId As Long = Utility.CreatePlate(plateWidth, plateLength, mParam.mWebPlates.mConnectPlateThickness,
+                                                  0, 0, VerticalPosition.kMiddle, plateUcs)
+        Me.ConnectPlateIds.Add(plateId)
+
+        plateUcs.SetCoordinateSystem(
+                MathTool.GetPointInDirection(plateOrg, -zDir,
+                         (mParam.mWebPlates.mChordSidePlateThickness + mParam.mWebPlates.mConnectPlateThickness) / 2),
+                         xDir, yDir)
+        plateId = Utility.CreatePlate(plateWidth, plateLength, mParam.mWebPlates.mConnectPlateThickness,
+                                                  0, 0, VerticalPosition.kMiddle, plateUcs)
+
+        Me.ConnectPlateIds.Add(plateId)
+
+    End Sub
+
+    Private Function CreateSupportPlate1() As Long
+
+        Dim xDir As New PsVector
+        Dim yDir As New PsVector
+        Dim org As New PsPoint
+
+        mBaseUcs.getOrigin(org)
+        mBaseUcs.getZAxis(xDir)
+        mBaseUcs.getYAxis(yDir)
+
+        Dim plateOrg As PsPoint = MathTool.GetPointInDirection(org, -xDir,
+                 (mParam.mHorCutback + mParam.mHorGap) +
+                  mParam.mWebPlates.mBraceSidePlateLength -
+                  mParam.mWebPlates.mSupportPlateOffset)
+
+        Dim zDir As New PsVector
+        mBaseUcs.getXAxis(zDir)
+
+        Dim Length As Double = UserConnection.GetHorMemberFlangeWidth(mHorId, mBaseUcs, mParam) -
+                               mParam.mHorPlateThickness
+
+        Dim sidePt As New PsPoint
+        sidePt = MathTool.GetPointInDirection(org, -xDir, mParam.mHorWebCutback)
+        sidePt = MathTool.GetPointInDirection(sidePt, zDir,
+                 Length / 2)
+
+        Dim Width As Double = sidePt.get_DistanceTo(plateOrg)
+
+        xDir.SetFromPoints(plateOrg, sidePt)
+        xDir.Normalize()
+
+        plateOrg = MathTool.GetPointInDirection(plateOrg, xDir, Width / 2)
+
+        Dim plateUcs As New PsMatrix
+        plateUcs.SetCoordinateSystem(plateOrg, xDir, yDir)
+
+        Dim result As Long = Utility.CreatePlate(Width, Length, mParam.mWebPlates.mBraceSidePlateThickness,
+                            0, 0, VerticalPosition.kMiddle, plateUcs)
+        Return result
+    End Function
+
+    Private Function CreateSupportPlate2() As Long
+
+        Dim xDir As New PsVector
+        Dim yDir As New PsVector
+        Dim org As New PsPoint
+
+        mBaseUcs.getOrigin(org)
+        mBaseUcs.getZAxis(xDir)
+        mBaseUcs.getYAxis(yDir)
+
+        Dim plateOrg As PsPoint = MathTool.GetPointInDirection(org, -xDir,
+                 (mParam.mHorCutback + mParam.mHorGap) +
+                  mParam.mWebPlates.mBraceSidePlateLength -
+                  mParam.mWebPlates.mSupportPlateOffset)
+
+        Dim zDir As New PsVector
+        mBaseUcs.getXAxis(zDir)
+
+        Dim Length As Double = UserConnection.GetHorMemberFlangeWidth(mHorId, mBaseUcs, mParam) -
+                               mParam.mHorPlateThickness
+
+        Dim sidePt As New PsPoint
+        sidePt = MathTool.GetPointInDirection(org, -xDir, mParam.mHorWebCutback)
+        sidePt = MathTool.GetPointInDirection(sidePt, -zDir,
+                 Length / 2)
+
+        Dim Width As Double = sidePt.get_DistanceTo(plateOrg)
+
+        xDir.SetFromPoints(plateOrg, sidePt)
+        xDir.Normalize()
+
+        plateOrg = MathTool.GetPointInDirection(plateOrg, xDir, Width / 2)
+
+        Dim plateUcs As New PsMatrix
+        plateUcs.SetCoordinateSystem(plateOrg, xDir, yDir)
+
+        Dim result As Long = Utility.CreatePlate(Width, Length, mParam.mWebPlates.mBraceSidePlateThickness,
+                            0, 0, VerticalPosition.kMiddle, plateUcs)
+        Return result
+    End Function
 
 
     Public Sub New(horId As Long, param As Parameters, connMat As PsMatrix)
@@ -107,9 +283,16 @@ Public Class WebPlatesCreator
         Me.mBaseUcs = connMat
     End Sub
 
-    Public Sub CreatePlates()
+    Public Sub Create()
         CreateChordSidePlate()
         CreateBraceSidePlate()
+
+        SupportPlateId1 = CreateSupportPlate1()
+        SupportPlateId2 = CreateSupportPlate2()
+
+        CreateConnectPlates()
+
+        DrillPlates()
     End Sub
     Private Sub CreateChordSidePlate()
         Dim oCreater As New PsCreatePlate

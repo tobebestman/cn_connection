@@ -94,6 +94,7 @@ Public Class SidePlateParameter
         Me.mDiagDist = 238.5
         Me.mOutsidePlateThickness = 20
         Me.mInsidePlateThickness = 16
+
     End Sub
 
     Public Sub WriteToConnection(ByRef eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.WriteToConnection

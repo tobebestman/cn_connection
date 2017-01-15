@@ -248,7 +248,7 @@ Friend Class UserConnectionForm
     Private Sub ReadFromDialog(ByRef Data As Parameters)
 
         Data.mHorCutback = UIConverter.ConvertToNumeric(txtHorCutBack.Text)
-        Data.mHorFlangeCutback = UIConverter.ConvertToNumeric(txtHorFlangeCutBack.Text)
+        Data.mHorWebCutback = UIConverter.ConvertToNumeric(txtHorFlangeCutBack.Text)
         Data.mDiagnalCutback = UIConverter.ConvertToNumeric(txtDiagnalCutback.Text)
 
         Data.mHorGap = UIConverter.ConvertToNumeric(txtHorGap.Text)
@@ -272,12 +272,21 @@ Friend Class UserConnectionForm
         Data.mWebPlates.mSupportPlateOffset = UIConverter.ConvertToNumeric(txtSupportPlateOffset.Text)
         Data.mWebPlates.mSupportPlateThickness = UIConverter.ConvertToNumeric(txtSupportPlateThickness.Text)
 
+        Data.mWebPlates.mHoleDiameter = UIConverter.ConvertToNumeric(txtHoleDiameter.Text)
+        Data.mWebPlates.mHorHoleDist = UIConverter.ConvertToNumeric(txtHorHoleDist.Text)
+        Data.mWebPlates.mHorHoleEdgeDist = UIConverter.ConvertToNumeric(txtHorHoleEdgeDist.Text)
+        Data.mWebPlates.mVerHoleDist = UIConverter.ConvertToNumeric(txtVerHoleDist.Text)
+        Data.mWebPlates.mVerHoleEdgeDist = UIConverter.ConvertToNumeric(txtVerHoleEdgeDist.Text)
+        Data.mWebPlates.mConnectPlateThickness = UIConverter.ConvertToNumeric(txtConnectPlateThickness.Text)
+
+        Data.mWebPlates.mHorHoleCount = UIConverter.ConvertToNumeric(txtHorHoleCount.Text)
+        Data.mWebPlates.mVerHoleCount = UIConverter.ConvertToNumeric(txtVerHoleCount.Text)
     End Sub
 
     Private Sub WriteToDialog(ByRef Data As Parameters)
 
         txtHorCutBack.Text = UIConverter.ConvertToText(Data.mHorCutback)
-        txtHorFlangeCutBack.Text = UIConverter.ConvertToText(Data.mHorFlangeCutback)
+        txtHorFlangeCutBack.Text = UIConverter.ConvertToText(Data.mHorWebCutback)
         txtDiagnalCutback.Text = UIConverter.ConvertToText(Data.mDiagnalCutback)
 
         txtHorGap.Text = UIConverter.ConvertToText(Data.mHorGap)
@@ -301,6 +310,15 @@ Friend Class UserConnectionForm
         txtSupportPlateOffset.Text = UIConverter.ConvertToText(Data.mWebPlates.mSupportPlateOffset)
         txtSupportPlateThickness.Text = UIConverter.ConvertToText(Data.mWebPlates.mSupportPlateThickness)
 
+        txtHoleDiameter.Text = UIConverter.ConvertToText(Data.mWebPlates.mHoleDiameter)
+        txtHorHoleDist.Text = UIConverter.ConvertToText(Data.mWebPlates.mHorHoleDist)
+        txtHorHoleEdgeDist.Text = UIConverter.ConvertToText(Data.mWebPlates.mHorHoleEdgeDist)
+        txtVerHoleDist.Text = UIConverter.ConvertToText(Data.mWebPlates.mVerHoleDist)
+        txtVerHoleEdgeDist.Text = UIConverter.ConvertToText(Data.mWebPlates.mVerHoleEdgeDist)
+        txtConnectPlateThickness.Text = UIConverter.ConvertAngleToText(Data.mWebPlates.mConnectPlateThickness)
+
+        txtHorHoleCount.Text = UIConverter.ConvertToText(Data.mWebPlates.mHorHoleCount)
+        txtVerHoleCount.Text = UIConverter.ConvertToText(Data.mWebPlates.mVerHoleCount)
     End Sub
 
     Public Sub EditData(ByRef ConnId As Long)
@@ -499,7 +517,7 @@ Friend Class UserConnectionForm
     End Sub
 
     Private Sub txtDoubleValue_leave(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) _
-    Handles txtWebConnectPlateVerEdgeDist2.Leave, txtWebConnectPlateVerEdgeDist1.Leave, txtWebConnectPlateVerDist2.Leave, txtWebConnectPlateVerDist1.Leave, txtWebConnectPlateThickness2.Leave, txtWebConnectPlateThickness1.Leave, txtWebConnectPlateInnerVerEdgeDist2.Leave, txtWebConnectPlateInnerVerEdgeDist1.Leave, txtWebConnectPlateHorEdgeDist2.Leave, txtWebConnectPlateHorEdgeDist1.Leave, txtWebConnectPlateHorDist2.Leave, txtWebConnectPlateHorDist1.Leave, txtHorPlateThickness.Leave, txtHorGap.Leave, txtHorFlangeCutBack.Leave, txtHorCutBack.Leave, txtDiagFillet.Leave, txtHorFillet.Leave, txtDiagnalCutback.Leave, txtConnect2Width.Leave, txtConnect2Thickness.Leave, txtConnect2SideDistance.Leave, txtConnect2Radius.Leave, txtConnect2Length.Leave, txtConnect2innerWebThickness.Leave, txtConnect2InnerWebHeight.Leave, txtConnect2innerWebDist.Leave, txtSupportPlateOffset.Leave, txtSupportPlateThickness.Leave, txtChordSideWebPlateThickness.Leave, txtBraceSideWebPlateThickness.Leave, txtBraceSideWebPlateLength.Leave, txtConnect1innerWebThickness.Leave, txtConnect1InnerWebHeight.Leave, txtConnect1innerWebDist.Leave, txtBoltGroupSpan2.Leave, txtBoltGroupSpan1.Leave, txtBoltGroupHorSideDist2.Leave, txtBoltGroupHorSideDist1.Leave,
+    Handles txtWebConnectPlateVerEdgeDist2.Leave, txtWebConnectPlateVerEdgeDist1.Leave, txtWebConnectPlateVerDist2.Leave, txtWebConnectPlateVerDist1.Leave, txtWebConnectPlateThickness2.Leave, txtWebConnectPlateThickness1.Leave, txtWebConnectPlateInnerVerEdgeDist2.Leave, txtWebConnectPlateInnerVerEdgeDist1.Leave, txtWebConnectPlateHorEdgeDist2.Leave, txtWebConnectPlateHorEdgeDist1.Leave, txtWebConnectPlateHorDist2.Leave, txtWebConnectPlateHorDist1.Leave, txtHorPlateThickness.Leave, txtHorGap.Leave, txtHorFlangeCutBack.Leave, txtHorCutBack.Leave, txtDiagFillet.Leave, txtHorFillet.Leave, txtDiagnalCutback.Leave, txtConnect2Width.Leave, txtConnect2Thickness.Leave, txtConnect2SideDistance.Leave, txtConnect2Radius.Leave, txtConnect2Length.Leave, txtConnect2innerWebThickness.Leave, txtConnect2InnerWebHeight.Leave, txtConnect2innerWebDist.Leave, txtSupportPlateOffset.Leave, txtSupportPlateThickness.Leave, txtChordSideWebPlateThickness.Leave, txtBraceSideWebPlateThickness.Leave, txtBraceSideWebPlateLength.Leave, txtHorHoleEdgeDist.Leave, txtHorHoleDist.Leave, txtBoltGroupSpan2.Leave, txtBoltGroupSpan1.Leave, txtBoltGroupHorSideDist2.Leave, txtBoltGroupHorSideDist1.Leave,
         txtDiagnalCutback.Leave, txtHorGap.Leave,
         txtHorCutBack.Leave, txtHorFlangeCutBack.Leave,
         txtHorFillet.Leave, txtDiagFillet.Leave, txtConnect2Width.Leave,
@@ -509,8 +527,8 @@ Friend Class UserConnectionForm
         txtConnect2innerWebDist.Leave, txtSupportPlateOffset.Leave,
         txtSupportPlateThickness.Leave, txtChordSideWebPlateThickness.Leave,
         txtBraceSideWebPlateThickness.Leave, txtBraceSideWebPlateLength.Leave,
-        txtConnect1innerWebThickness.Leave, txtConnect1InnerWebHeight.Leave,
-        txtConnect1innerWebDist.Leave, txtBoltGroupHorSideDist1.Leave,
+        txtHorHoleEdgeDist.Leave, txtHorHoleDist.Leave,
+        txtVerHoleCount.Leave, txtBoltGroupHorSideDist1.Leave,
         txtWebConnectPlateVerEdgeDist2.Leave,
         txtWebConnectPlateVerEdgeDist1.Leave, txtWebConnectPlateVerDist2.Leave,
         txtWebConnectPlateVerDist1.Leave, txtWebConnectPlateThickness2.Leave,
@@ -518,7 +536,7 @@ Friend Class UserConnectionForm
         txtWebConnectPlateInnerVerEdgeDist1.Leave, txtWebConnectPlateHorEdgeDist2.Leave,
         txtWebConnectPlateHorEdgeDist1.Leave, txtWebConnectPlateHorDist2.Leave,
         txtWebConnectPlateHorDist1.Leave, txtBoltGroupSpan2.Leave,
-        txtBoltGroupSpan1.Leave, txtBoltGroupHorSideDist2.Leave, txtOutsidePlateThickness.Leave, txtInsidePlateThickness.Leave, txtHorDist.Leave, txtDiagDist.Leave
+        txtBoltGroupSpan1.Leave, txtBoltGroupHorSideDist2.Leave, txtOutsidePlateThickness.Leave, txtInsidePlateThickness.Leave, txtHorDist.Leave, txtDiagDist.Leave, txtVerHoleEdgeDist.Leave, txtVerHoleDist.Leave, txtHoleDiameter.Leave, txtConnectPlateThickness.Leave
 
         Dim oldValue As String = eventSender.Text
         eventSender.Text = oCheckInput.CheckPositive(eventSender.Text)
@@ -531,7 +549,7 @@ Friend Class UserConnectionForm
 
     Private Sub txtIntegerValue_leave(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles _
         txtWebConnectPlateVerCount2.Leave, txtWebConnectPlateVerCount1.Leave, txtWebConnectPlateHorCount2.Leave,
-        txtWebConnectPlateHorCount1.Leave, txtConnect2innerWebCount.Leave, txtConnect1innerWebCount.Leave, txtWebConnectPlateVerCount2.Leave
+        txtWebConnectPlateHorCount1.Leave, txtConnect2innerWebCount.Leave, txtWebConnectPlateVerCount2.Leave, txtVerHoleCount.Leave, txtHorHoleCount.Leave
 
         Dim oldValue As String = eventSender.Text
         eventSender.Text = oCheckInput.CheckPositiveInteger(eventSender.Text)

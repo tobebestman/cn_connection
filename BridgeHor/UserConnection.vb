@@ -393,7 +393,7 @@ Public Class UserConnection
             'Debug.Assert(foldLine.Count = 4)
 
             Dim webPlatesCtor As New WebPlatesCreator(horId, data, connMat1)
-            webPlatesCtor.CreatePlates()
+            webPlatesCtor.Create()
 
             oConnAdpt = Nothing
 
@@ -403,8 +403,14 @@ Public Class UserConnection
             oConnAdpt.AppendAdditionalObjectId(diagnalId)
             oConnAdpt.AppendAdditionalObjectId(sidPlateId)
 
+            For Each id As Long In webPlatesCtor.ConnectPlateIds
+                oConnAdpt.AppendCreatedObjectId(id)
+            Next
+
             oConnAdpt.AppendCreatedObjectId(webPlatesCtor.ChordSidePlateId)
             oConnAdpt.AppendCreatedObjectId(webPlatesCtor.BraceSidePlateId)
+            oConnAdpt.AppendCreatedObjectId(webPlatesCtor.SupportPlateId1)
+            oConnAdpt.AppendCreatedObjectId(webPlatesCtor.SupportPlateId2)
 
             oConnAdpt.SetBuilt(True)
             oConnAdpt.CommitAppendObjects()
@@ -432,7 +438,7 @@ Public Class UserConnection
         connMat.getZAxis(xDir)
         connMat.getYAxis(yDir)
 
-        Dim width As Double = param.mHorFlangeCutback * 2
+        Dim width As Double = param.mHorWebCutback * 2
         Dim height As Double = 0
         If (GeoHelper.IsInSameDirection(shpAdpt.XAxis, yDir) Or
             GeoHelper.IsInSameDirection(-shpAdpt.XAxis, yDir)) Then
@@ -447,6 +453,33 @@ Public Class UserConnection
         Return height
     End Function
 
+    Public Shared Function GetHorMemberFlangeWidth(id As Long,
+                                                 connMat As PsMatrix,
+                                                 param As Parameters) As Double
+        Dim shpAdpt As New ShapeAdapter(id)
+        Dim org As New PsPoint
+        Dim xDir As New PsVector
+        Dim yDir As New PsVector
+
+        connMat.getOrigin(org)
+        connMat.getZAxis(xDir)
+        connMat.getYAxis(yDir)
+
+        Dim width As Double = param.mHorWebCutback * 2
+        Dim height As Double = 0
+        If (GeoHelper.IsInSameDirection(shpAdpt.XAxis, yDir) Or
+            GeoHelper.IsInSameDirection(-shpAdpt.XAxis, yDir)) Then
+            height = shpAdpt.Height
+        ElseIf (GeoHelper.IsInSameDirection(shpAdpt.YAxis, yDir) Or
+                 GeoHelper.IsInSameDirection(-shpAdpt.XAxis, yDir)) Then
+            height = shpAdpt.Width
+        Else
+            Debug.Assert(False)
+            height = shpAdpt.Width
+        End If
+        Return height
+    End Function
+
     Private Sub CutHorMember(id As Long, connMat As PsMatrix, param As Parameters)
         Dim shpAdpt As New ShapeAdapter(id)
         Dim org As New PsPoint
@@ -457,7 +490,7 @@ Public Class UserConnection
         connMat.getZAxis(xDir)
         connMat.getYAxis(yDir)
 
-        Dim width As Double = param.mHorFlangeCutback * 2
+        Dim width As Double = param.mHorWebCutback * 2
         Dim height As Double = GetHorMemberWebHeight(id, connMat, param)
 
         Dim oPoly As New PsPolygon
@@ -472,7 +505,8 @@ Public Class UserConnection
         If cut.Apply() > 0 Then
             param.mHorWebCutIndex = cut.GetModifyIndex()
         Else
-            Debug.Assert(False)
+            param.mHorWebCutIndex = -1
+            'Debug.Assert(False)
         End If
 
         cut.SetToDefaults()
@@ -485,7 +519,8 @@ Public Class UserConnection
         If cut.Apply() > 0 Then
             param.mHorCutbackCutIndex = cut.GetModifyIndex()
         Else
-            Debug.Assert(False)
+            param.mHorCutbackCutIndex = -1
+            'Debug.Assert(False)
         End If
 
         Return
@@ -689,7 +724,7 @@ Public Class UserConnection
 
         Dim dist As Double = MathTool.GetDistanceBetween(instPt1, instPt2)
         Dim spt As PsPoint
-        spt = MathTool.GetPointInDirection(org2, -zAxis2, data.mHorFlangeCutback)
+        spt = MathTool.GetPointInDirection(org2, -zAxis2, data.mHorWebCutback)
         spt = MathTool.GetPointInDirection(spt, yAxis2, New ShapeAdapter(supportId2).Height / 2)
         TopHalf.Add(spt)
 
@@ -798,7 +833,7 @@ Public Class UserConnection
         If (isFirstPair) Then
             oStart = MathTool.GetPointInDirection(oStart, -zAxis, oData.mHorCutback)
         Else
-            oStart = MathTool.GetPointInDirection(oStart, -zAxis, oData.mHorFlangeCutback)
+            oStart = MathTool.GetPointInDirection(oStart, -zAxis, oData.mHorWebCutback)
         End If
 
         oStart = MathTool.GetPointInDirection(oStart, xAxis, width / 2 - oData.mHorPlateThickness)
@@ -806,7 +841,7 @@ Public Class UserConnection
 
         Dim polyLength As Double = oData.mHorCutback +
                              MathTool.GetDistanceBetween(instPt1, instPt2) +
-                             oData.mHorFlangeCutback
+                             oData.mHorWebCutback
         Dim polyWidth As Double = 2 * oData.mHorPlateThickness
 
         Dim oPoly As New PsPolygon
@@ -842,7 +877,7 @@ Public Class UserConnection
         If isFirstPair = True Then
             oStart = MathTool.GetPointInDirection(oStart, -zAxis, oData.mHorCutback)
         Else
-            oStart = MathTool.GetPointInDirection(oStart, -zAxis, oData.mHorFlangeCutback)
+            oStart = MathTool.GetPointInDirection(oStart, -zAxis, oData.mHorWebCutback)
         End If
 
         oStart = MathTool.GetPointInDirection(oStart, -xAxis, width / 2 - oData.mHorPlateThickness)
@@ -850,7 +885,7 @@ Public Class UserConnection
 
         Dim polyLength As Double = oData.mHorCutback +
                              MathTool.GetDistanceBetween(instPt1, instPt2) +
-                             oData.mHorFlangeCutback
+                             oData.mHorWebCutback
         Dim polyWidth As Double = 2 * oData.mHorPlateThickness
 
         Dim oPoly As New PsPolygon

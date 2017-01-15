@@ -58,7 +58,7 @@ Public Class Parameters
     Public mCreateGroup As Boolean
 
     Public mHorCutback As Double
-    Public mHorFlangeCutback As Double
+    Public mHorWebCutback As Double
     Public mDiagnalCutback As Double
 
     Public mHorGap As Double
@@ -123,7 +123,7 @@ Public Class Parameters
         eConnection.Number(iNum) = mDiagnalCutbackCutIndex : iNum = iNum + 1
 
         eConnection.Double(iDbl) = mHorCutback : iDbl = iDbl + 1
-        eConnection.Double(iDbl) = mHorFlangeCutback : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mHorWebCutback : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mDiagnalCutback : iDbl = iDbl + 1
 
         eConnection.Double(iDbl) = mHorGap : iDbl = iDbl + 1
@@ -155,7 +155,7 @@ Public Class Parameters
         mDiagnalCutbackCutIndex = eConnection.Number(iNum) : iNum = iNum + 1
 
         mHorCutback = eConnection.Double(iDbl) : iDbl = iDbl + 1
-        mHorFlangeCutback = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mHorWebCutback = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mDiagnalCutback = eConnection.Double(iDbl) : iDbl = iDbl + 1
 
         mHorGap = eConnection.Double(iDbl) : iDbl = iDbl + 1
@@ -177,7 +177,7 @@ Public Class Parameters
         Template.AppendNumber(mVersionNumber)
 
         Template.AppendDouble(mHorCutback)
-        Template.AppendDouble(mHorFlangeCutback)
+        Template.AppendDouble(mHorWebCutback)
         Template.AppendDouble(mDiagnalCutback)
 
         Template.AppendDouble(mHorGap)
@@ -204,7 +204,7 @@ Public Class Parameters
         mVersionNumber = Template.Number(iNum) : iNum = iNum + 1
 
         mHorCutback = Template.Double(iDbl) : iDbl = iDbl + 1
-        mHorFlangeCutback = Template.Double(iDbl) : iDbl = iDbl + 1
+        mHorWebCutback = Template.Double(iDbl) : iDbl = iDbl + 1
         mDiagnalCutback = Template.Double(iDbl) : iDbl = iDbl + 1
 
         mHorGap = Template.Double(iDbl) : iDbl = iDbl + 1
@@ -245,7 +245,7 @@ Public Class Parameters
 
     Public Sub SetToMetricDefaults() Implements ISetToDefauts.SetToMetricDefaults
         mHorCutback = 2000.7
-        mHorFlangeCutback = 3000.7
+        mHorWebCutback = 3000.7
 
         mDiagnalCutback = 2400
 

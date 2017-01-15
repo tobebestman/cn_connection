@@ -93,18 +93,25 @@
         Me.txtDiagFillet = New System.Windows.Forms.TextBox()
         Me.Label6 = New System.Windows.Forms.Label()
         Me.TabPageConnPlate1 = New System.Windows.Forms.TabPage()
+        Me.GroupBox5 = New System.Windows.Forms.GroupBox()
+        Me.Label37 = New System.Windows.Forms.Label()
+        Me.txtConnectPlateThickness = New System.Windows.Forms.TextBox()
+        Me.Label36 = New System.Windows.Forms.Label()
+        Me.Label35 = New System.Windows.Forms.Label()
+        Me.txtHoleDiameter = New System.Windows.Forms.TextBox()
+        Me.txtHorHoleCount = New System.Windows.Forms.TextBox()
+        Me.txtHorHoleDist = New System.Windows.Forms.TextBox()
+        Me.Label17 = New System.Windows.Forms.Label()
+        Me.txtHorHoleEdgeDist = New System.Windows.Forms.TextBox()
+        Me.Label21 = New System.Windows.Forms.Label()
+        Me.Label18 = New System.Windows.Forms.Label()
+        Me.txtVerHoleDist = New System.Windows.Forms.TextBox()
+        Me.Label20 = New System.Windows.Forms.Label()
+        Me.txtVerHoleEdgeDist = New System.Windows.Forms.TextBox()
+        Me.txtVerHoleCount = New System.Windows.Forms.TextBox()
+        Me.Label19 = New System.Windows.Forms.Label()
         Me.Label22 = New System.Windows.Forms.Label()
         Me.txtSupportPlateThickness = New System.Windows.Forms.TextBox()
-        Me.Label21 = New System.Windows.Forms.Label()
-        Me.txtConnect1Angle = New System.Windows.Forms.TextBox()
-        Me.Label20 = New System.Windows.Forms.Label()
-        Me.txtConnect1innerWebDist = New System.Windows.Forms.TextBox()
-        Me.Label19 = New System.Windows.Forms.Label()
-        Me.txtConnect1innerWebCount = New System.Windows.Forms.TextBox()
-        Me.Label18 = New System.Windows.Forms.Label()
-        Me.txtConnect1innerWebThickness = New System.Windows.Forms.TextBox()
-        Me.Label17 = New System.Windows.Forms.Label()
-        Me.txtConnect1InnerWebHeight = New System.Windows.Forms.TextBox()
         Me.Label16 = New System.Windows.Forms.Label()
         Me.txtSupportPlateOffset = New System.Windows.Forms.TextBox()
         Me.Label15 = New System.Windows.Forms.Label()
@@ -195,6 +202,7 @@
         Me.TabPageSidePlate.SuspendLayout()
         Me._TabFrames_0.SuspendLayout()
         Me.TabPageConnPlate1.SuspendLayout()
+        Me.GroupBox5.SuspendLayout()
         Me.TabPageConnPlate2.SuspendLayout()
         Me.TabPageWebConnPlate1.SuspendLayout()
         Me.GroupBox2.SuspendLayout()
@@ -819,18 +827,9 @@
         '
         'TabPageConnPlate1
         '
+        Me.TabPageConnPlate1.Controls.Add(Me.GroupBox5)
         Me.TabPageConnPlate1.Controls.Add(Me.Label22)
         Me.TabPageConnPlate1.Controls.Add(Me.txtSupportPlateThickness)
-        Me.TabPageConnPlate1.Controls.Add(Me.Label21)
-        Me.TabPageConnPlate1.Controls.Add(Me.txtConnect1Angle)
-        Me.TabPageConnPlate1.Controls.Add(Me.Label20)
-        Me.TabPageConnPlate1.Controls.Add(Me.txtConnect1innerWebDist)
-        Me.TabPageConnPlate1.Controls.Add(Me.Label19)
-        Me.TabPageConnPlate1.Controls.Add(Me.txtConnect1innerWebCount)
-        Me.TabPageConnPlate1.Controls.Add(Me.Label18)
-        Me.TabPageConnPlate1.Controls.Add(Me.txtConnect1innerWebThickness)
-        Me.TabPageConnPlate1.Controls.Add(Me.Label17)
-        Me.TabPageConnPlate1.Controls.Add(Me.txtConnect1InnerWebHeight)
         Me.TabPageConnPlate1.Controls.Add(Me.Label16)
         Me.TabPageConnPlate1.Controls.Add(Me.txtSupportPlateOffset)
         Me.TabPageConnPlate1.Controls.Add(Me.Label15)
@@ -847,12 +846,245 @@
         Me.TabPageConnPlate1.Text = "D0500'Middle Web Plates"
         Me.TabPageConnPlate1.UseVisualStyleBackColor = True
         '
+        'GroupBox5
+        '
+        Me.GroupBox5.Controls.Add(Me.Label37)
+        Me.GroupBox5.Controls.Add(Me.txtConnectPlateThickness)
+        Me.GroupBox5.Controls.Add(Me.Label36)
+        Me.GroupBox5.Controls.Add(Me.Label35)
+        Me.GroupBox5.Controls.Add(Me.txtHoleDiameter)
+        Me.GroupBox5.Controls.Add(Me.txtHorHoleCount)
+        Me.GroupBox5.Controls.Add(Me.txtHorHoleDist)
+        Me.GroupBox5.Controls.Add(Me.Label17)
+        Me.GroupBox5.Controls.Add(Me.txtHorHoleEdgeDist)
+        Me.GroupBox5.Controls.Add(Me.Label21)
+        Me.GroupBox5.Controls.Add(Me.Label18)
+        Me.GroupBox5.Controls.Add(Me.txtVerHoleDist)
+        Me.GroupBox5.Controls.Add(Me.Label20)
+        Me.GroupBox5.Controls.Add(Me.txtVerHoleEdgeDist)
+        Me.GroupBox5.Controls.Add(Me.txtVerHoleCount)
+        Me.GroupBox5.Controls.Add(Me.Label19)
+        Me.GroupBox5.Location = New System.Drawing.Point(18, 152)
+        Me.GroupBox5.Name = "GroupBox5"
+        Me.GroupBox5.Size = New System.Drawing.Size(584, 224)
+        Me.GroupBox5.TabIndex = 124
+        Me.GroupBox5.TabStop = False
+        Me.GroupBox5.Text = "D0506'Connect Plates"
+        '
+        'Label37
+        '
+        Me.Label37.AutoSize = True
+        Me.Label37.BackColor = System.Drawing.Color.Transparent
+        Me.Label37.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label37.ForeColor = System.Drawing.Color.Red
+        Me.Label37.Location = New System.Drawing.Point(313, 36)
+        Me.Label37.Name = "Label37"
+        Me.Label37.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label37.Size = New System.Drawing.Size(113, 20)
+        Me.Label37.TabIndex = 127
+        Me.Label37.Text = "D514'Plate thk"
+        '
+        'txtConnectPlateThickness
+        '
+        Me.txtConnectPlateThickness.AcceptsReturn = True
+        Me.txtConnectPlateThickness.BackColor = System.Drawing.SystemColors.Window
+        Me.txtConnectPlateThickness.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtConnectPlateThickness.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtConnectPlateThickness.Location = New System.Drawing.Point(469, 33)
+        Me.txtConnectPlateThickness.MaxLength = 0
+        Me.txtConnectPlateThickness.Name = "txtConnectPlateThickness"
+        Me.txtConnectPlateThickness.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtConnectPlateThickness.Size = New System.Drawing.Size(84, 26)
+        Me.txtConnectPlateThickness.TabIndex = 126
+        '
+        'Label36
+        '
+        Me.Label36.AutoSize = True
+        Me.Label36.BackColor = System.Drawing.Color.Transparent
+        Me.Label36.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label36.ForeColor = System.Drawing.Color.Red
+        Me.Label36.Location = New System.Drawing.Point(16, 36)
+        Me.Label36.Name = "Label36"
+        Me.Label36.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label36.Size = New System.Drawing.Size(121, 20)
+        Me.Label36.TabIndex = 125
+        Me.Label36.Text = "D0513'Hole Dia"
+        '
+        'Label35
+        '
+        Me.Label35.AutoSize = True
+        Me.Label35.BackColor = System.Drawing.Color.Transparent
+        Me.Label35.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label35.ForeColor = System.Drawing.Color.Red
+        Me.Label35.Location = New System.Drawing.Point(16, 180)
+        Me.Label35.Name = "Label35"
+        Me.Label35.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label35.Size = New System.Drawing.Size(133, 20)
+        Me.Label35.TabIndex = 123
+        Me.Label35.Text = "D0511'Hor Count"
+        '
+        'txtHoleDiameter
+        '
+        Me.txtHoleDiameter.AcceptsReturn = True
+        Me.txtHoleDiameter.BackColor = System.Drawing.SystemColors.Window
+        Me.txtHoleDiameter.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtHoleDiameter.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtHoleDiameter.Location = New System.Drawing.Point(172, 33)
+        Me.txtHoleDiameter.MaxLength = 0
+        Me.txtHoleDiameter.Name = "txtHoleDiameter"
+        Me.txtHoleDiameter.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtHoleDiameter.Size = New System.Drawing.Size(84, 26)
+        Me.txtHoleDiameter.TabIndex = 124
+        '
+        'txtHorHoleCount
+        '
+        Me.txtHorHoleCount.AcceptsReturn = True
+        Me.txtHorHoleCount.BackColor = System.Drawing.SystemColors.Window
+        Me.txtHorHoleCount.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtHorHoleCount.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtHorHoleCount.Location = New System.Drawing.Point(172, 177)
+        Me.txtHorHoleCount.MaxLength = 0
+        Me.txtHorHoleCount.Name = "txtHorHoleCount"
+        Me.txtHorHoleCount.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtHorHoleCount.Size = New System.Drawing.Size(84, 26)
+        Me.txtHorHoleCount.TabIndex = 122
+        '
+        'txtHorHoleDist
+        '
+        Me.txtHorHoleDist.AcceptsReturn = True
+        Me.txtHorHoleDist.BackColor = System.Drawing.SystemColors.Window
+        Me.txtHorHoleDist.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtHorHoleDist.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtHorHoleDist.Location = New System.Drawing.Point(172, 80)
+        Me.txtHorHoleDist.MaxLength = 0
+        Me.txtHorHoleDist.Name = "txtHorHoleDist"
+        Me.txtHorHoleDist.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtHorHoleDist.Size = New System.Drawing.Size(84, 26)
+        Me.txtHorHoleDist.TabIndex = 112
+        '
+        'Label17
+        '
+        Me.Label17.AutoSize = True
+        Me.Label17.BackColor = System.Drawing.Color.Transparent
+        Me.Label17.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label17.ForeColor = System.Drawing.Color.Red
+        Me.Label17.Location = New System.Drawing.Point(16, 83)
+        Me.Label17.Name = "Label17"
+        Me.Label17.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label17.Size = New System.Drawing.Size(118, 20)
+        Me.Label17.TabIndex = 113
+        Me.Label17.Text = "D0507'Hor Dist"
+        '
+        'txtHorHoleEdgeDist
+        '
+        Me.txtHorHoleEdgeDist.AcceptsReturn = True
+        Me.txtHorHoleEdgeDist.BackColor = System.Drawing.SystemColors.Window
+        Me.txtHorHoleEdgeDist.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtHorHoleEdgeDist.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtHorHoleEdgeDist.Location = New System.Drawing.Point(172, 127)
+        Me.txtHorHoleEdgeDist.MaxLength = 0
+        Me.txtHorHoleEdgeDist.Name = "txtHorHoleEdgeDist"
+        Me.txtHorHoleEdgeDist.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtHorHoleEdgeDist.Size = New System.Drawing.Size(84, 26)
+        Me.txtHorHoleEdgeDist.TabIndex = 114
+        '
+        'Label21
+        '
+        Me.Label21.AutoSize = True
+        Me.Label21.BackColor = System.Drawing.Color.Transparent
+        Me.Label21.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label21.ForeColor = System.Drawing.Color.Red
+        Me.Label21.Location = New System.Drawing.Point(313, 83)
+        Me.Label21.Name = "Label21"
+        Me.Label21.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label21.Size = New System.Drawing.Size(117, 20)
+        Me.Label21.TabIndex = 121
+        Me.Label21.Text = "D0508'Ver Dist"
+        '
+        'Label18
+        '
+        Me.Label18.AutoSize = True
+        Me.Label18.BackColor = System.Drawing.Color.Transparent
+        Me.Label18.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label18.ForeColor = System.Drawing.Color.Red
+        Me.Label18.Location = New System.Drawing.Point(16, 130)
+        Me.Label18.Name = "Label18"
+        Me.Label18.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label18.Size = New System.Drawing.Size(160, 20)
+        Me.Label18.TabIndex = 115
+        Me.Label18.Text = "D0509'Hor Edge Dist"
+        '
+        'txtVerHoleDist
+        '
+        Me.txtVerHoleDist.AcceptsReturn = True
+        Me.txtVerHoleDist.BackColor = System.Drawing.SystemColors.Window
+        Me.txtVerHoleDist.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtVerHoleDist.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtVerHoleDist.Location = New System.Drawing.Point(469, 80)
+        Me.txtVerHoleDist.MaxLength = 0
+        Me.txtVerHoleDist.Name = "txtVerHoleDist"
+        Me.txtVerHoleDist.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtVerHoleDist.Size = New System.Drawing.Size(84, 26)
+        Me.txtVerHoleDist.TabIndex = 120
+        '
+        'Label20
+        '
+        Me.Label20.AutoSize = True
+        Me.Label20.BackColor = System.Drawing.Color.Transparent
+        Me.Label20.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label20.ForeColor = System.Drawing.Color.Red
+        Me.Label20.Location = New System.Drawing.Point(313, 180)
+        Me.Label20.Name = "Label20"
+        Me.Label20.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label20.Size = New System.Drawing.Size(132, 20)
+        Me.Label20.TabIndex = 119
+        Me.Label20.Text = "D0512'Ver Count"
+        '
+        'txtVerHoleEdgeDist
+        '
+        Me.txtVerHoleEdgeDist.AcceptsReturn = True
+        Me.txtVerHoleEdgeDist.BackColor = System.Drawing.SystemColors.Window
+        Me.txtVerHoleEdgeDist.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtVerHoleEdgeDist.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtVerHoleEdgeDist.Location = New System.Drawing.Point(469, 127)
+        Me.txtVerHoleEdgeDist.MaxLength = 0
+        Me.txtVerHoleEdgeDist.Name = "txtVerHoleEdgeDist"
+        Me.txtVerHoleEdgeDist.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtVerHoleEdgeDist.Size = New System.Drawing.Size(84, 26)
+        Me.txtVerHoleEdgeDist.TabIndex = 116
+        '
+        'txtVerHoleCount
+        '
+        Me.txtVerHoleCount.AcceptsReturn = True
+        Me.txtVerHoleCount.BackColor = System.Drawing.SystemColors.Window
+        Me.txtVerHoleCount.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtVerHoleCount.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtVerHoleCount.Location = New System.Drawing.Point(469, 177)
+        Me.txtVerHoleCount.MaxLength = 0
+        Me.txtVerHoleCount.Name = "txtVerHoleCount"
+        Me.txtVerHoleCount.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtVerHoleCount.Size = New System.Drawing.Size(84, 26)
+        Me.txtVerHoleCount.TabIndex = 118
+        '
+        'Label19
+        '
+        Me.Label19.AutoSize = True
+        Me.Label19.BackColor = System.Drawing.Color.Transparent
+        Me.Label19.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label19.ForeColor = System.Drawing.Color.Red
+        Me.Label19.Location = New System.Drawing.Point(313, 130)
+        Me.Label19.Name = "Label19"
+        Me.Label19.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label19.Size = New System.Drawing.Size(159, 20)
+        Me.Label19.TabIndex = 117
+        Me.Label19.Text = "D0510'Ver Edge Dist"
+        '
         'Label22
         '
         Me.Label22.AutoSize = True
         Me.Label22.BackColor = System.Drawing.Color.Transparent
         Me.Label22.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label22.ForeColor = System.Drawing.Color.Red
+        Me.Label22.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.Label22.Location = New System.Drawing.Point(316, 65)
         Me.Label22.Name = "Label22"
         Me.Label22.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -873,142 +1105,12 @@
         Me.txtSupportPlateThickness.Size = New System.Drawing.Size(84, 26)
         Me.txtSupportPlateThickness.TabIndex = 122
         '
-        'Label21
-        '
-        Me.Label21.AutoSize = True
-        Me.Label21.BackColor = System.Drawing.Color.Transparent
-        Me.Label21.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label21.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label21.Location = New System.Drawing.Point(316, 111)
-        Me.Label21.Name = "Label21"
-        Me.Label21.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label21.Size = New System.Drawing.Size(101, 20)
-        Me.Label21.TabIndex = 121
-        Me.Label21.Text = "D0507'Angle"
-        '
-        'txtConnect1Angle
-        '
-        Me.txtConnect1Angle.AcceptsReturn = True
-        Me.txtConnect1Angle.BackColor = System.Drawing.SystemColors.Window
-        Me.txtConnect1Angle.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.txtConnect1Angle.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtConnect1Angle.Location = New System.Drawing.Point(472, 105)
-        Me.txtConnect1Angle.MaxLength = 0
-        Me.txtConnect1Angle.Name = "txtConnect1Angle"
-        Me.txtConnect1Angle.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtConnect1Angle.Size = New System.Drawing.Size(84, 26)
-        Me.txtConnect1Angle.TabIndex = 120
-        '
-        'Label20
-        '
-        Me.Label20.AutoSize = True
-        Me.Label20.BackColor = System.Drawing.Color.Transparent
-        Me.Label20.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label20.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label20.Location = New System.Drawing.Point(316, 205)
-        Me.Label20.Name = "Label20"
-        Me.Label20.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label20.Size = New System.Drawing.Size(161, 20)
-        Me.Label20.TabIndex = 119
-        Me.Label20.Text = "D0511'Web Side Dist"
-        '
-        'txtConnect1innerWebDist
-        '
-        Me.txtConnect1innerWebDist.AcceptsReturn = True
-        Me.txtConnect1innerWebDist.BackColor = System.Drawing.SystemColors.Window
-        Me.txtConnect1innerWebDist.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.txtConnect1innerWebDist.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtConnect1innerWebDist.Location = New System.Drawing.Point(472, 198)
-        Me.txtConnect1innerWebDist.MaxLength = 0
-        Me.txtConnect1innerWebDist.Name = "txtConnect1innerWebDist"
-        Me.txtConnect1innerWebDist.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtConnect1innerWebDist.Size = New System.Drawing.Size(84, 26)
-        Me.txtConnect1innerWebDist.TabIndex = 118
-        '
-        'Label19
-        '
-        Me.Label19.AutoSize = True
-        Me.Label19.BackColor = System.Drawing.Color.Transparent
-        Me.Label19.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label19.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label19.Location = New System.Drawing.Point(316, 158)
-        Me.Label19.Name = "Label19"
-        Me.Label19.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label19.Size = New System.Drawing.Size(140, 20)
-        Me.Label19.TabIndex = 117
-        Me.Label19.Text = "D0510'Web Count"
-        '
-        'txtConnect1innerWebCount
-        '
-        Me.txtConnect1innerWebCount.AcceptsReturn = True
-        Me.txtConnect1innerWebCount.BackColor = System.Drawing.SystemColors.Window
-        Me.txtConnect1innerWebCount.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.txtConnect1innerWebCount.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtConnect1innerWebCount.Location = New System.Drawing.Point(472, 152)
-        Me.txtConnect1innerWebCount.MaxLength = 0
-        Me.txtConnect1innerWebCount.Name = "txtConnect1innerWebCount"
-        Me.txtConnect1innerWebCount.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtConnect1innerWebCount.Size = New System.Drawing.Size(84, 26)
-        Me.txtConnect1innerWebCount.TabIndex = 116
-        '
-        'Label18
-        '
-        Me.Label18.AutoSize = True
-        Me.Label18.BackColor = System.Drawing.Color.Transparent
-        Me.Label18.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label18.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label18.Location = New System.Drawing.Point(14, 203)
-        Me.Label18.Name = "Label18"
-        Me.Label18.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label18.Size = New System.Drawing.Size(168, 20)
-        Me.Label18.TabIndex = 115
-        Me.Label18.Text = "D0509'Web Thickness"
-        '
-        'txtConnect1innerWebThickness
-        '
-        Me.txtConnect1innerWebThickness.AcceptsReturn = True
-        Me.txtConnect1innerWebThickness.BackColor = System.Drawing.SystemColors.Window
-        Me.txtConnect1innerWebThickness.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.txtConnect1innerWebThickness.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtConnect1innerWebThickness.Location = New System.Drawing.Point(170, 197)
-        Me.txtConnect1innerWebThickness.MaxLength = 0
-        Me.txtConnect1innerWebThickness.Name = "txtConnect1innerWebThickness"
-        Me.txtConnect1innerWebThickness.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtConnect1innerWebThickness.Size = New System.Drawing.Size(84, 26)
-        Me.txtConnect1innerWebThickness.TabIndex = 114
-        '
-        'Label17
-        '
-        Me.Label17.AutoSize = True
-        Me.Label17.BackColor = System.Drawing.Color.Transparent
-        Me.Label17.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label17.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label17.Location = New System.Drawing.Point(14, 157)
-        Me.Label17.Name = "Label17"
-        Me.Label17.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label17.Size = New System.Drawing.Size(144, 20)
-        Me.Label17.TabIndex = 113
-        Me.Label17.Text = "D0508'Web Height"
-        '
-        'txtConnect1InnerWebHeight
-        '
-        Me.txtConnect1InnerWebHeight.AcceptsReturn = True
-        Me.txtConnect1InnerWebHeight.BackColor = System.Drawing.SystemColors.Window
-        Me.txtConnect1InnerWebHeight.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.txtConnect1InnerWebHeight.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtConnect1InnerWebHeight.Location = New System.Drawing.Point(170, 151)
-        Me.txtConnect1InnerWebHeight.MaxLength = 0
-        Me.txtConnect1InnerWebHeight.Name = "txtConnect1InnerWebHeight"
-        Me.txtConnect1InnerWebHeight.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtConnect1InnerWebHeight.Size = New System.Drawing.Size(84, 26)
-        Me.txtConnect1InnerWebHeight.TabIndex = 112
-        '
         'Label16
         '
         Me.Label16.AutoSize = True
         Me.Label16.BackColor = System.Drawing.Color.Transparent
         Me.Label16.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label16.ForeColor = System.Drawing.Color.Red
+        Me.Label16.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.Label16.Location = New System.Drawing.Point(316, 18)
         Me.Label16.Name = "Label16"
         Me.Label16.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -1034,7 +1136,7 @@
         Me.Label15.AutoSize = True
         Me.Label15.BackColor = System.Drawing.Color.Transparent
         Me.Label15.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label15.ForeColor = System.Drawing.Color.Red
+        Me.Label15.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.Label15.Location = New System.Drawing.Point(14, 111)
         Me.Label15.Name = "Label15"
         Me.Label15.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -1060,7 +1162,7 @@
         Me.Label13.AutoSize = True
         Me.Label13.BackColor = System.Drawing.Color.Transparent
         Me.Label13.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label13.ForeColor = System.Drawing.Color.Red
+        Me.Label13.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.Label13.Location = New System.Drawing.Point(14, 65)
         Me.Label13.Name = "Label13"
         Me.Label13.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -1086,7 +1188,7 @@
         Me.Label11.AutoSize = True
         Me.Label11.BackColor = System.Drawing.Color.Transparent
         Me.Label11.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label11.ForeColor = System.Drawing.Color.Red
+        Me.Label11.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.Label11.Location = New System.Drawing.Point(14, 18)
         Me.Label11.Name = "Label11"
         Me.Label11.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -2128,6 +2230,8 @@
         Me._TabFrames_0.PerformLayout()
         Me.TabPageConnPlate1.ResumeLayout(False)
         Me.TabPageConnPlate1.PerformLayout()
+        Me.GroupBox5.ResumeLayout(False)
+        Me.GroupBox5.PerformLayout()
         Me.TabPageConnPlate2.ResumeLayout(False)
         Me.TabPageConnPlate2.PerformLayout()
         Me.TabPageWebConnPlate1.ResumeLayout(False)
@@ -2174,15 +2278,15 @@
     Public WithEvents Label22 As Windows.Forms.Label
     Public WithEvents txtSupportPlateThickness As Windows.Forms.TextBox
     Public WithEvents Label21 As Windows.Forms.Label
-    Public WithEvents txtConnect1Angle As Windows.Forms.TextBox
+    Public WithEvents txtVerHoleDist As Windows.Forms.TextBox
     Public WithEvents Label20 As Windows.Forms.Label
-    Public WithEvents txtConnect1innerWebDist As Windows.Forms.TextBox
+    Public WithEvents txtVerHoleCount As Windows.Forms.TextBox
     Public WithEvents Label19 As Windows.Forms.Label
-    Public WithEvents txtConnect1innerWebCount As Windows.Forms.TextBox
+    Public WithEvents txtVerHoleEdgeDist As Windows.Forms.TextBox
     Public WithEvents Label18 As Windows.Forms.Label
-    Public WithEvents txtConnect1innerWebThickness As Windows.Forms.TextBox
+    Public WithEvents txtHorHoleEdgeDist As Windows.Forms.TextBox
     Public WithEvents Label17 As Windows.Forms.Label
-    Public WithEvents txtConnect1InnerWebHeight As Windows.Forms.TextBox
+    Public WithEvents txtHorHoleDist As Windows.Forms.TextBox
     Public WithEvents Label16 As Windows.Forms.Label
     Public WithEvents txtSupportPlateOffset As Windows.Forms.TextBox
     Public WithEvents Label15 As Windows.Forms.Label
@@ -2264,5 +2368,12 @@
     Public WithEvents txtInsidePlateThickness As Windows.Forms.TextBox
     Public WithEvents Label31 As Windows.Forms.Label
     Public WithEvents txtOutsidePlateThickness As Windows.Forms.TextBox
+    Friend WithEvents GroupBox5 As Windows.Forms.GroupBox
+    Public WithEvents Label36 As Windows.Forms.Label
+    Public WithEvents txtHoleDiameter As Windows.Forms.TextBox
+    Public WithEvents Label35 As Windows.Forms.Label
+    Public WithEvents txtHorHoleCount As Windows.Forms.TextBox
+    Public WithEvents Label37 As Windows.Forms.Label
+    Public WithEvents txtConnectPlateThickness As Windows.Forms.TextBox
 #End Region
 End Class

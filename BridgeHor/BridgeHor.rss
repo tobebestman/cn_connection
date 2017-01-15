@@ -67,14 +67,15 @@
 @D0503,"Brace Side Len",
 @D0504,"Support Plate Offset",
 @D0505,"Width",
-@D0506,"Thickness",
-@D0507,"Angle",
-@D0508,"Web Height",
-@D0509,"Web Thickness",
-@D0510,"Web Count",
-@D0511,"Web Side Dist",
-@D0512,"Web Connect Plate",
-@D0513,"Gap 2",
+@D0506,"Connect Plates",
+@D0507,"Hor Dist",
+@D0508,"Ver Dist",
+@D0509,"Hor Edge Dist",
+@D0510,"Ver Edge Dist",
+@D0511,"Hor Count",
+@D0512,"Ver Count",
+@D0513,"Hole Dia",
+@D0514,"Plate thk"
 
 @D0600,"Arc Plate 2",
 
