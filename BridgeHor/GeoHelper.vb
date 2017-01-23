@@ -116,6 +116,22 @@ Public Module GeoHelper
 
     End Function
 
+    Public Function getAxisByThreePoints(ptMiddle As PsPoint,
+                                         pt1 As PsPoint,
+                                         pt2 As PsPoint) As PsVector
+        Dim dir1 As New PsVector
+        Dim dir2 As New PsVector
+
+        dir1.SetFromPoints(ptMiddle, pt1)
+        dir2.SetFromPoints(ptMiddle, pt2)
+
+        Dim result As New PsVector
+        result.SetFromCrossProduct(dir1, dir2)
+        result.Normalize()
+
+        Return result
+    End Function
+
     ''' <summary>
     ''' get a new line by rotating the input line by its start
     ''' point with an angle in degree.

@@ -151,6 +151,16 @@ Module Utility
         Return GetShapePlateIntersectPoint(shpAdpt, plateAdpt)
     End Function
 
+    Public Sub RecoverShapeLengthTo(horId As Long, plateId As Long)
+        Dim instPt As PsPoint = Utility.GetShapePlateIntersetPoint(horId, plateId)
+        Dim shpAdpt As New ShapeAdapter(horId)
+        If shpAdpt.MidLineEnd.get_DistanceTo(instPt) <= shpAdpt.MidLineStart.get_DistanceTo(instPt) Then
+            shpAdpt.SetShapeEnd(instPt)
+        Else
+            shpAdpt.SetShapeStart(instPt)
+        End If
+    End Sub
+
     Private Function GetShapePlateIntersectPoint(shpAdpt As ShapeAdapter, plateAdpt As PlateAdapter) As PsPoint
         Dim pt1 As New PsPoint
         MathTool.IntersectLineWithPlane(shpAdpt.MidLineStart, shpAdpt.MidLineEnd,
@@ -168,6 +178,14 @@ Module Utility
             Return pt2
         End If
     End Function
+
+    Public Sub DrawLines(points As List(Of PsPoint))
+        For i = 0 To points.Count - 2
+            drawLine(points(i), points(i + 1), "1", 1)
+        Next
+        drawLine(points(0), points(points.Count - 1), "1", 1)
+    End Sub
+
 
     Public Function GetIntersectPtAndUcsByShapeAndPlate(mainShape As Long,
                                                         secondShape As Long,
@@ -523,6 +541,27 @@ Module Utility
             oPoly.setVertex(sId2, New PsPolygonVertex(ept2.x, ept2.y, 0))
         End If
     End Sub
+
+    Public Function CreatePlate(oPoly As PsPolygon, oMat As PsMatrix,
+                                 thickness As Double, xOffset As Double, yOffset As Double,
+                                 vertPos As VerticalPosition) As Long
+        Dim plateCreator As New PsCreatePlate
+        plateCreator.SetToDefaults()
+        plateCreator.SetFromPolygon(oPoly)
+        plateCreator.SetInsertMatrix(oMat)
+
+        plateCreator.SetNormalPosition(vertPos)
+        plateCreator.SetThickness(thickness)
+        plateCreator.SetXOffset(xOffset)
+        plateCreator.SetYOffset(yOffset)
+
+        If (plateCreator.Create = False) Then
+            Debug.Assert(False)
+            Return -1
+        Else
+            Return plateCreator.ObjectId
+        End If
+    End Function
 
 
     Public Function CreatePlate(plateWidth As Double, plateLength As Double,

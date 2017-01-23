@@ -52,10 +52,12 @@ Public Class SidePlateParameter
 
     Public mHorFillet As Double
     Public mHorAngle As Double
-    Public mHorDist As Double
+    Public mHorTopDist As Double
+    Public mHorBottomDist As Double
     Public mDiagFillet As Double
     Public mDiagAngle As Double
-    Public mDiagDist As Double
+    Public mDiagTopDist As Double
+    Public mDiagBottomDist As Double
     Public mOutsidePlateThickness As Double
     Public mInsidePlateThickness As Double
 
@@ -64,8 +66,10 @@ Public Class SidePlateParameter
         mDiagFillet = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mHorAngle = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mDiagAngle = eConnection.Double(iDbl) : iDbl = iDbl + 1
-        mHorDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
-        mDiagDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mHorTopDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mDiagTopDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mHorBottomDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mDiagBottomDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mOutsidePlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mInsidePlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
     End Sub
@@ -75,8 +79,10 @@ Public Class SidePlateParameter
         mDiagFillet = Template.Double(iDbl) : iDbl = iDbl + 1
         mHorAngle = Template.Double(iDbl) : iDbl = iDbl + 1
         mDiagAngle = Template.Double(iDbl) : iDbl = iDbl + 1
-        mHorDist = Template.Double(iDbl) : iDbl = iDbl + 1
-        mDiagDist = Template.Double(iDbl) : iDbl = iDbl + 1
+        mHorTopDist = Template.Double(iDbl) : iDbl = iDbl + 1
+        mDiagTopDist = Template.Double(iDbl) : iDbl = iDbl + 1
+        mHorBottomDist = Template.Double(iDbl) : iDbl = iDbl + 1
+        mDiagBottomDist = Template.Double(iDbl) : iDbl = iDbl + 1
         mOutsidePlateThickness = Template.Double(iDbl) : iDbl = iDbl + 1
         mInsidePlateThickness = Template.Double(iDbl) : iDbl = iDbl + 1
     End Sub
@@ -90,8 +96,10 @@ Public Class SidePlateParameter
         Me.mDiagFillet = 200
         Me.mHorAngle = 30
         Me.mDiagAngle = 90
-        Me.mHorDist = 380
-        Me.mDiagDist = 238.5
+        Me.mHorTopDist = 580
+        Me.mDiagTopDist = 238.5
+        Me.mHorBottomDist = 974.6
+        Me.mDiagBottomDist = 954.1
         Me.mOutsidePlateThickness = 20
         Me.mInsidePlateThickness = 16
 
@@ -102,8 +110,10 @@ Public Class SidePlateParameter
         eConnection.Double(iDbl) = mDiagFillet : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mHorAngle : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mDiagAngle : iDbl = iDbl + 1
-        eConnection.Double(iDbl) = mHorDist : iDbl = iDbl + 1
-        eConnection.Double(iDbl) = mDiagDist : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mHorTopDist : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mDiagTopDist : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mHorBottomDist : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mDiagBottomDist : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mOutsidePlateThickness : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mInsidePlateThickness : iDbl = iDbl + 1
     End Sub
@@ -113,8 +123,10 @@ Public Class SidePlateParameter
         Template.AppendDouble(mDiagFillet)
         Template.AppendDouble(mHorAngle)
         Template.AppendDouble(mDiagAngle)
-        Template.AppendDouble(mHorDist)
-        Template.AppendDouble(mDiagDist)
+        Template.AppendDouble(mHorTopDist)
+        Template.AppendDouble(mDiagTopDist)
+        Template.AppendDouble(mHorBottomDist)
+        Template.AppendDouble(mDiagBottomDist)
         Template.AppendDouble(mOutsidePlateThickness)
         Template.AppendDouble(mInsidePlateThickness)
     End Sub

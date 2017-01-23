@@ -106,6 +106,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SidePlateCreator.vb" />
     <Compile Include="WebPlatesCreator.vb" />
     <Compile Include="WebPlatesParameter.vb" />
     <Content Include="BridgeHor.keyins">

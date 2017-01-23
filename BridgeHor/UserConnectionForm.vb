@@ -261,8 +261,10 @@ Friend Class UserConnectionForm
         Data.mSidePlate.mDiagFillet = UIConverter.ConvertToNumeric(txtDiagFillet.Text)
         Data.mSidePlate.mHorAngle = UIConverter.ConvertAngleToNumeric(txtHorAngle.Text)
         Data.mSidePlate.mDiagAngle = UIConverter.ConvertAngleToNumeric(txtDiagAngle.Text)
-        Data.mSidePlate.mHorDist = UIConverter.ConvertToNumeric(txtHorDist.Text)
-        Data.mSidePlate.mDiagDist = UIConverter.ConvertToNumeric(txtDiagDist.Text)
+        Data.mSidePlate.mHorTopDist = UIConverter.ConvertToNumeric(txtTopHorDist.Text)
+        Data.mSidePlate.mDiagTopDist = UIConverter.ConvertToNumeric(txtTopDiagDist.Text)
+        Data.mSidePlate.mHorBottomDist = UIConverter.ConvertToNumeric(txtBottomHorDist.Text)
+        Data.mSidePlate.mDiagBottomDist = UIConverter.ConvertToNumeric(txtBottomDiagDist.Text)
         Data.mSidePlate.mOutsidePlateThickness = UIConverter.ConvertToNumeric(txtOutsidePlateThickness.Text)
         Data.mSidePlate.mInsidePlateThickness = UIConverter.ConvertToNumeric(txtInsidePlateThickness.Text)
 
@@ -299,8 +301,10 @@ Friend Class UserConnectionForm
         txtDiagFillet.Text = UIConverter.ConvertToText(Data.mSidePlate.mDiagFillet)
         txtHorAngle.Text = UIConverter.ConvertAngleToText(Data.mSidePlate.mHorAngle)
         txtDiagAngle.Text = UIConverter.ConvertAngleToText(Data.mSidePlate.mDiagAngle)
-        txtHorDist.Text = UIConverter.ConvertToText(Data.mSidePlate.mHorDist)
-        txtDiagDist.Text = UIConverter.ConvertToText(Data.mSidePlate.mDiagDist)
+        txtTopHorDist.Text = UIConverter.ConvertToText(Data.mSidePlate.mHorTopDist)
+        txtTopDiagDist.Text = UIConverter.ConvertToText(Data.mSidePlate.mDiagTopDist)
+        txtBottomHorDist.Text = UIConverter.ConvertToText(Data.mSidePlate.mHorBottomDist)
+        txtBottomDiagDist.Text = UIConverter.ConvertToText(Data.mSidePlate.mDiagBottomDist)
         txtOutsidePlateThickness.Text = UIConverter.ConvertToText(Data.mSidePlate.mOutsidePlateThickness)
         txtInsidePlateThickness.Text = UIConverter.ConvertToText(Data.mSidePlate.mInsidePlateThickness)
 
@@ -536,7 +540,7 @@ Friend Class UserConnectionForm
         txtWebConnectPlateInnerVerEdgeDist1.Leave, txtWebConnectPlateHorEdgeDist2.Leave,
         txtWebConnectPlateHorEdgeDist1.Leave, txtWebConnectPlateHorDist2.Leave,
         txtWebConnectPlateHorDist1.Leave, txtBoltGroupSpan2.Leave,
-        txtBoltGroupSpan1.Leave, txtBoltGroupHorSideDist2.Leave, txtOutsidePlateThickness.Leave, txtInsidePlateThickness.Leave, txtHorDist.Leave, txtDiagDist.Leave, txtVerHoleEdgeDist.Leave, txtVerHoleDist.Leave, txtHoleDiameter.Leave, txtConnectPlateThickness.Leave
+        txtBoltGroupSpan1.Leave, txtBoltGroupHorSideDist2.Leave, txtOutsidePlateThickness.Leave, txtInsidePlateThickness.Leave, txtTopHorDist.Leave, txtTopDiagDist.Leave, txtVerHoleEdgeDist.Leave, txtVerHoleDist.Leave, txtHoleDiameter.Leave, txtConnectPlateThickness.Leave, txtBottomHorDist.Leave, txtBottomDiagDist.Leave
 
         Dim oldValue As String = eventSender.Text
         eventSender.Text = oCheckInput.CheckPositive(eventSender.Text)

@@ -78,7 +78,6 @@ Public Class UserConnection
     Public Sub New()
         MyBase.New()
         Base = New PlugInBase.KsPlugInBase
-
         IsCreatingConn = False
     End Sub
 
@@ -356,10 +355,10 @@ Public Class UserConnection
 
             Dim horId = mBuilder.getOriginHorShapeIdFromAdapter(oConnAdpt)
             Dim diagnalId = mBuilder.getOriginDiagnalShapeIdFromAdapter(oConnAdpt)
-            Dim sidPlateId = mBuilder.getOriginSidePlateIdFromAdapter(oConnAdpt)
+            Dim sidePlateId = mBuilder.getOriginSidePlateIdFromAdapter(oConnAdpt)
 
             If (horId <= 0 Or diagnalId <= 0 Or
-                    sidPlateId <= 0) Then
+                    sidePlateId <= 0) Then
                 Debug.Assert(False)
                 Return
             End If
@@ -386,14 +385,35 @@ Public Class UserConnection
 
             CutHorMember(horId, connMat1, data)
 
-            'Dim cBdr As New ConnectionBuilder
-            'Dim foldLine As List(Of PsPoint) = CalculateFoldingLine(cBdr.getOriginHorShapeIdFromAdapter(oConnAdpt),
-            '                                                        cBdr.getOriginDiagnalShapeIdFromAdapter(oConnAdpt),
-            '                                                        data, connMat1, connMat2)
-            'Debug.Assert(foldLine.Count = 4)
+            Dim cBdr As New ConnectionBuilder
+            Dim foldLine As List(Of PsPoint) = CalculateFoldingLine(cBdr.getOriginHorShapeIdFromAdapter(oConnAdpt),
+                                                                    cBdr.getOriginDiagnalShapeIdFromAdapter(oConnAdpt),
+                                                                    data, connMat1, connMat2)
+            Debug.Assert(foldLine.Count = 4)
 
-            Dim webPlatesCtor As New WebPlatesCreator(horId, data, connMat1)
-            webPlatesCtor.Create()
+            Dim oSidePlateCreator1 As New SidePlateCreator(sidePlateId,
+                                                           horId, diagnalId,
+                                                           connMat1, connMat2,
+                                                           foldLine(0), foldLine(1), data)
+            If (CheckFoldLine(foldLine(0), foldLine(1), horId, diagnalId, connMat1, data)) Then
+                oSidePlateCreator1.Create(True)
+            End If
+
+            data.mDiagnalCutbackCutIndex = IIf(oSidePlateCreator1.mDiagCutIndex = -1, -1, oSidePlateCreator1.mDiagCutIndex)
+
+            'Utility.DrawLines(foldLine)
+
+            Dim oSidePlateCreator2 As New SidePlateCreator(sidePlateId,
+                                                           horId, diagnalId,
+                                                           connMat1, connMat2,
+                                                           foldLine(2), foldLine(3), data)
+            If (CheckFoldLine(foldLine(2), foldLine(3), horId, diagnalId, connMat1, data)) Then
+                oSidePlateCreator2.Create(False)
+            End If
+
+
+            Dim webPlatesCreater As New WebPlatesCreator(horId, data, connMat1)
+            webPlatesCreater.Create()
 
             oConnAdpt = Nothing
 
@@ -401,16 +421,22 @@ Public Class UserConnection
 
             oConnAdpt.AppendAdditionalObjectId(horId)
             oConnAdpt.AppendAdditionalObjectId(diagnalId)
-            oConnAdpt.AppendAdditionalObjectId(sidPlateId)
+            oConnAdpt.AppendAdditionalObjectId(sidePlateId)
 
-            For Each id As Long In webPlatesCtor.ConnectPlateIds
+            For Each id As Long In webPlatesCreater.ConnectPlateIds
                 oConnAdpt.AppendCreatedObjectId(id)
             Next
 
-            oConnAdpt.AppendCreatedObjectId(webPlatesCtor.ChordSidePlateId)
-            oConnAdpt.AppendCreatedObjectId(webPlatesCtor.BraceSidePlateId)
-            oConnAdpt.AppendCreatedObjectId(webPlatesCtor.SupportPlateId1)
-            oConnAdpt.AppendCreatedObjectId(webPlatesCtor.SupportPlateId2)
+            oConnAdpt.AppendCreatedObjectId(webPlatesCreater.ChordSidePlateId)
+            oConnAdpt.AppendCreatedObjectId(webPlatesCreater.BraceSidePlateId)
+            oConnAdpt.AppendCreatedObjectId(webPlatesCreater.SupportPlateId1)
+            oConnAdpt.AppendCreatedObjectId(webPlatesCreater.SupportPlateId2)
+
+            oConnAdpt.AppendCreatedObjectId(oSidePlateCreator1.mCreatedDiagPlateId)
+            oConnAdpt.AppendCreatedObjectId(oSidePlateCreator1.mCreatedHorPlateId)
+
+            oConnAdpt.AppendCreatedObjectId(oSidePlateCreator2.mCreatedDiagPlateId)
+            oConnAdpt.AppendCreatedObjectId(oSidePlateCreator2.mCreatedHorPlateId)
 
             oConnAdpt.SetBuilt(True)
             oConnAdpt.CommitAppendObjects()
@@ -426,6 +452,53 @@ Public Class UserConnection
             MessageBox.Show(ex.Message)
         End Try
     End Sub
+
+    Public Function CheckFoldLine(spt As PsPoint, ept As PsPoint,
+                                  horId As Long, diagId As Long, connMat1 As PsMatrix, data As Parameters) As Boolean
+
+
+        Dim horAdpt As New ShapeAdapter(horId)
+        Dim diagAdpt As New ShapeAdapter(diagId)
+        Dim zDir As New PsVector
+        connMat1.getZAxis(zDir)
+        Dim planeOrg As New PsPoint
+        connMat1.getOrigin(planeOrg)
+        planeOrg = MathTool.GetPointInDirection(planeOrg, -zDir, data.mHorCutback)
+
+        Dim horInst As New PsPoint
+        MathTool.IntersectLineWithPlane(horAdpt.MidLineStart, horAdpt.MidLineEnd, planeOrg, -zDir, horInst)
+        Dim diagInst As New PsPoint
+        MathTool.IntersectLineWithPlane(diagAdpt.MidLineStart, diagAdpt.MidLineEnd, planeOrg, -zDir, diagInst)
+        Dim pt As New PsPoint
+        MathTool.IntersectLineWithPlane(spt, ept, planeOrg, -zDir, pt)
+
+        'make sure the org point is on the same line
+        Dim orgOnline As PsPoint = MathTool.OrthoProjectPointToLine(pt, horInst, diagInst)
+
+        'the expected result should be:
+        'horInst --> pt --> diagInst
+
+        Dim vec1 As New PsVector
+        Dim vec2 As New PsVector
+        vec1.SetFromPoints(horInst, orgOnline)
+        vec1.Normalize()
+        vec2.SetFromPoints(orgOnline, diagInst)
+        vec2.Normalize()
+
+        'drawBall(horInst, 20)
+        'drawBall(pt, 40)
+        'drawBall(diagInst, 60)
+
+        If (GeoHelper.IsInSameDirection(vec1, vec2)) Then
+            Return True
+        Else
+            'the fold line is not between the two 
+            'member. skip it.
+            Debug.Assert(False)
+            Return False
+        End If
+    End Function
+
     Public Shared Function GetHorMemberWebHeight(id As Long,
                                                  connMat As PsMatrix,
                                                  param As Parameters) As Double
@@ -529,18 +602,18 @@ Public Class UserConnection
     Private Function GetSidePlane(id As Long, connMat As PsMatrix) As List(Of PsCutPlane)
         Dim result As New List(Of PsCutPlane)
 
-        Dim shpAdpt As New ShapeAdapter(id)
-        Dim yDir As New PsVector
-        Dim org As New PsPoint
-
-        connMat.getYAxis(yDir)
-        connMat.getOrigin(org)
+        Dim diagAdpt As New DiagShapeAdapter(connMat, id)
+        Dim org As PsPoint = diagAdpt.org()
 
         Dim oPlanePos As New PsCutPlane
-        oPlanePos.SetFromNormal(MathTool.GetPointInDirection(org, yDir, shpAdpt.Height / 2), yDir)
+        oPlanePos.SetFromNormal(MathTool.GetPointInDirection(org,
+                                         diagAdpt.SideDir, diagAdpt.GetWidthBySideDir / 2),
+                                         diagAdpt.SideDir)
 
         Dim oPlaneNeg As New PsCutPlane
-        oPlaneNeg.SetFromNormal(MathTool.GetPointInDirection(org, -yDir, shpAdpt.Height / 2), yDir)
+        oPlaneNeg.SetFromNormal(MathTool.GetPointInDirection(org,
+                                         -diagAdpt.SideDir, diagAdpt.GetWidthBySideDir / 2),
+                                         diagAdpt.SideDir)
 
         result.Add(oPlanePos)
         result.Add(oPlaneNeg)
@@ -557,15 +630,22 @@ Public Class UserConnection
         CalculateFoldLine(horId, param, connMat1, result, diagSidePlanes(0))
         CalculateFoldLine(horId, param, connMat1, result, diagSidePlanes(1))
 
-        Dim oLine As New PsGeoLine
-        oLine.StartPoint = result(0)
-        oLine.EndPoint = result(1)
-        oLine.DrawLine(CoordSystem.kWcs, "0", "0", 1, 1)
+        'If (result.Count > 1) Then
+        '    Dim oLine As New PsGeoLine
+        '    oLine.StartPoint = result(0)
+        '    oLine.EndPoint = result(1)
+        '    oLine.DrawLine(CoordSystem.kWcs, "0", "0", 1, 1)
+        'End If
 
-        oLine.StartPoint = result(2)
-        oLine.EndPoint = result(3)
-        oLine.DrawLine(CoordSystem.kWcs, "0", "0", 3, 1)
+        'If (result.Count > 3) Then
+        '    Dim oLine As New PsGeoLine
+        '    oLine.StartPoint = result(2)
+        '    oLine.EndPoint = result(3)
+        '    oLine.DrawLine(CoordSystem.kWcs, "0", "0", 3, 1)
+        'End If
 
+        'now we need check of the fold line is between the 
+        'two members.
 
         'oLine.StartPoint = highPt1
         'oLine.EndPoint = highPt2
@@ -598,17 +678,20 @@ Public Class UserConnection
         connMat1.getXAxis(xDir)
         Dim foldPoslow As New PsPoint
 
-        Utility.drawLine(ptPosLow, MathTool.GetPointInDirection(ptPosLow, xDir, 2000), 1, 1)
+        'Utility.drawLine(ptPosLow, MathTool.GetPointInDirection(ptPosLow, xDir, 2000), 1, 1)
         MathTool.IntersectLineWithPlane(ptPosLow, MathTool.GetPointInDirection(ptPosLow, xDir, 2000),
                                         plane.InsertPoint, plane.Normal, foldPoslow)
         Dim foldPosHigh As New PsPoint
 
-        Utility.drawLine(ptPosHight, MathTool.GetPointInDirection(ptPosHight, xDir, 2000), 2, 1)
+        'Utility.drawLine(ptPosHight, MathTool.GetPointInDirection(ptPosHight, xDir, 2000), 2, 1)
         MathTool.IntersectLineWithPlane(ptPosHight, MathTool.GetPointInDirection(ptPosHight, xDir, 2000),
                                         plane.InsertPoint, plane.Normal, foldPosHigh)
 
+
+
         result.Add(foldPoslow)
         result.Add(foldPosHigh)
+
     End Sub
 
     Private Shared Function SidePlateTopToCenterDistance(data As Parameters, supportingId1 As Long)
@@ -940,12 +1023,36 @@ Public Class UserConnection
             Dim oTrans As New PsTransaction
             Dim oConnection As PsConnection = Nothing
             Dim oEdit As New PsEditModification
+            Try
+                oTrans.GetObject(ConnectionId, PsOpenMode.kForWrite, oConnection)
+                If oConnection IsNot Nothing Then
+
+                    oConnection = RemoveModifications(oConnection)
+
+                End If
+            Catch ex As System.Exception
+                MessageBox.Show(ex.Message)
+            Finally
+                oTrans.Close()
+                oEdit = Nothing
+            End Try
+
+            Dim oAdpt As New ConnectionAdapter(ConnectionId)
+            oAdpt.ReadAddtionalObjects()
+            Dim oBuilder As New ConnectionBuilder
+            Dim horId As Long = oBuilder.getOriginHorShapeIdFromAdapter(oAdpt)
+            Dim diagId As Long = oBuilder.getOriginDiagnalShapeIdFromAdapter(oAdpt)
+            Dim plateId As Long = oBuilder.getOriginSidePlateIdFromAdapter(oAdpt)
+
+            Utility.RecoverShapeLengthTo(horId, plateId)
+            Utility.RecoverShapeLengthTo(diagId, plateId)
 
             Try
                 oTrans.GetObject(ConnectionId, PsOpenMode.kForWrite, oConnection)
                 If oConnection IsNot Nothing Then
 
                     oConnection = RemoveModifications(oConnection)
+
 
                     oConnection.RemoveAllAdditionalEntity(False)
 
@@ -1000,7 +1107,6 @@ Public Class UserConnection
             End Try
         End If
     End Sub
-
     Private Shared Function RemoveModifications(oConnection As PsConnection) As PsConnection
         Dim param As New Parameters
         param.ReadFromConnection(oConnection)
@@ -1012,7 +1118,7 @@ Public Class UserConnection
 
         If (param.mHorCutbackCutIndex <> -1) Then
             oModify.SetObjectId(support1)
-            oModify.DeletePolyCut(param.mHorCutbackCutIndex)
+            oModify.DeleteCutPlane(param.mHorCutbackCutIndex)
         End If
 
         If (param.mHorWebCutIndex <> -1) Then
@@ -1022,13 +1128,14 @@ Public Class UserConnection
 
         If (param.mHorCutbackCutIndex <> -1) Then
             oModify.SetObjectId(support1)
-            oModify.DeletePolyCut(param.mHorCutbackCutIndex)
+            oModify.DeleteCutPlane(param.mHorCutbackCutIndex)
         End If
 
         If (param.mDiagnalCutbackCutIndex <> -1) Then
             oModify.SetObjectId(support2)
-            oModify.DeletePolyCut(param.mDiagnalCutbackCutIndex)
+            oModify.DeleteCutPlane(param.mDiagnalCutbackCutIndex)
         End If
+
 
         Return oConnection
     End Function
@@ -1140,4 +1247,56 @@ Public Class UserConnection
         Base = Nothing
         MyBase.Finalize()
     End Sub
+
+    Public Class DiagShapeAdapter
+        Private _mat As PsMatrix
+        Private _id As Long
+        Public Sub New(connMat As PsMatrix, id As Long)
+            _id = id
+            _mat = connMat
+        End Sub
+
+        Public Function SideDir() As PsVector
+            Dim yDir As New PsVector
+            _mat.getYAxis(yDir)
+            Return yDir
+        End Function
+
+        Public Function NoneSideDir() As PsVector
+            Dim result As New PsVector
+            _mat.getXAxis(result)
+            Return result
+        End Function
+
+        Public Function org() As PsPoint
+            Dim result As New PsPoint
+            _mat.getOrigin(result)
+            Return result
+        End Function
+
+        Public Function SideDirIsXDir() As Boolean
+            Dim oAdpt As New ShapeAdapter(_id)
+
+            If Math.Abs(Math.Abs(MathTool.GetDotProductFrom(oAdpt.XAxis, SideDir)) - 1) < PRECISION Then
+                Return True
+            ElseIf Math.Abs(Math.Abs(MathTool.GetDotProductFrom(oAdpt.YAxis, SideDir)) - 1) < PRECISION Then
+                Return False
+            End If
+
+            Debug.Assert(False)
+            Return True
+        End Function
+
+        Public Function GetWidthBySideDir() As Double
+            Dim shpAdpt As New ShapeAdapter(_id)
+            If (SideDirIsXDir()) Then
+                Return shpAdpt.Width
+            Else
+                Return shpAdpt.Height
+            End If
+        End Function
+    End Class
+
 End Class
+
+

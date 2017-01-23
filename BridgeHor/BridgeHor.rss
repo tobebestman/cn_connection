@@ -18,11 +18,12 @@
 @D0103,"Hor Angle",
 @D0104,"Diag Fillet",
 @D0105,"Diag Angle",
-@D0107,"Hor Dist",
-@D0109,"Diag Dist",
-
+@D0107,"Hor Top Dist",
+@D0109,"Diag Top Dist",
 @D0110,"Outside PL thk",
 @D0111,"Inside PL thk",
+@D0112,"Hor Bottom Dist",
+@D0113,"Diag Bottom Dist",
 
 @D0200,"Hole",
 @D0201,"Distribution in Shape Direction",
