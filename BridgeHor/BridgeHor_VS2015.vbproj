@@ -106,6 +106,8 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FlangeConnectPlateCreator.vb" />
+    <Compile Include="FlangeConnectPlateParameter.vb" />
     <Compile Include="SidePlateCreator.vb" />
     <Compile Include="WebPlatesCreator.vb" />
     <Compile Include="WebPlatesParameter.vb" />

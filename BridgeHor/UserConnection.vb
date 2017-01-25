@@ -411,9 +411,11 @@ Public Class UserConnection
                 oSidePlateCreator2.Create(False)
             End If
 
-
             Dim webPlatesCreater As New WebPlatesCreator(horId, data, connMat1)
             webPlatesCreater.Create()
+
+            Dim flangePlatesCreater As New FlangeConnectPlateCreator(horId, connMat1, data)
+            flangePlatesCreater.Create()
 
             oConnAdpt = Nothing
 
@@ -437,6 +439,14 @@ Public Class UserConnection
 
             oConnAdpt.AppendCreatedObjectId(oSidePlateCreator2.mCreatedDiagPlateId)
             oConnAdpt.AppendCreatedObjectId(oSidePlateCreator2.mCreatedHorPlateId)
+
+            oConnAdpt.AppendCreatedObjectId(flangePlatesCreater.mOutsidePlateId1)
+            oConnAdpt.AppendCreatedObjectId(flangePlatesCreater.mOutsidePlateId2)
+
+            oConnAdpt.AppendCreatedObjectId(flangePlatesCreater.mInsidePlateId11)
+            oConnAdpt.AppendCreatedObjectId(flangePlatesCreater.mInsidePlateId12)
+            oConnAdpt.AppendCreatedObjectId(flangePlatesCreater.mInsidePlateId21)
+            oConnAdpt.AppendCreatedObjectId(flangePlatesCreater.mInsidePlateId22)
 
             oConnAdpt.SetBuilt(True)
             oConnAdpt.CommitAppendObjects()

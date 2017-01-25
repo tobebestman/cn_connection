@@ -78,7 +78,15 @@
 @D0513,"Hole Dia",
 @D0514,"Plate thk"
 
-@D0600,"Arc Plate 2",
+@D0600,"Flange Connect Plate",
+@D0601,"Outside PL Thk",
+@D0602,"Inside PL Thk",
+@D0603,"Hor Edge Dist",
+@D0604,"Hor Dist",
+@D0605,"Hor Count",
+@D0606,"Ver Edge Dist",
+@D0607,"Ver Dist",
+@D0608,"Ver Count",
 
 @D0700,"Web Connect Plate 1",
 @D0701,"Thickness",

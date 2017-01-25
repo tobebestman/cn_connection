@@ -69,6 +69,9 @@ Public Class SidePlateCreator
 
     Public mDiagCutIndex As Integer
 
+    Public mSideCutPlane As PsCutPlane
+    Public mHorCutPlane As PsCutPlane
+
     Public Sub New(plateId As Long,
                    horId As Long,
                    diagId As Long,
@@ -85,6 +88,10 @@ Public Class SidePlateCreator
         mParam = param
         mFoldStart = foldStart
         mFoldEnd = foldEnd
+
+        mHorCutPlane = Nothing
+        mSideCutPlane = Nothing
+
     End Sub
 
     Public Sub Create(isFirstFoldLine As Boolean)
@@ -145,8 +152,13 @@ Public Class SidePlateCreator
         midPt = MathTool.GetPointInDirection(inst, zDir, dist * Math.Cos(angle))
 
         If (isFirstFoldLine) Then
+
+            mSideCutPlane = New PsCutPlane()
+            mSideCutPlane.SetFromNormal(midPt, zDir)
+
             Dim oPlane As New PsCutPlane
             oPlane.SetFromNormal(MathTool.GetPointInDirection(midPt, -zDir, mParam.mDiagnalGap), zDir)
+
             Dim oCut As New PsCutObjects
             oCut.SetAsPlaneCut(oPlane)
             oCut.SetObjectId(mDiagId)
@@ -237,6 +249,9 @@ Public Class SidePlateCreator
 
         Dim pt As PsPoint
         pt = MathTool.OrthoProjectPointToPlane(mFoldEnd, org, -xDir)
+
+        mHorCutPlane = New PsCutPlane
+        mHorCutPlane.SetFromNormal(pt, zDir)
 
         Dim lineDir As New PsVector
         lineDir.SetFromPoints(mFoldEnd, pt)
