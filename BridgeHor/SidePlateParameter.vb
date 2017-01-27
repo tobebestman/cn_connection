@@ -60,6 +60,7 @@ Public Class SidePlateParameter
     Public mDiagBottomDist As Double
     Public mOutsidePlateThickness As Double
     Public mInsidePlateThickness As Double
+    Public mBackingPlateThickness As Double
 
     Public Sub ReadFromConnection(eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromConnection
         mHorFillet = eConnection.Double(iDbl) : iDbl = iDbl + 1
@@ -72,6 +73,7 @@ Public Class SidePlateParameter
         mDiagBottomDist = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mOutsidePlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mInsidePlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mBackingPlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
     End Sub
 
     Public Sub ReadFromTemplate(Template As PsTemplateManager, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromTemplate
@@ -85,6 +87,7 @@ Public Class SidePlateParameter
         mDiagBottomDist = Template.Double(iDbl) : iDbl = iDbl + 1
         mOutsidePlateThickness = Template.Double(iDbl) : iDbl = iDbl + 1
         mInsidePlateThickness = Template.Double(iDbl) : iDbl = iDbl + 1
+        mBackingPlateThickness = Template.Double(iDbl) : iDbl = iDbl + 1
     End Sub
 
     Public Sub SetToImperialDefaults() Implements ISetToDefauts.SetToImperialDefaults
@@ -102,7 +105,7 @@ Public Class SidePlateParameter
         Me.mDiagBottomDist = 954.1
         Me.mOutsidePlateThickness = 20
         Me.mInsidePlateThickness = 16
-
+        Me.mBackingPlateThickness = 10
     End Sub
 
     Public Sub WriteToConnection(ByRef eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.WriteToConnection
@@ -116,6 +119,7 @@ Public Class SidePlateParameter
         eConnection.Double(iDbl) = mDiagBottomDist : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mOutsidePlateThickness : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mInsidePlateThickness : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mBackingPlateThickness : iDbl = iDbl + 1
     End Sub
 
     Public Sub WriteToTemplate(ByRef Template As PsTemplateManager) Implements IParameters.WriteToTemplate
@@ -129,5 +133,6 @@ Public Class SidePlateParameter
         Template.AppendDouble(mDiagBottomDist)
         Template.AppendDouble(mOutsidePlateThickness)
         Template.AppendDouble(mInsidePlateThickness)
+        Template.AppendDouble(mBackingPlateThickness)
     End Sub
 End Class

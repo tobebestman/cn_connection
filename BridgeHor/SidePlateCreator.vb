@@ -190,13 +190,12 @@ Public Class SidePlateCreator
         points.Add(lowerInst)
 
         Dim oPoly As New PsPolygon
-        Dim oMat As New PsMatrix
-        oMat.SetCoordinateSystem(midPt, diagCutDir, zDir)
+        Dim oMat As PsMatrix = GenerateInwordsUcsByFoldLineAndShape(diagAdpt)
         Utility.TransformPointListToPolygon(points, oPoly, oMat)
 
         mCreatedDiagPlateId = Utility.CreatePlate(oPoly, oMat,
-                                                   mParam.mSidePlate.mOutsidePlateThickness,
-                                                   0, 0, VerticalPosition.kTop)
+                                                   mParam.mSidePlate.mInsidePlateThickness,
+                                                   0, 0, VerticalPosition.kDown)
 
         'Utility.DrawLines(points)
 
@@ -233,6 +232,49 @@ Public Class SidePlateCreator
         axis.SetFromCrossProduct(axis, dir1)
         axis.Normalize()
         Return axis
+    End Function
+
+    Private Function GenerateInwordsUcsByFoldLineAndShape(diagAdpt As UserConnection.DiagShapeAdapter) As PsMatrix
+        Dim xDir As PsVector = diagAdpt.NoneSideDir()
+        Dim yDir As PsVector = diagAdpt.SideDir()
+
+        Dim org As PsPoint = diagAdpt.org
+        Dim outPt As PsPoint = MathTool.OrthoProjectPointToPlane(mFoldStart, org, xDir)
+
+        Dim inPt As PsPoint = MathTool.OrthoProjectPointToPlane(outPt, org, yDir)
+
+        Dim zDir As New PsVector
+        zDir.SetFromPoints(outPt, inPt)
+
+        Dim result As New PsMatrix
+        xDir.SetFromPoints(mFoldStart, mFoldEnd)
+        xDir.Normalize()
+        yDir.SetFromCrossProduct(zDir, xDir)
+        yDir.Normalize()
+        result.SetCoordinateSystem(mFoldEnd, xDir, yDir)
+        Return result
+    End Function
+
+    Private Function GenerateInwordsUcsByFoldLineAndShape(ucs As PsMatrix) As PsMatrix
+        Dim xDir As New PsVector
+        ucs.getXAxis(xDir)
+        Dim yDir As New PsVector
+        ucs.getYAxis(yDir)
+
+        Dim org As New PsPoint
+        ucs.getOrigin(org)
+        Dim outPt As PsPoint = MathTool.OrthoProjectPointToPlane(mFoldStart, org, xDir)
+
+        Dim zDir As New PsVector
+        zDir.SetFromPoints(outPt, org)
+
+        Dim result As New PsMatrix
+        xDir.SetFromPoints(mFoldStart, mFoldEnd)
+        xDir.Normalize()
+        yDir.SetFromCrossProduct(zDir, xDir)
+        yDir.Normalize()
+        result.SetCoordinateSystem(mFoldEnd, xDir, yDir)
+        Return result
     End Function
 
     Private Sub CreateHorSidePlate()
@@ -281,12 +323,11 @@ Public Class SidePlateCreator
 
         'Utility.DrawLines(points)
 
-        Dim oMat As New PsMatrix
+        Dim oMat As PsMatrix = GenerateInwordsUcsByFoldLineAndShape(mHorUcs)
         Dim oPoly As New PsPolygon
-        oMat.SetCoordinateSystem(mFoldStart, xDir, zDir)
         Utility.TransformPointListToPolygon(points, oPoly, oMat)
 
         mCreatedHorPlateId = Utility.CreatePlate(oPoly, oMat, mParam.mSidePlate.mInsidePlateThickness,
-                                           0, 0, VerticalPosition.kTop)
+                                           0, 0, VerticalPosition.kDown)
     End Sub
 End Class

@@ -555,7 +555,7 @@ Friend Class UserConnectionForm
         txtHorHoleEdgeDist.Leave, txtHorHoleDist.Leave, txtOutsidePlateThickness.Leave,
         txtInsidePlateThickness.Leave, txtTopHorDist.Leave,
         txtTopDiagDist.Leave, txtVerHoleEdgeDist.Leave, txtVerHoleDist.Leave,
-        txtHoleDiameter.Leave, txtConnectPlateThickness.Leave, txtBottomHorDist.Leave, txtBottomDiagDist.Leave, txtVerDist.Leave, txtVerMiddleDist.Leave
+        txtHoleDiameter.Leave, txtConnectPlateThickness.Leave, txtBottomHorDist.Leave, txtBottomDiagDist.Leave, txtVerDist.Leave, txtVerMiddleDist.Leave, txtBackingPlateThickness.Leave
 
         Dim oldValue As String = eventSender.Text
         eventSender.Text = oCheckInput.CheckPositive(eventSender.Text)

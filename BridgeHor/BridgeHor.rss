@@ -24,6 +24,7 @@
 @D0111,"Inside PL thk",
 @D0112,"Hor Bottom Dist",
 @D0113,"Diag Bottom Dist",
+@D0114,"Backing PL thk",
 
 @D0200,"Hole",
 @D0201,"Distribution in Shape Direction",
@@ -78,7 +79,7 @@
 @D0513,"Hole Dia",
 @D0514,"Plate thk"
 
-@D0600,"Flange Connect Plate",
+@D0600,"Hor Flange Connect Plate",
 @D0601,"Outside PL Thk",
 @D0602,"Inside PL Thk",
 @D0603,"Hor Edge Dist",
@@ -88,23 +89,7 @@
 @D0607,"Ver Dist",
 @D0608,"Ver Count",
 
-@D0700,"Web Connect Plate 1",
-@D0701,"Thickness",
-@D0702,"Bolt Group",
-@D0703,"Ver Side Dist",
-@D0704,"Hor Side Dist",
-@D0705,"Group Dist",
-@D0706,"Plate",
-@D0707,"Edge Hor Dist",
-@D0708,"Edge Ver Dist",
-@D0709,"Hor Dist",
-@D0710,"Hor Count",
-@D0711,"Ver Dist",
-@D0712,"Ver Count",
-@D0713,"Inner Ver Edge Dist"
-
-
-@D0800,"Web Connect Plate 2",
+@D0700,"Diag Flange Connect Plate",
 
 @M0000,"Select horizontal weld shape1",
 @M0001,"Select diagnal weld shape2",

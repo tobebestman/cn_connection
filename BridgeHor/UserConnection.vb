@@ -609,7 +609,7 @@ Public Class UserConnection
         Return
     End Sub
 
-    Private Function GetSidePlane(id As Long, connMat As PsMatrix) As List(Of PsCutPlane)
+    Private Function GetSidePlane(id As Long, connMat As PsMatrix, backingPlateThk As Double) As List(Of PsCutPlane)
         Dim result As New List(Of PsCutPlane)
 
         Dim diagAdpt As New DiagShapeAdapter(connMat, id)
@@ -617,12 +617,12 @@ Public Class UserConnection
 
         Dim oPlanePos As New PsCutPlane
         oPlanePos.SetFromNormal(MathTool.GetPointInDirection(org,
-                                         diagAdpt.SideDir, diagAdpt.GetWidthBySideDir / 2),
+                                         diagAdpt.SideDir, backingPlateThk + diagAdpt.GetWidthBySideDir / 2),
                                          diagAdpt.SideDir)
 
         Dim oPlaneNeg As New PsCutPlane
         oPlaneNeg.SetFromNormal(MathTool.GetPointInDirection(org,
-                                         -diagAdpt.SideDir, diagAdpt.GetWidthBySideDir / 2),
+                                         -diagAdpt.SideDir, backingPlateThk + diagAdpt.GetWidthBySideDir / 2),
                                          diagAdpt.SideDir)
 
         result.Add(oPlanePos)
@@ -635,7 +635,9 @@ Public Class UserConnection
                                           connMat1 As PsMatrix, connMat2 As PsMatrix) As List(Of PsPoint)
         Dim result As New List(Of PsPoint)
 
-        Dim diagSidePlanes As List(Of PsCutPlane) = GetSidePlane(diagId, connMat2)
+        Dim diagSidePlanes As List(Of PsCutPlane) = GetSidePlane(diagId,
+                                                                 connMat2,
+                                                                 param.mSidePlate.mBackingPlateThickness)
 
         CalculateFoldLine(horId, param, connMat1, result, diagSidePlanes(0))
         CalculateFoldLine(horId, param, connMat1, result, diagSidePlanes(1))

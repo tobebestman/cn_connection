@@ -124,7 +124,9 @@
         Me.txtBraceSideWebPlateThickness = New System.Windows.Forms.TextBox()
         Me.Label11 = New System.Windows.Forms.Label()
         Me.txtChordSideWebPlateThickness = New System.Windows.Forms.TextBox()
-        Me.TabPageConnPlate = New System.Windows.Forms.TabPage()
+        Me.TabPageHorConnPlate = New System.Windows.Forms.TabPage()
+        Me.Label25 = New System.Windows.Forms.Label()
+        Me.txtVerMiddleDist = New System.Windows.Forms.TextBox()
         Me.Label23 = New System.Windows.Forms.Label()
         Me.txtVerEdgeDist = New System.Windows.Forms.TextBox()
         Me.Label24 = New System.Windows.Forms.Label()
@@ -149,8 +151,13 @@
         Me.imgBitmaps4 = New System.Windows.Forms.ImageList(Me.components)
         Me.imgBitmaps5 = New System.Windows.Forms.ImageList(Me.components)
         Me.imgBitmaps6 = New System.Windows.Forms.ImageList(Me.components)
-        Me.Label25 = New System.Windows.Forms.Label()
-        Me.txtVerMiddleDist = New System.Windows.Forms.TextBox()
+        Me.TabPageDiagConnPlate = New System.Windows.Forms.TabPage()
+        Me.Label44 = New System.Windows.Forms.Label()
+        Me.TextBox6 = New System.Windows.Forms.TextBox()
+        Me.Label47 = New System.Windows.Forms.Label()
+        Me.TextBox9 = New System.Windows.Forms.TextBox()
+        Me.Label27 = New System.Windows.Forms.Label()
+        Me.txtBackingPlateThickness = New System.Windows.Forms.TextBox()
         CType(Me.Picture2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picBitmap, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabStrip1.SuspendLayout()
@@ -159,7 +166,8 @@
         Me._TabFrames_0.SuspendLayout()
         Me.TabPageMiddleWebConnPlate.SuspendLayout()
         Me.GroupBox5.SuspendLayout()
-        Me.TabPageConnPlate.SuspendLayout()
+        Me.TabPageHorConnPlate.SuspendLayout()
+        Me.TabPageDiagConnPlate.SuspendLayout()
         Me.SuspendLayout()
         '
         'cmdGetLengthFromLine
@@ -313,8 +321,9 @@
         Me.TabStrip1.Controls.Add(Me.TabPageGeneral)
         Me.TabStrip1.Controls.Add(Me.TabPageSidePlate)
         Me.TabStrip1.Controls.Add(Me.TabPageMiddleWebConnPlate)
-        Me.TabStrip1.Controls.Add(Me.TabPageConnPlate)
-        Me.TabStrip1.Location = New System.Drawing.Point(6, 14)
+        Me.TabStrip1.Controls.Add(Me.TabPageHorConnPlate)
+        Me.TabStrip1.Controls.Add(Me.TabPageDiagConnPlate)
+        Me.TabStrip1.Location = New System.Drawing.Point(9, 18)
         Me.TabStrip1.Name = "TabStrip1"
         Me.TabStrip1.SelectedIndex = 0
         Me.TabStrip1.Size = New System.Drawing.Size(624, 472)
@@ -540,6 +549,8 @@
         '_TabFrames_0
         '
         Me._TabFrames_0.BackColor = System.Drawing.Color.Transparent
+        Me._TabFrames_0.Controls.Add(Me.Label27)
+        Me._TabFrames_0.Controls.Add(Me.txtBackingPlateThickness)
         Me._TabFrames_0.Controls.Add(Me.Label38)
         Me._TabFrames_0.Controls.Add(Me.txtBottomDiagDist)
         Me._TabFrames_0.Controls.Add(Me.Label39)
@@ -1213,34 +1224,60 @@
         Me.txtChordSideWebPlateThickness.Size = New System.Drawing.Size(84, 26)
         Me.txtChordSideWebPlateThickness.TabIndex = 102
         '
-        'TabPageConnPlate
+        'TabPageHorConnPlate
         '
-        Me.TabPageConnPlate.Controls.Add(Me.Label25)
-        Me.TabPageConnPlate.Controls.Add(Me.txtVerMiddleDist)
-        Me.TabPageConnPlate.Controls.Add(Me.Label23)
-        Me.TabPageConnPlate.Controls.Add(Me.txtVerEdgeDist)
-        Me.TabPageConnPlate.Controls.Add(Me.Label24)
-        Me.TabPageConnPlate.Controls.Add(Me.txtVerDist)
-        Me.TabPageConnPlate.Controls.Add(Me.Label26)
-        Me.TabPageConnPlate.Controls.Add(Me.txtVerCount)
-        Me.TabPageConnPlate.Controls.Add(Me.Label28)
-        Me.TabPageConnPlate.Controls.Add(Me.txtHorCount)
-        Me.TabPageConnPlate.Controls.Add(Me.Label29)
-        Me.TabPageConnPlate.Controls.Add(Me.txtFlgConnPlateInsidePlateThk)
-        Me.TabPageConnPlate.Controls.Add(Me.Label30)
-        Me.TabPageConnPlate.Controls.Add(Me.txtHorDist)
-        Me.TabPageConnPlate.Controls.Add(Me.Label32)
-        Me.TabPageConnPlate.Controls.Add(Me.txtHorEdgeDist)
-        Me.TabPageConnPlate.Controls.Add(Me.Label33)
-        Me.TabPageConnPlate.Controls.Add(Me.txtFlgConnPlateOutsidePlateThk)
-        Me.TabPageConnPlate.ForeColor = System.Drawing.Color.Red
-        Me.TabPageConnPlate.Location = New System.Drawing.Point(4, 29)
-        Me.TabPageConnPlate.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
-        Me.TabPageConnPlate.Name = "TabPageConnPlate"
-        Me.TabPageConnPlate.Size = New System.Drawing.Size(616, 439)
-        Me.TabPageConnPlate.TabIndex = 13
-        Me.TabPageConnPlate.Text = "D0600'Flange Connect Plate"
-        Me.TabPageConnPlate.UseVisualStyleBackColor = True
+        Me.TabPageHorConnPlate.Controls.Add(Me.Label25)
+        Me.TabPageHorConnPlate.Controls.Add(Me.txtVerMiddleDist)
+        Me.TabPageHorConnPlate.Controls.Add(Me.Label23)
+        Me.TabPageHorConnPlate.Controls.Add(Me.txtVerEdgeDist)
+        Me.TabPageHorConnPlate.Controls.Add(Me.Label24)
+        Me.TabPageHorConnPlate.Controls.Add(Me.txtVerDist)
+        Me.TabPageHorConnPlate.Controls.Add(Me.Label26)
+        Me.TabPageHorConnPlate.Controls.Add(Me.txtVerCount)
+        Me.TabPageHorConnPlate.Controls.Add(Me.Label28)
+        Me.TabPageHorConnPlate.Controls.Add(Me.txtHorCount)
+        Me.TabPageHorConnPlate.Controls.Add(Me.Label29)
+        Me.TabPageHorConnPlate.Controls.Add(Me.txtFlgConnPlateInsidePlateThk)
+        Me.TabPageHorConnPlate.Controls.Add(Me.Label30)
+        Me.TabPageHorConnPlate.Controls.Add(Me.txtHorDist)
+        Me.TabPageHorConnPlate.Controls.Add(Me.Label32)
+        Me.TabPageHorConnPlate.Controls.Add(Me.txtHorEdgeDist)
+        Me.TabPageHorConnPlate.Controls.Add(Me.Label33)
+        Me.TabPageHorConnPlate.Controls.Add(Me.txtFlgConnPlateOutsidePlateThk)
+        Me.TabPageHorConnPlate.ForeColor = System.Drawing.Color.Red
+        Me.TabPageHorConnPlate.Location = New System.Drawing.Point(4, 29)
+        Me.TabPageHorConnPlate.Margin = New System.Windows.Forms.Padding(4, 5, 4, 5)
+        Me.TabPageHorConnPlate.Name = "TabPageHorConnPlate"
+        Me.TabPageHorConnPlate.Size = New System.Drawing.Size(616, 439)
+        Me.TabPageHorConnPlate.TabIndex = 13
+        Me.TabPageHorConnPlate.Text = "D0600'Hor Flange Connect Plate"
+        Me.TabPageHorConnPlate.UseVisualStyleBackColor = True
+        '
+        'Label25
+        '
+        Me.Label25.AutoSize = True
+        Me.Label25.BackColor = System.Drawing.Color.Transparent
+        Me.Label25.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label25.ForeColor = System.Drawing.Color.Red
+        Me.Label25.Location = New System.Drawing.Point(316, 206)
+        Me.Label25.Name = "Label25"
+        Me.Label25.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label25.Size = New System.Drawing.Size(167, 20)
+        Me.Label25.TabIndex = 147
+        Me.Label25.Text = "D0609'Ver Middle Dist"
+        '
+        'txtVerMiddleDist
+        '
+        Me.txtVerMiddleDist.AcceptsReturn = True
+        Me.txtVerMiddleDist.BackColor = System.Drawing.SystemColors.Window
+        Me.txtVerMiddleDist.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtVerMiddleDist.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtVerMiddleDist.Location = New System.Drawing.Point(472, 200)
+        Me.txtVerMiddleDist.MaxLength = 0
+        Me.txtVerMiddleDist.Name = "txtVerMiddleDist"
+        Me.txtVerMiddleDist.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtVerMiddleDist.Size = New System.Drawing.Size(84, 26)
+        Me.txtVerMiddleDist.TabIndex = 146
         '
         'Label23
         '
@@ -1513,31 +1550,96 @@
         Me.imgBitmaps6.TransparentColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.imgBitmaps6.Images.SetKeyName(0, "")
         '
-        'Label25
+        'TabPageDiagConnPlate
         '
-        Me.Label25.AutoSize = True
-        Me.Label25.BackColor = System.Drawing.Color.Transparent
-        Me.Label25.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label25.ForeColor = System.Drawing.Color.Red
-        Me.Label25.Location = New System.Drawing.Point(316, 206)
-        Me.Label25.Name = "Label25"
-        Me.Label25.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label25.Size = New System.Drawing.Size(167, 20)
-        Me.Label25.TabIndex = 147
-        Me.Label25.Text = "D0609'Ver Middle Dist"
+        Me.TabPageDiagConnPlate.Controls.Add(Me.Label44)
+        Me.TabPageDiagConnPlate.Controls.Add(Me.TextBox6)
+        Me.TabPageDiagConnPlate.Controls.Add(Me.Label47)
+        Me.TabPageDiagConnPlate.Controls.Add(Me.TextBox9)
+        Me.TabPageDiagConnPlate.Location = New System.Drawing.Point(4, 29)
+        Me.TabPageDiagConnPlate.Name = "TabPageDiagConnPlate"
+        Me.TabPageDiagConnPlate.Size = New System.Drawing.Size(616, 439)
+        Me.TabPageDiagConnPlate.TabIndex = 14
+        Me.TabPageDiagConnPlate.Text = "D0700'Diag Flange Connect Plate"
+        Me.TabPageDiagConnPlate.UseVisualStyleBackColor = True
         '
-        'txtVerMiddleDist
+        'Label44
         '
-        Me.txtVerMiddleDist.AcceptsReturn = True
-        Me.txtVerMiddleDist.BackColor = System.Drawing.SystemColors.Window
-        Me.txtVerMiddleDist.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.txtVerMiddleDist.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtVerMiddleDist.Location = New System.Drawing.Point(472, 200)
-        Me.txtVerMiddleDist.MaxLength = 0
-        Me.txtVerMiddleDist.Name = "txtVerMiddleDist"
-        Me.txtVerMiddleDist.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtVerMiddleDist.Size = New System.Drawing.Size(84, 26)
-        Me.txtVerMiddleDist.TabIndex = 146
+        Me.Label44.AutoSize = True
+        Me.Label44.BackColor = System.Drawing.Color.Transparent
+        Me.Label44.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label44.ForeColor = System.Drawing.Color.Red
+        Me.Label44.Location = New System.Drawing.Point(323, 21)
+        Me.Label44.Name = "Label44"
+        Me.Label44.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label44.Size = New System.Drawing.Size(156, 20)
+        Me.Label44.TabIndex = 155
+        Me.Label44.Text = "D0505'Inside PL Thk"
+        '
+        'TextBox6
+        '
+        Me.TextBox6.AcceptsReturn = True
+        Me.TextBox6.BackColor = System.Drawing.SystemColors.Window
+        Me.TextBox6.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.TextBox6.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.TextBox6.Location = New System.Drawing.Point(479, 15)
+        Me.TextBox6.MaxLength = 0
+        Me.TextBox6.Name = "TextBox6"
+        Me.TextBox6.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.TextBox6.Size = New System.Drawing.Size(84, 26)
+        Me.TextBox6.TabIndex = 154
+        '
+        'Label47
+        '
+        Me.Label47.AutoSize = True
+        Me.Label47.BackColor = System.Drawing.Color.Transparent
+        Me.Label47.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label47.ForeColor = System.Drawing.Color.Red
+        Me.Label47.Location = New System.Drawing.Point(21, 21)
+        Me.Label47.Name = "Label47"
+        Me.Label47.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label47.Size = New System.Drawing.Size(168, 20)
+        Me.Label47.TabIndex = 149
+        Me.Label47.Text = "D0601'Outside PL Thk"
+        '
+        'TextBox9
+        '
+        Me.TextBox9.AcceptsReturn = True
+        Me.TextBox9.BackColor = System.Drawing.SystemColors.Window
+        Me.TextBox9.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.TextBox9.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.TextBox9.Location = New System.Drawing.Point(177, 15)
+        Me.TextBox9.MaxLength = 0
+        Me.TextBox9.Name = "TextBox9"
+        Me.TextBox9.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.TextBox9.Size = New System.Drawing.Size(84, 26)
+        Me.TextBox9.TabIndex = 148
+        '
+        'Label27
+        '
+        Me.Label27.AutoSize = True
+        Me.Label27.BackColor = System.Drawing.Color.Transparent
+        Me.Label27.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label27.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label27.Location = New System.Drawing.Point(276, 247)
+        Me.Label27.Name = "Label27"
+        Me.Label27.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label27.Size = New System.Drawing.Size(170, 20)
+        Me.Label27.TabIndex = 123
+        Me.Label27.Text = "D0114,'Backing PL thk"
+        '
+        'txtBackingPlateThickness
+        '
+        Me.txtBackingPlateThickness.AcceptsReturn = True
+        Me.txtBackingPlateThickness.BackColor = System.Drawing.SystemColors.Window
+        Me.txtBackingPlateThickness.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtBackingPlateThickness.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtBackingPlateThickness.Location = New System.Drawing.Point(426, 243)
+        Me.txtBackingPlateThickness.MaxLength = 0
+        Me.txtBackingPlateThickness.Name = "txtBackingPlateThickness"
+        Me.txtBackingPlateThickness.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtBackingPlateThickness.Size = New System.Drawing.Size(84, 26)
+        Me.txtBackingPlateThickness.TabIndex = 122
         '
         'UserConnectionForm
         '
@@ -1580,8 +1682,10 @@
         Me.TabPageMiddleWebConnPlate.PerformLayout()
         Me.GroupBox5.ResumeLayout(False)
         Me.GroupBox5.PerformLayout()
-        Me.TabPageConnPlate.ResumeLayout(False)
-        Me.TabPageConnPlate.PerformLayout()
+        Me.TabPageHorConnPlate.ResumeLayout(False)
+        Me.TabPageHorConnPlate.PerformLayout()
+        Me.TabPageDiagConnPlate.ResumeLayout(False)
+        Me.TabPageDiagConnPlate.PerformLayout()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1631,7 +1735,7 @@
     Public WithEvents txtBraceSideWebPlateLength As Windows.Forms.TextBox
     Public WithEvents Label13 As Windows.Forms.Label
     Public WithEvents txtBraceSideWebPlateThickness As Windows.Forms.TextBox
-    Friend WithEvents TabPageConnPlate As Windows.Forms.TabPage
+    Friend WithEvents TabPageHorConnPlate As Windows.Forms.TabPage
     Public WithEvents Label23 As Windows.Forms.Label
     Public WithEvents txtVerEdgeDist As Windows.Forms.TextBox
     Public WithEvents Label24 As Windows.Forms.Label
@@ -1669,5 +1773,12 @@
     Public WithEvents txtBottomHorDist As Windows.Forms.TextBox
     Public WithEvents Label25 As Windows.Forms.Label
     Public WithEvents txtVerMiddleDist As Windows.Forms.TextBox
+    Friend WithEvents TabPageDiagConnPlate As Windows.Forms.TabPage
+    Public WithEvents Label44 As Windows.Forms.Label
+    Public WithEvents TextBox6 As Windows.Forms.TextBox
+    Public WithEvents Label47 As Windows.Forms.Label
+    Public WithEvents TextBox9 As Windows.Forms.TextBox
+    Public WithEvents Label27 As Windows.Forms.Label
+    Public WithEvents txtBackingPlateThickness As Windows.Forms.TextBox
 #End Region
 End Class
