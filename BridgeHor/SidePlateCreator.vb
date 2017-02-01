@@ -67,6 +67,8 @@ Public Class SidePlateCreator
     Public mCreatedHorPlateId As Long
     Public mCreatedDiagPlateId As Long
 
+    Public mAccessoryPlates As List(Of Long)
+
     Public mDiagCutIndex As Integer
 
     Public mSideCutPlane As PsCutPlane
@@ -91,6 +93,9 @@ Public Class SidePlateCreator
 
         mHorCutPlane = Nothing
         mSideCutPlane = Nothing
+
+        mAccessoryPlates = New List(Of Long)
+
 
     End Sub
 
@@ -152,21 +157,7 @@ Public Class SidePlateCreator
         midPt = MathTool.GetPointInDirection(inst, zDir, dist * Math.Cos(angle))
 
         If (isFirstFoldLine) Then
-
-            mSideCutPlane = New PsCutPlane()
-            mSideCutPlane.SetFromNormal(midPt, zDir)
-
-            Dim oPlane As New PsCutPlane
-            oPlane.SetFromNormal(MathTool.GetPointInDirection(midPt, -zDir, mParam.mDiagnalGap), zDir)
-
-            Dim oCut As New PsCutObjects
-            oCut.SetAsPlaneCut(oPlane)
-            oCut.SetObjectId(mDiagId)
-            If oCut.Apply > 0 Then
-                mDiagCutIndex = oCut.GetModifyIndex
-            Else
-                mDiagCutIndex = -1
-            End If
+            CutDiagShape(zDir, midPt)
         End If
 
         'drawBall(midPt, 20)
@@ -190,15 +181,58 @@ Public Class SidePlateCreator
         points.Add(lowerInst)
 
         Dim oPoly As New PsPolygon
-        Dim oMat As PsMatrix = GenerateInwordsUcsByFoldLineAndShape(diagAdpt)
+        Dim oMat As PsMatrix = GenerateInwardsUcsByFoldLineAndShape(diagAdpt)
         Utility.TransformPointListToPolygon(points, oPoly, oMat)
 
         mCreatedDiagPlateId = Utility.CreatePlate(oPoly, oMat,
                                                    mParam.mSidePlate.mInsidePlateThickness,
-                                                   0, 0, VerticalPosition.kDown)
+                                                   0, 0, VerticalPosition.kTop)
 
         'Utility.DrawLines(points)
 
+        Dim dirInwards As New PsVector
+        oMat.getZAxis(dirInwards)
+
+        Dim xDir As New PsVector
+        Dim yDir As New PsVector
+        mDiagUcs.getZAxis(xDir)
+        yDir.SetFromCrossProduct(xDir, dirInwards)
+
+        Dim length As Double = 500
+        Dim width As Double
+        Dim diagShp As New ShapeAdapter(mDiagId)
+        If diagAdpt.SideDirIsXDir Then
+            width = diagShp.Height
+        Else
+            width = diagShp.Width
+        End If
+
+        Dim oAccessMat As New PsMatrix
+        oAccessMat.SetCoordinateSystem(MathTool.GetPointInDirection(midPt,
+                                                                      xDir, mParam.mDiagnalGap),
+                                        xDir, yDir)
+
+        Dim accessoryId As Long = Utility.CreatePlate(length, width,
+                            mParam.mSidePlate.mBackingPlateThickness, length / 2,
+                            0, VerticalPosition.kTop, oAccessMat)
+        mAccessoryPlates.Add(accessoryId)
+    End Sub
+
+    Private Sub CutDiagShape(zDir As PsVector, midPt As PsPoint)
+        mSideCutPlane = New PsCutPlane()
+        mSideCutPlane.SetFromNormal(midPt, zDir)
+
+        Dim oPlane As New PsCutPlane
+        oPlane.SetFromNormal(MathTool.GetPointInDirection(midPt, -zDir, mParam.mDiagnalGap), zDir)
+
+        Dim oCut As New PsCutObjects
+        oCut.SetAsPlaneCut(oPlane)
+        oCut.SetObjectId(mDiagId)
+        If oCut.Apply > 0 Then
+            mDiagCutIndex = oCut.GetModifyIndex
+        Else
+            mDiagCutIndex = -1
+        End If
     End Sub
 
     Private Function GetDiagSideEdge(points As List(Of PsPoint)) As PsVector
@@ -234,7 +268,7 @@ Public Class SidePlateCreator
         Return axis
     End Function
 
-    Private Function GenerateInwordsUcsByFoldLineAndShape(diagAdpt As UserConnection.DiagShapeAdapter) As PsMatrix
+    Private Function GenerateInwardsUcsByFoldLineAndShape(diagAdpt As UserConnection.DiagShapeAdapter) As PsMatrix
         Dim xDir As PsVector = diagAdpt.NoneSideDir()
         Dim yDir As PsVector = diagAdpt.SideDir()
 

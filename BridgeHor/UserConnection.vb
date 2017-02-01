@@ -440,6 +440,14 @@ Public Class UserConnection
             oConnAdpt.AppendCreatedObjectId(oSidePlateCreator2.mCreatedDiagPlateId)
             oConnAdpt.AppendCreatedObjectId(oSidePlateCreator2.mCreatedHorPlateId)
 
+            For Each id As Long In oSidePlateCreator1.mAccessoryPlates
+                oConnAdpt.AppendCreatedObjectId(id)
+            Next
+
+            For Each id As Long In oSidePlateCreator2.mAccessoryPlates
+                oConnAdpt.AppendCreatedObjectId(id)
+            Next
+
             oConnAdpt.AppendCreatedObjectId(flangePlatesCreater.mOutsidePlateId1)
             oConnAdpt.AppendCreatedObjectId(flangePlatesCreater.mOutsidePlateId2)
 
