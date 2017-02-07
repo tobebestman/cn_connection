@@ -563,6 +563,32 @@ Module Utility
         End If
     End Function
 
+    Public Function CreatePlate(plateWidth As Double, plateLength As Double,
+                                 plateThickness As Double,
+                                 xOffset As Double, yOffset As Double, insertOffset As Double,
+                                 vertPos As VerticalPosition, oMat As PsMatrix) As Long
+        Dim oCreatePlate As New PsCreatePlate
+        oCreatePlate.SetToDefaults()
+        oCreatePlate.SetAsRectangularPlate(plateWidth, plateLength)
+        oCreatePlate.SetNormalPosition(vertPos)
+        oCreatePlate.SetThickness(plateThickness)
+
+        oCreatePlate.SetXOffset(xOffset)
+        oCreatePlate.SetYOffset(yOffset)
+        oCreatePlate.SetInsertHeight(insertOffset)
+
+        Dim org As New PsPoint
+        oMat.getOrigin(org)
+
+        'Utility.CreateBall(org)
+
+        oCreatePlate.SetInsertMatrix(oMat)
+        If oCreatePlate.Create() = False Then
+            Debug.Assert(False)
+        End If
+        Dim plateId As Long = oCreatePlate.ObjectId
+        Return plateId
+    End Function
 
     Public Function CreatePlate(plateWidth As Double, plateLength As Double,
                                  plateThickness As Double,

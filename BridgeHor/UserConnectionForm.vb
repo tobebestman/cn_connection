@@ -70,6 +70,7 @@ Friend Class UserConnectionForm
     Private oCheckInput As CheckInput
     Private UIConverter As New KsxUnits
 
+    Private RSS As New RSSReader(PLUGIN_IDENTIFIER)
 
     Private Sub cmdBitmaps_Click(ByVal eventSender As System.Object, ByVal eventArgs As System.EventArgs) Handles cmdBitmaps.Click
         If mBitmapStatus Then
@@ -293,6 +294,17 @@ Friend Class UserConnectionForm
         Data.mFlangeConnectPlate.mVerMiddleDist = UIConverter.ConvertToNumeric(txtVerMiddleDist.Text)
         Data.mFlangeConnectPlate.mVerDist = UIConverter.ConvertToNumeric(txtVerDist.Text)
         Data.mFlangeConnectPlate.mVerCount = UIConverter.ConvertToNumeric(txtVerCount.Text)
+
+        Data.mDiagFlangeConnectPlate.thickness = UIConverter.ConvertToNumeric(txtDiagFlageConnectPlateThk.Text)
+        Data.mDiagFlangeConnectPlate.middleDistance = UIConverter.ConvertToNumeric(txtHoleMiddleDist.Text)
+
+        For Each oRow As DataGridViewRow In DataGridViewHole.Rows
+            Dim oDef As New HoleColumnDefinition
+            oDef.edgeDistance = UIConverter.ConvertToNumeric(oRow.Cells("EdgeDist").Value)
+            oDef.horDistance = UIConverter.ConvertToNumeric(oRow.Cells("HorDist").Value)
+            oDef.YDesc = oRow.Cells("YDesc").Value
+            oDef.groupId = 0
+        Next
     End Sub
 
     Private Sub WriteToDialog(ByRef Data As Parameters)
@@ -343,6 +355,15 @@ Friend Class UserConnectionForm
         txtVerMiddleDist.Text = UIConverter.ConvertToText(Data.mFlangeConnectPlate.mVerMiddleDist)
         txtVerDist.Text = UIConverter.ConvertToText(Data.mFlangeConnectPlate.mVerDist)
         txtVerCount.Text = UIConverter.ConvertToText(Data.mFlangeConnectPlate.mVerCount)
+
+        txtDiagFlageConnectPlateThk.Text = UIConverter.ConvertToText(Data.mDiagFlangeConnectPlate.thickness)
+        txtHoleMiddleDist.Text = UIConverter.ConvertToText(Data.mDiagFlangeConnectPlate.middleDistance)
+
+        For Each oDef As HoleColumnDefinition In Data.mDiagFlangeConnectPlate.holeDefs
+            DataGridViewHole.Rows.Add(UIConverter.ConvertToText(oDef.edgeDistance),
+                                      UIConverter.ConvertToText(oDef.horDistance),
+                                      oDef.YDesc)
+        Next
 
     End Sub
 
@@ -555,7 +576,7 @@ Friend Class UserConnectionForm
         txtHorHoleEdgeDist.Leave, txtHorHoleDist.Leave, txtOutsidePlateThickness.Leave,
         txtInsidePlateThickness.Leave, txtTopHorDist.Leave,
         txtTopDiagDist.Leave, txtVerHoleEdgeDist.Leave, txtVerHoleDist.Leave,
-        txtHoleDiameter.Leave, txtConnectPlateThickness.Leave, txtBottomHorDist.Leave, txtBottomDiagDist.Leave, txtVerDist.Leave, txtVerMiddleDist.Leave, txtBackingPlateThickness.Leave
+        txtHoleDiameter.Leave, txtConnectPlateThickness.Leave, txtBottomHorDist.Leave, txtBottomDiagDist.Leave, txtVerDist.Leave, txtVerMiddleDist.Leave, txtBackingPlateThickness.Leave, txtHoleMiddleDist.Leave, txtDiagFlageConnectPlateThk.Leave
 
         Dim oldValue As String = eventSender.Text
         eventSender.Text = oCheckInput.CheckPositive(eventSender.Text)
@@ -586,5 +607,69 @@ Friend Class UserConnectionForm
         End If
 
     End Sub
+
+    Private Function IsValidDescString(value As String) As Boolean
+        Dim boltParser As New BoltDescParser
+        If boltParser.Parse(value) = False Then
+            Return False
+        End If
+
+
+        If (boltParser.count > 0 And
+                boltParser.distance > 0) Then
+            Return True
+        End If
+
+        Return False
+    End Function
+
+
+    Private Sub DataGridViewWebPlate_CellValidating(sender As Object, e As DataGridViewCellValidatingEventArgs) Handles DataGridViewHole.CellValidating
+        Dim grid As DataGridView
+        grid = TryCast(sender, DataGridView)
+        If grid Is Nothing Then
+            Debug.Assert(False)
+            Return
+        End If
+
+        If (e.ColumnIndex < 0 Or e.RowIndex < 0) Then
+            Return
+        End If
+
+        Dim strValue As String = e.FormattedValue
+
+        Dim header As String = grid.Columns(e.ColumnIndex).HeaderText
+
+        Select Case header
+            Case "EdgeDist", "HorDist"
+                Try
+                    Dim value As Double = Double.Parse(strValue)
+                    If (value < 0) Then
+                        e.Cancel = True
+                        grid.Rows(e.RowIndex).ErrorText = RSS.RSS("M0006")
+                    End If
+                Catch ex As Exception
+                    e.Cancel = True
+                    grid.Rows(e.RowIndex).ErrorText = RSS.RSS("M0006")
+                End Try
+
+            Case "YDesc"
+                If IsValidDescString(strValue) = False Then
+                    e.Cancel = True
+                    grid.Rows(e.RowIndex).ErrorText = RSS.RSS("M0007")
+                End If
+        End Select
+    End Sub
+
+    Private Sub DataGridViewWebPlate_CellEndEdit(sender As Object, e As DataGridViewCellEventArgs) Handles DataGridViewHole.CellEndEdit
+        Dim grid As DataGridView
+        grid = TryCast(sender, DataGridView)
+        If grid Is Nothing Then
+            Debug.Assert(False)
+            Return
+        End If
+        grid.Rows(e.RowIndex).ErrorText = String.Empty
+    End Sub
+
 
 End Class

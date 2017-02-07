@@ -625,12 +625,12 @@ Public Class UserConnection
 
         Dim oPlanePos As New PsCutPlane
         oPlanePos.SetFromNormal(MathTool.GetPointInDirection(org,
-                                         diagAdpt.SideDir, backingPlateThk + diagAdpt.GetWidthBySideDir / 2),
+                                         diagAdpt.SideDir, backingPlateThk + diagAdpt.GetFaceDistanceInSideDir / 2),
                                          diagAdpt.SideDir)
 
         Dim oPlaneNeg As New PsCutPlane
         oPlaneNeg.SetFromNormal(MathTool.GetPointInDirection(org,
-                                         -diagAdpt.SideDir, backingPlateThk + diagAdpt.GetWidthBySideDir / 2),
+                                         -diagAdpt.SideDir, backingPlateThk + diagAdpt.GetFaceDistanceInSideDir / 2),
                                          diagAdpt.SideDir)
 
         result.Add(oPlanePos)
@@ -1307,13 +1307,24 @@ Public Class UserConnection
             Return True
         End Function
 
-        Public Function GetWidthBySideDir() As Double
+        Public Function GetFaceDistanceInSideDir() As Double
             Dim shpAdpt As New ShapeAdapter(_id)
             If (SideDirIsXDir()) Then
                 Return shpAdpt.Width
             Else
                 Return shpAdpt.Height
             End If
+        End Function
+
+        Public Function getFaceDistancePerpendToSideDir() As Double
+            Dim width As Double
+            Dim diagShp As New ShapeAdapter(_id)
+            If SideDirIsXDir() Then
+                width = diagShp.Height
+            Else
+                width = diagShp.Width
+            End If
+            Return width
         End Function
     End Class
 

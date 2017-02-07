@@ -90,6 +90,10 @@
 @D0608,"Ver Count",
 
 @D0700,"Diag Flange Connect Plate",
+@D0701,"Plate Thk",
+@D0702,"Middle Dist"
+@D0703,"Hole"
+
 
 @M0000,"Select horizontal weld shape1",
 @M0001,"Select diagnal weld shape2",
@@ -99,6 +103,8 @@
 @M0004,"Select side direction of the diagnal shape",
 
 @M0005,"Select same connection you want to clone from: ",
+@M0006,"Value should bigger tha or equal to zero",
+@M0007,"YDesc should be in NxDist format such as 2x100 format",
 
 @T0003,"Length by line",
 

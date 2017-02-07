@@ -76,6 +76,8 @@
         Me.txtDiagnalCutback = New System.Windows.Forms.TextBox()
         Me.TabPageSidePlate = New System.Windows.Forms.TabPage()
         Me._TabFrames_0 = New System.Windows.Forms.GroupBox()
+        Me.Label27 = New System.Windows.Forms.Label()
+        Me.txtBackingPlateThickness = New System.Windows.Forms.TextBox()
         Me.Label38 = New System.Windows.Forms.Label()
         Me.txtBottomDiagDist = New System.Windows.Forms.TextBox()
         Me.Label39 = New System.Windows.Forms.Label()
@@ -143,6 +145,16 @@
         Me.txtHorEdgeDist = New System.Windows.Forms.TextBox()
         Me.Label33 = New System.Windows.Forms.Label()
         Me.txtFlgConnPlateOutsidePlateThk = New System.Windows.Forms.TextBox()
+        Me.TabPageDiagConnPlate = New System.Windows.Forms.TabPage()
+        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.DataGridViewHole = New System.Windows.Forms.DataGridView()
+        Me.VerEdgeDist = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.HorDist = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.YDesc = New System.Windows.Forms.DataGridViewTextBoxColumn()
+        Me.txtHoleMiddleDist = New System.Windows.Forms.TextBox()
+        Me.Label44 = New System.Windows.Forms.Label()
+        Me.Label47 = New System.Windows.Forms.Label()
+        Me.txtDiagFlageConnectPlateThk = New System.Windows.Forms.TextBox()
         Me.cmdRollover = New System.Windows.Forms.Button()
         Me.imgBitmaps = New System.Windows.Forms.ImageList(Me.components)
         Me.imgIcons = New System.Windows.Forms.ImageList(Me.components)
@@ -151,13 +163,6 @@
         Me.imgBitmaps4 = New System.Windows.Forms.ImageList(Me.components)
         Me.imgBitmaps5 = New System.Windows.Forms.ImageList(Me.components)
         Me.imgBitmaps6 = New System.Windows.Forms.ImageList(Me.components)
-        Me.TabPageDiagConnPlate = New System.Windows.Forms.TabPage()
-        Me.Label44 = New System.Windows.Forms.Label()
-        Me.TextBox6 = New System.Windows.Forms.TextBox()
-        Me.Label47 = New System.Windows.Forms.Label()
-        Me.TextBox9 = New System.Windows.Forms.TextBox()
-        Me.Label27 = New System.Windows.Forms.Label()
-        Me.txtBackingPlateThickness = New System.Windows.Forms.TextBox()
         CType(Me.Picture2, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.picBitmap, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.TabStrip1.SuspendLayout()
@@ -168,6 +173,8 @@
         Me.GroupBox5.SuspendLayout()
         Me.TabPageHorConnPlate.SuspendLayout()
         Me.TabPageDiagConnPlate.SuspendLayout()
+        Me.GroupBox1.SuspendLayout()
+        CType(Me.DataGridViewHole, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'cmdGetLengthFromLine
@@ -579,6 +586,32 @@
         Me._TabFrames_0.Size = New System.Drawing.Size(616, 439)
         Me._TabFrames_0.TabIndex = 12
         Me._TabFrames_0.TabStop = False
+        '
+        'Label27
+        '
+        Me.Label27.AutoSize = True
+        Me.Label27.BackColor = System.Drawing.Color.Transparent
+        Me.Label27.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label27.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label27.Location = New System.Drawing.Point(276, 248)
+        Me.Label27.Name = "Label27"
+        Me.Label27.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label27.Size = New System.Drawing.Size(170, 20)
+        Me.Label27.TabIndex = 123
+        Me.Label27.Text = "D0114,'Backing PL thk"
+        '
+        'txtBackingPlateThickness
+        '
+        Me.txtBackingPlateThickness.AcceptsReturn = True
+        Me.txtBackingPlateThickness.BackColor = System.Drawing.SystemColors.Window
+        Me.txtBackingPlateThickness.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtBackingPlateThickness.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtBackingPlateThickness.Location = New System.Drawing.Point(426, 243)
+        Me.txtBackingPlateThickness.MaxLength = 0
+        Me.txtBackingPlateThickness.Name = "txtBackingPlateThickness"
+        Me.txtBackingPlateThickness.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtBackingPlateThickness.Size = New System.Drawing.Size(84, 26)
+        Me.txtBackingPlateThickness.TabIndex = 122
         '
         'Label38
         '
@@ -1487,6 +1520,107 @@
         Me.txtFlgConnPlateOutsidePlateThk.Size = New System.Drawing.Size(84, 26)
         Me.txtFlgConnPlateOutsidePlateThk.TabIndex = 124
         '
+        'TabPageDiagConnPlate
+        '
+        Me.TabPageDiagConnPlate.Controls.Add(Me.GroupBox1)
+        Me.TabPageDiagConnPlate.Controls.Add(Me.Label47)
+        Me.TabPageDiagConnPlate.Controls.Add(Me.txtDiagFlageConnectPlateThk)
+        Me.TabPageDiagConnPlate.Location = New System.Drawing.Point(4, 29)
+        Me.TabPageDiagConnPlate.Name = "TabPageDiagConnPlate"
+        Me.TabPageDiagConnPlate.Size = New System.Drawing.Size(616, 439)
+        Me.TabPageDiagConnPlate.TabIndex = 14
+        Me.TabPageDiagConnPlate.Text = "D0700'Diag Flange Connect Plate"
+        Me.TabPageDiagConnPlate.UseVisualStyleBackColor = True
+        '
+        'GroupBox1
+        '
+        Me.GroupBox1.Controls.Add(Me.DataGridViewHole)
+        Me.GroupBox1.Controls.Add(Me.txtHoleMiddleDist)
+        Me.GroupBox1.Controls.Add(Me.Label44)
+        Me.GroupBox1.Location = New System.Drawing.Point(10, 51)
+        Me.GroupBox1.Name = "GroupBox1"
+        Me.GroupBox1.Size = New System.Drawing.Size(594, 371)
+        Me.GroupBox1.TabIndex = 156
+        Me.GroupBox1.TabStop = False
+        Me.GroupBox1.Text = "D0703'Hole"
+        '
+        'DataGridViewHole
+        '
+        Me.DataGridViewHole.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
+        Me.DataGridViewHole.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.VerEdgeDist, Me.HorDist, Me.YDesc})
+        Me.DataGridViewHole.Location = New System.Drawing.Point(6, 66)
+        Me.DataGridViewHole.Name = "DataGridViewHole"
+        Me.DataGridViewHole.RowTemplate.Height = 28
+        Me.DataGridViewHole.Size = New System.Drawing.Size(588, 299)
+        Me.DataGridViewHole.TabIndex = 156
+        '
+        'VerEdgeDist
+        '
+        Me.VerEdgeDist.HeaderText = "EdgeDist"
+        Me.VerEdgeDist.Name = "VerEdgeDist"
+        '
+        'HorDist
+        '
+        Me.HorDist.HeaderText = "HorDist"
+        Me.HorDist.Name = "HorDist"
+        '
+        'YDesc
+        '
+        Me.YDesc.HeaderText = "YDesc"
+        Me.YDesc.Name = "YDesc"
+        '
+        'txtHoleMiddleDist
+        '
+        Me.txtHoleMiddleDist.AcceptsReturn = True
+        Me.txtHoleMiddleDist.BackColor = System.Drawing.SystemColors.Window
+        Me.txtHoleMiddleDist.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtHoleMiddleDist.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtHoleMiddleDist.Location = New System.Drawing.Point(172, 25)
+        Me.txtHoleMiddleDist.MaxLength = 0
+        Me.txtHoleMiddleDist.Name = "txtHoleMiddleDist"
+        Me.txtHoleMiddleDist.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtHoleMiddleDist.Size = New System.Drawing.Size(84, 26)
+        Me.txtHoleMiddleDist.TabIndex = 154
+        '
+        'Label44
+        '
+        Me.Label44.AutoSize = True
+        Me.Label44.BackColor = System.Drawing.Color.Transparent
+        Me.Label44.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label44.ForeColor = System.Drawing.Color.Red
+        Me.Label44.Location = New System.Drawing.Point(16, 28)
+        Me.Label44.Name = "Label44"
+        Me.Label44.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label44.Size = New System.Drawing.Size(138, 20)
+        Me.Label44.TabIndex = 155
+        Me.Label44.Text = "D0702'Middle Dist"
+        '
+        'Label47
+        '
+        Me.Label47.AutoSize = True
+        Me.Label47.BackColor = System.Drawing.Color.Transparent
+        Me.Label47.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label47.ForeColor = System.Drawing.Color.Red
+        Me.Label47.Location = New System.Drawing.Point(21, 22)
+        Me.Label47.Name = "Label47"
+        Me.Label47.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label47.Size = New System.Drawing.Size(126, 20)
+        Me.Label47.TabIndex = 149
+        Me.Label47.Text = "D0701'Plate Thk"
+        '
+        'txtDiagFlageConnectPlateThk
+        '
+        Me.txtDiagFlageConnectPlateThk.AcceptsReturn = True
+        Me.txtDiagFlageConnectPlateThk.BackColor = System.Drawing.SystemColors.Window
+        Me.txtDiagFlageConnectPlateThk.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtDiagFlageConnectPlateThk.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtDiagFlageConnectPlateThk.Location = New System.Drawing.Point(177, 19)
+        Me.txtDiagFlageConnectPlateThk.MaxLength = 0
+        Me.txtDiagFlageConnectPlateThk.Name = "txtDiagFlageConnectPlateThk"
+        Me.txtDiagFlageConnectPlateThk.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtDiagFlageConnectPlateThk.Size = New System.Drawing.Size(84, 26)
+        Me.txtDiagFlageConnectPlateThk.TabIndex = 148
+        '
         'cmdRollover
         '
         Me.cmdRollover.BackColor = System.Drawing.SystemColors.Control
@@ -1550,97 +1684,6 @@
         Me.imgBitmaps6.TransparentColor = System.Drawing.Color.FromArgb(CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
         Me.imgBitmaps6.Images.SetKeyName(0, "")
         '
-        'TabPageDiagConnPlate
-        '
-        Me.TabPageDiagConnPlate.Controls.Add(Me.Label44)
-        Me.TabPageDiagConnPlate.Controls.Add(Me.TextBox6)
-        Me.TabPageDiagConnPlate.Controls.Add(Me.Label47)
-        Me.TabPageDiagConnPlate.Controls.Add(Me.TextBox9)
-        Me.TabPageDiagConnPlate.Location = New System.Drawing.Point(4, 29)
-        Me.TabPageDiagConnPlate.Name = "TabPageDiagConnPlate"
-        Me.TabPageDiagConnPlate.Size = New System.Drawing.Size(616, 439)
-        Me.TabPageDiagConnPlate.TabIndex = 14
-        Me.TabPageDiagConnPlate.Text = "D0700'Diag Flange Connect Plate"
-        Me.TabPageDiagConnPlate.UseVisualStyleBackColor = True
-        '
-        'Label44
-        '
-        Me.Label44.AutoSize = True
-        Me.Label44.BackColor = System.Drawing.Color.Transparent
-        Me.Label44.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label44.ForeColor = System.Drawing.Color.Red
-        Me.Label44.Location = New System.Drawing.Point(323, 21)
-        Me.Label44.Name = "Label44"
-        Me.Label44.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label44.Size = New System.Drawing.Size(156, 20)
-        Me.Label44.TabIndex = 155
-        Me.Label44.Text = "D0505'Inside PL Thk"
-        '
-        'TextBox6
-        '
-        Me.TextBox6.AcceptsReturn = True
-        Me.TextBox6.BackColor = System.Drawing.SystemColors.Window
-        Me.TextBox6.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.TextBox6.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.TextBox6.Location = New System.Drawing.Point(479, 15)
-        Me.TextBox6.MaxLength = 0
-        Me.TextBox6.Name = "TextBox6"
-        Me.TextBox6.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.TextBox6.Size = New System.Drawing.Size(84, 26)
-        Me.TextBox6.TabIndex = 154
-        '
-        'Label47
-        '
-        Me.Label47.AutoSize = True
-        Me.Label47.BackColor = System.Drawing.Color.Transparent
-        Me.Label47.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label47.ForeColor = System.Drawing.Color.Red
-        Me.Label47.Location = New System.Drawing.Point(21, 21)
-        Me.Label47.Name = "Label47"
-        Me.Label47.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label47.Size = New System.Drawing.Size(168, 20)
-        Me.Label47.TabIndex = 149
-        Me.Label47.Text = "D0601'Outside PL Thk"
-        '
-        'TextBox9
-        '
-        Me.TextBox9.AcceptsReturn = True
-        Me.TextBox9.BackColor = System.Drawing.SystemColors.Window
-        Me.TextBox9.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.TextBox9.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.TextBox9.Location = New System.Drawing.Point(177, 15)
-        Me.TextBox9.MaxLength = 0
-        Me.TextBox9.Name = "TextBox9"
-        Me.TextBox9.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.TextBox9.Size = New System.Drawing.Size(84, 26)
-        Me.TextBox9.TabIndex = 148
-        '
-        'Label27
-        '
-        Me.Label27.AutoSize = True
-        Me.Label27.BackColor = System.Drawing.Color.Transparent
-        Me.Label27.Cursor = System.Windows.Forms.Cursors.Default
-        Me.Label27.ForeColor = System.Drawing.SystemColors.ControlText
-        Me.Label27.Location = New System.Drawing.Point(276, 247)
-        Me.Label27.Name = "Label27"
-        Me.Label27.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.Label27.Size = New System.Drawing.Size(170, 20)
-        Me.Label27.TabIndex = 123
-        Me.Label27.Text = "D0114,'Backing PL thk"
-        '
-        'txtBackingPlateThickness
-        '
-        Me.txtBackingPlateThickness.AcceptsReturn = True
-        Me.txtBackingPlateThickness.BackColor = System.Drawing.SystemColors.Window
-        Me.txtBackingPlateThickness.Cursor = System.Windows.Forms.Cursors.IBeam
-        Me.txtBackingPlateThickness.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtBackingPlateThickness.Location = New System.Drawing.Point(426, 243)
-        Me.txtBackingPlateThickness.MaxLength = 0
-        Me.txtBackingPlateThickness.Name = "txtBackingPlateThickness"
-        Me.txtBackingPlateThickness.RightToLeft = System.Windows.Forms.RightToLeft.No
-        Me.txtBackingPlateThickness.Size = New System.Drawing.Size(84, 26)
-        Me.txtBackingPlateThickness.TabIndex = 122
-        '
         'UserConnectionForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(9.0!, 20.0!)
@@ -1669,7 +1712,7 @@
         Me.Name = "UserConnectionForm"
         Me.RightToLeft = System.Windows.Forms.RightToLeft.No
         Me.ShowInTaskbar = False
-        Me.Text = "D0001'Bridge K Brace Designer"
+        Me.Text = "D0001'Bridge Hor Brace Designer"
         CType(Me.Picture2, System.ComponentModel.ISupportInitialize).EndInit()
         CType(Me.picBitmap, System.ComponentModel.ISupportInitialize).EndInit()
         Me.TabStrip1.ResumeLayout(False)
@@ -1686,6 +1729,9 @@
         Me.TabPageHorConnPlate.PerformLayout()
         Me.TabPageDiagConnPlate.ResumeLayout(False)
         Me.TabPageDiagConnPlate.PerformLayout()
+        Me.GroupBox1.ResumeLayout(False)
+        Me.GroupBox1.PerformLayout()
+        CType(Me.DataGridViewHole, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -1775,10 +1821,15 @@
     Public WithEvents txtVerMiddleDist As Windows.Forms.TextBox
     Friend WithEvents TabPageDiagConnPlate As Windows.Forms.TabPage
     Public WithEvents Label44 As Windows.Forms.Label
-    Public WithEvents TextBox6 As Windows.Forms.TextBox
+    Public WithEvents txtHoleMiddleDist As Windows.Forms.TextBox
     Public WithEvents Label47 As Windows.Forms.Label
-    Public WithEvents TextBox9 As Windows.Forms.TextBox
+    Public WithEvents txtDiagFlageConnectPlateThk As Windows.Forms.TextBox
     Public WithEvents Label27 As Windows.Forms.Label
     Public WithEvents txtBackingPlateThickness As Windows.Forms.TextBox
+    Friend WithEvents GroupBox1 As Windows.Forms.GroupBox
+    Friend WithEvents DataGridViewHole As Windows.Forms.DataGridView
+    Friend WithEvents VerEdgeDist As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents HorDist As Windows.Forms.DataGridViewTextBoxColumn
+    Friend WithEvents YDesc As Windows.Forms.DataGridViewTextBoxColumn
 #End Region
 End Class

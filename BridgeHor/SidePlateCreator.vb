@@ -198,18 +198,19 @@ Public Class SidePlateCreator
         mDiagUcs.getZAxis(xDir)
         yDir.SetFromCrossProduct(xDir, dirInwards)
 
-        Dim length As Double = 500
-        Dim width As Double
-        Dim diagShp As New ShapeAdapter(mDiagId)
-        If diagAdpt.SideDirIsXDir Then
-            width = diagShp.Height
-        Else
-            width = diagShp.Width
+        Dim diagConnPlateCreator As New DiagConnectPlateCreator(getDiagShapeCutPlane(zDir, midPt),
+                                                                mDiagUcs, mDiagId, mParam)
+        If (isFirstFoldLine) Then
+            If diagConnPlateCreator.Create() = False Then
+                Debug.Assert(False)
+            End If
         End If
 
+        Dim length As Double = diagConnPlateCreator.getPlateWidth() / 2
+        Dim width As Double = diagAdpt.getFaceDistancePerpendToSideDir()
+
         Dim oAccessMat As New PsMatrix
-        oAccessMat.SetCoordinateSystem(MathTool.GetPointInDirection(midPt,
-                                                                      xDir, mParam.mDiagnalGap),
+        oAccessMat.SetCoordinateSystem(MathTool.GetPointInDirection(midPt, xDir, mParam.mDiagnalGap),
                                         xDir, yDir)
 
         Dim accessoryId As Long = Utility.CreatePlate(length, width,
@@ -222,8 +223,7 @@ Public Class SidePlateCreator
         mSideCutPlane = New PsCutPlane()
         mSideCutPlane.SetFromNormal(midPt, zDir)
 
-        Dim oPlane As New PsCutPlane
-        oPlane.SetFromNormal(MathTool.GetPointInDirection(midPt, -zDir, mParam.mDiagnalGap), zDir)
+        Dim oPlane As PsCutPlane = getDiagShapeCutPlane(zDir, midPt)
 
         Dim oCut As New PsCutObjects
         oCut.SetAsPlaneCut(oPlane)
@@ -234,6 +234,12 @@ Public Class SidePlateCreator
             mDiagCutIndex = -1
         End If
     End Sub
+
+    Private Function getDiagShapeCutPlane(zDir As PsVector, midPt As PsPoint) As PsCutPlane
+        Dim oPlane As New PsCutPlane
+        oPlane.SetFromNormal(MathTool.GetPointInDirection(midPt, -zDir, mParam.mDiagnalGap), zDir)
+        Return oPlane
+    End Function
 
     Private Function GetDiagSideEdge(points As List(Of PsPoint)) As PsVector
         Dim axis As New PsVector

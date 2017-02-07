@@ -71,6 +71,8 @@ Public Class Parameters
     Public mWebPlates As WebPlatesParameter
     Public mFlangeConnectPlate As FlangeConnectPlateParameter
 
+    Public mDiagFlangeConnectPlate As DiagConnectPlateParameter
+
     Public Sub WriteToConnectionId(ByVal ConnectionId As Long)
         Dim oTrans As New PsTransaction
         Dim eConn As PsConnection = Nothing
@@ -137,6 +139,8 @@ Public Class Parameters
         mWebPlates.WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
 
         mFlangeConnectPlate.WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
+
+        mDiagFlangeConnectPlate.WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
     End Sub
 
     Public Sub ReadFromConnection(ByRef eConnection As PsConnection, Optional ByVal forClone As Boolean = False)
@@ -171,6 +175,8 @@ Public Class Parameters
         mWebPlates.ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
 
         mFlangeConnectPlate.ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
+
+        mDiagFlangeConnectPlate.ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
     End Sub
 
     Public Sub WriteToTemplate(ByRef Template As PsTemplateManager) Implements IParameters.WriteToTemplate
@@ -195,6 +201,7 @@ Public Class Parameters
         mWebPlates.WriteToTemplate(Template)
 
         mFlangeConnectPlate.WriteToTemplate(Template)
+        mDiagFlangeConnectPlate.WriteToTemplate(Template)
     End Sub
 
     Public Sub ReadFromTemplate(ByRef Template As PsTemplateManager)
@@ -224,6 +231,7 @@ Public Class Parameters
         mWebPlates.ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
 
         mFlangeConnectPlate.ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
+        mDiagFlangeConnectPlate.ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
     End Sub
 
 
@@ -233,6 +241,7 @@ Public Class Parameters
         mSidePlate = New SidePlateParameter()
         mWebPlates = New WebPlatesParameter()
         mFlangeConnectPlate = New FlangeConnectPlateParameter()
+        mDiagFlangeConnectPlate = New DiagConnectPlateParameter()
     End Sub
 
     Protected Overrides Sub Finalize()
@@ -269,6 +278,7 @@ Public Class Parameters
         mWebPlates.SetToMetricDefaults()
 
         mFlangeConnectPlate.SetToMetricDefaults()
+        mDiagFlangeConnectPlate.SetToMetricDefaults()
     End Sub
 
     Public Sub SetToImperialDefaults() Implements ISetToDefauts.SetToImperialDefaults
