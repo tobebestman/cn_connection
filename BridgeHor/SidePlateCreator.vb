@@ -186,7 +186,7 @@ Public Class SidePlateCreator
 
         mCreatedDiagPlateId = Utility.CreatePlate(oPoly, oMat,
                                                    mParam.mSidePlate.mInsidePlateThickness,
-                                                   0, 0, VerticalPosition.kTop)
+                                                   0, 0, VerticalPosition.kDown)
 
         'Utility.DrawLines(points)
 
@@ -201,22 +201,22 @@ Public Class SidePlateCreator
         Dim diagConnPlateCreator As New DiagConnectPlateCreator(getDiagShapeCutPlane(zDir, midPt),
                                                                 mDiagUcs, mDiagId, mParam)
         If (isFirstFoldLine) Then
-            If diagConnPlateCreator.Create() = False Then
-                Debug.Assert(False)
-            End If
+            'If diagConnPlateCreator.Create() = False Then
+            '    Debug.Assert(False)
+            'End If
         End If
 
-        Dim length As Double = diagConnPlateCreator.getPlateWidth() / 2
-        Dim width As Double = diagAdpt.getFaceDistancePerpendToSideDir()
+        'Dim length As Double = diagConnPlateCreator.getPlateWidth() / 2
+        'Dim width As Double = diagAdpt.getFaceDistancePerpendToSideDir()
 
-        Dim oAccessMat As New PsMatrix
-        oAccessMat.SetCoordinateSystem(MathTool.GetPointInDirection(midPt, xDir, mParam.mDiagnalGap),
-                                        xDir, yDir)
+        'Dim oAccessMat As New PsMatrix
+        'oAccessMat.SetCoordinateSystem(MathTool.GetPointInDirection(midPt, xDir, mParam.mDiagnalGap),
+        '                                xDir, yDir)
 
-        Dim accessoryId As Long = Utility.CreatePlate(length, width,
-                            mParam.mSidePlate.mBackingPlateThickness, length / 2,
-                            0, VerticalPosition.kTop, oAccessMat)
-        mAccessoryPlates.Add(accessoryId)
+        'Dim accessoryId As Long = Utility.CreatePlate(length, width,
+        '                    mParam.mSidePlate.mBackingPlateThickness, length / 2,
+        '                    0, VerticalPosition.kTop, oAccessMat)
+        'mAccessoryPlates.Add(accessoryId)
     End Sub
 
     Private Sub CutDiagShape(zDir As PsVector, midPt As PsPoint)
@@ -237,7 +237,7 @@ Public Class SidePlateCreator
 
     Private Function getDiagShapeCutPlane(zDir As PsVector, midPt As PsPoint) As PsCutPlane
         Dim oPlane As New PsCutPlane
-        oPlane.SetFromNormal(MathTool.GetPointInDirection(midPt, -zDir, mParam.mDiagnalGap), zDir)
+        oPlane.SetFromNormal(MathTool.GetPointInDirection(midPt, zDir, mParam.mDiagnalExtend), zDir)
         Return oPlane
     End Function
 

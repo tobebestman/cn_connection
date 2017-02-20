@@ -60,8 +60,9 @@
 @D0406,"Diagnal Gap"
 @D0407,"Connect Flange Thk 2"
 @D0408,"Hole Dia",
-@D0409,"Connect Web Thk 1"
-@D0410,"Connect Web Thk 2"
+@D0409,"Diagnal Ext",
+
+
 
 @D0500,"Middle Web Plates",
 @D0501,"Chord Side Thk",

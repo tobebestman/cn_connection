@@ -60,6 +60,8 @@
         Me.picBitmap = New System.Windows.Forms.PictureBox()
         Me.TabStrip1 = New System.Windows.Forms.TabControl()
         Me.TabPageGeneral = New System.Windows.Forms.TabPage()
+        Me.Label40 = New System.Windows.Forms.Label()
+        Me.txtDiagnalExtend = New System.Windows.Forms.TextBox()
         Me.txtDiagnalGap = New System.Windows.Forms.TextBox()
         Me.Label60 = New System.Windows.Forms.Label()
         Me.txtHoleDia = New System.Windows.Forms.TextBox()
@@ -338,6 +340,8 @@
         '
         'TabPageGeneral
         '
+        Me.TabPageGeneral.Controls.Add(Me.Label40)
+        Me.TabPageGeneral.Controls.Add(Me.txtDiagnalExtend)
         Me.TabPageGeneral.Controls.Add(Me.txtDiagnalGap)
         Me.TabPageGeneral.Controls.Add(Me.Label60)
         Me.TabPageGeneral.Controls.Add(Me.txtHoleDia)
@@ -360,6 +364,32 @@
         Me.TabPageGeneral.TabIndex = 11
         Me.TabPageGeneral.Text = "D0400'CutBack"
         Me.TabPageGeneral.UseVisualStyleBackColor = True
+        '
+        'Label40
+        '
+        Me.Label40.AutoSize = True
+        Me.Label40.BackColor = System.Drawing.Color.Transparent
+        Me.Label40.Cursor = System.Windows.Forms.Cursors.Default
+        Me.Label40.ForeColor = System.Drawing.SystemColors.ControlText
+        Me.Label40.Location = New System.Drawing.Point(298, 111)
+        Me.Label40.Name = "Label40"
+        Me.Label40.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.Label40.Size = New System.Drawing.Size(141, 20)
+        Me.Label40.TabIndex = 146
+        Me.Label40.Text = "D0409'Diagnal Ext"
+        '
+        'txtDiagnalExtend
+        '
+        Me.txtDiagnalExtend.AcceptsReturn = True
+        Me.txtDiagnalExtend.BackColor = System.Drawing.SystemColors.Window
+        Me.txtDiagnalExtend.Cursor = System.Windows.Forms.Cursors.IBeam
+        Me.txtDiagnalExtend.ForeColor = System.Drawing.SystemColors.WindowText
+        Me.txtDiagnalExtend.Location = New System.Drawing.Point(480, 105)
+        Me.txtDiagnalExtend.MaxLength = 0
+        Me.txtDiagnalExtend.Name = "txtDiagnalExtend"
+        Me.txtDiagnalExtend.RightToLeft = System.Windows.Forms.RightToLeft.No
+        Me.txtDiagnalExtend.Size = New System.Drawing.Size(84, 26)
+        Me.txtDiagnalExtend.TabIndex = 145
         '
         'txtDiagnalGap
         '
@@ -1551,7 +1581,7 @@
         Me.DataGridViewHole.Location = New System.Drawing.Point(6, 66)
         Me.DataGridViewHole.Name = "DataGridViewHole"
         Me.DataGridViewHole.RowTemplate.Height = 28
-        Me.DataGridViewHole.Size = New System.Drawing.Size(588, 299)
+        Me.DataGridViewHole.Size = New System.Drawing.Size(588, 298)
         Me.DataGridViewHole.TabIndex = 156
         '
         'VerEdgeDist
@@ -1614,7 +1644,7 @@
         Me.txtDiagFlageConnectPlateThk.BackColor = System.Drawing.SystemColors.Window
         Me.txtDiagFlageConnectPlateThk.Cursor = System.Windows.Forms.Cursors.IBeam
         Me.txtDiagFlageConnectPlateThk.ForeColor = System.Drawing.SystemColors.WindowText
-        Me.txtDiagFlageConnectPlateThk.Location = New System.Drawing.Point(177, 19)
+        Me.txtDiagFlageConnectPlateThk.Location = New System.Drawing.Point(177, 18)
         Me.txtDiagFlageConnectPlateThk.MaxLength = 0
         Me.txtDiagFlageConnectPlateThk.Name = "txtDiagFlageConnectPlateThk"
         Me.txtDiagFlageConnectPlateThk.RightToLeft = System.Windows.Forms.RightToLeft.No
@@ -1831,5 +1861,7 @@
     Friend WithEvents VerEdgeDist As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents HorDist As Windows.Forms.DataGridViewTextBoxColumn
     Friend WithEvents YDesc As Windows.Forms.DataGridViewTextBoxColumn
+    Public WithEvents Label40 As Windows.Forms.Label
+    Public WithEvents txtDiagnalExtend As Windows.Forms.TextBox
 #End Region
 End Class

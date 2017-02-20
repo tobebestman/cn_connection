@@ -645,7 +645,7 @@ Public Class UserConnection
 
         Dim diagSidePlanes As List(Of PsCutPlane) = GetSidePlane(diagId,
                                                                  connMat2,
-                                                                 param.mSidePlate.mBackingPlateThickness)
+                                                                 param.mSidePlate.mOutsidePlateThickness)
 
         CalculateFoldLine(horId, param, connMat1, result, diagSidePlanes(0))
         CalculateFoldLine(horId, param, connMat1, result, diagSidePlanes(1))

@@ -251,6 +251,7 @@ Friend Class UserConnectionForm
         Data.mHorCutback = UIConverter.ConvertToNumeric(txtHorCutBack.Text)
         Data.mHorWebCutback = UIConverter.ConvertToNumeric(txtHorFlangeCutBack.Text)
         Data.mDiagnalCutback = UIConverter.ConvertToNumeric(txtDiagnalCutback.Text)
+        Data.mDiagnalExtend = UIConverter.ConvertToNumeric(txtDiagnalExtend.Text)
 
         Data.mHorGap = UIConverter.ConvertToNumeric(txtHorGap.Text)
         Data.mDiagnalGap = UIConverter.ConvertToNumeric(txtDiagnalGap.Text)
@@ -312,6 +313,7 @@ Friend Class UserConnectionForm
         txtHorCutBack.Text = UIConverter.ConvertToText(Data.mHorCutback)
         txtHorFlangeCutBack.Text = UIConverter.ConvertToText(Data.mHorWebCutback)
         txtDiagnalCutback.Text = UIConverter.ConvertToText(Data.mDiagnalCutback)
+        txtDiagnalExtend.Text = UIConverter.ConvertToText(Data.mDiagnalExtend)
 
         txtHorGap.Text = UIConverter.ConvertToText(Data.mHorGap)
         txtDiagnalGap.Text = UIConverter.ConvertToText(Data.mDiagnalGap)
@@ -576,7 +578,7 @@ Friend Class UserConnectionForm
         txtHorHoleEdgeDist.Leave, txtHorHoleDist.Leave, txtOutsidePlateThickness.Leave,
         txtInsidePlateThickness.Leave, txtTopHorDist.Leave,
         txtTopDiagDist.Leave, txtVerHoleEdgeDist.Leave, txtVerHoleDist.Leave,
-        txtHoleDiameter.Leave, txtConnectPlateThickness.Leave, txtBottomHorDist.Leave, txtBottomDiagDist.Leave, txtVerDist.Leave, txtVerMiddleDist.Leave, txtBackingPlateThickness.Leave, txtHoleMiddleDist.Leave, txtDiagFlageConnectPlateThk.Leave
+        txtHoleDiameter.Leave, txtConnectPlateThickness.Leave, txtBottomHorDist.Leave, txtBottomDiagDist.Leave, txtVerDist.Leave, txtVerMiddleDist.Leave, txtBackingPlateThickness.Leave, txtHoleMiddleDist.Leave, txtDiagFlageConnectPlateThk.Leave, txtDiagnalExtend.Leave
 
         Dim oldValue As String = eventSender.Text
         eventSender.Text = oCheckInput.CheckPositive(eventSender.Text)

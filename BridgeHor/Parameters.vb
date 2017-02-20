@@ -60,6 +60,7 @@ Public Class Parameters
     Public mHorCutback As Double
     Public mHorWebCutback As Double
     Public mDiagnalCutback As Double
+    Public mDiagnalExtend As Double
 
     Public mHorGap As Double
     Public mDiagnalGap As Double
@@ -128,6 +129,7 @@ Public Class Parameters
         eConnection.Double(iDbl) = mHorCutback : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mHorWebCutback : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mDiagnalCutback : iDbl = iDbl + 1
+        eConnection.Double(iDbl) = mDiagnalExtend : iDbl = iDbl + 1
 
         eConnection.Double(iDbl) = mHorGap : iDbl = iDbl + 1
         eConnection.Double(iDbl) = mDiagnalGap : iDbl = iDbl + 1
@@ -164,6 +166,7 @@ Public Class Parameters
         mHorCutback = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mHorWebCutback = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mDiagnalCutback = eConnection.Double(iDbl) : iDbl = iDbl + 1
+        mDiagnalExtend = eConnection.Double(iDbl) : iDbl = iDbl + 1
 
         mHorGap = eConnection.Double(iDbl) : iDbl = iDbl + 1
         mDiagnalGap = eConnection.Double(iDbl) : iDbl = iDbl + 1
@@ -190,6 +193,7 @@ Public Class Parameters
         Template.AppendDouble(mHorCutback)
         Template.AppendDouble(mHorWebCutback)
         Template.AppendDouble(mDiagnalCutback)
+        Template.AppendDouble(mDiagnalExtend)
 
         Template.AppendDouble(mHorGap)
         Template.AppendDouble(mDiagnalGap)
@@ -220,6 +224,7 @@ Public Class Parameters
         mHorCutback = Template.Double(iDbl) : iDbl = iDbl + 1
         mHorWebCutback = Template.Double(iDbl) : iDbl = iDbl + 1
         mDiagnalCutback = Template.Double(iDbl) : iDbl = iDbl + 1
+        mDiagnalExtend = Template.Double(iDbl) : iDbl = iDbl + 1
 
         mHorGap = Template.Double(iDbl) : iDbl = iDbl + 1
         mDiagnalGap = Template.Double(iDbl) : iDbl = iDbl + 1
@@ -267,6 +272,7 @@ Public Class Parameters
         mHorWebCutback = 3000.7
 
         mDiagnalCutback = 2400
+        mDiagnalExtend = 300
 
         mHorGap = 40
         mDiagnalGap = 40
