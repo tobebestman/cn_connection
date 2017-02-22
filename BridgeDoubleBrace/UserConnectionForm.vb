@@ -148,8 +148,18 @@ Friend Class UserConnectionForm
         If mIsCreatingConn Then
             mCallBack.CleanI(ConnectionId)
         Else
+
+            Dim oConnAdpt As New ConnectionAdapter(ConnectionId)
+            Dim data As New Parameters
+
+            data.ReadFromConnectionId(ConnectionId)
+            oConnAdpt.ReadAddtionalObjects()
+
             mCallBack.CleanI(ConnectionId, False)
+
             CancelData.WriteToConnectionId(ConnectionId)
+            oConnAdpt.CommitAppendObjects()
+
             Dim oTrans As New PsTransaction
             Try
                 If oTrans.GetObject(ConnectionId, PsOpenMode.kForWrite, eConnection) Then

@@ -434,11 +434,11 @@ Public Class UserConnection
             oConnAdpt.AppendCreatedObjectId(webPlatesCreater.SupportPlateId1)
             oConnAdpt.AppendCreatedObjectId(webPlatesCreater.SupportPlateId2)
 
-            oConnAdpt.AppendCreatedObjectId(oSidePlateCreator1.mCreatedDiagPlateId)
-            oConnAdpt.AppendCreatedObjectId(oSidePlateCreator1.mCreatedHorPlateId)
+            oConnAdpt.AppendSecondActiveObjectId(oSidePlateCreator1.mCreatedDiagPlateId)
+            oConnAdpt.AppendSecondActiveObjectId(oSidePlateCreator1.mCreatedHorPlateId)
 
-            oConnAdpt.AppendCreatedObjectId(oSidePlateCreator2.mCreatedDiagPlateId)
-            oConnAdpt.AppendCreatedObjectId(oSidePlateCreator2.mCreatedHorPlateId)
+            oConnAdpt.AppendSecondActiveObjectId(oSidePlateCreator2.mCreatedDiagPlateId)
+            oConnAdpt.AppendSecondActiveObjectId(oSidePlateCreator2.mCreatedHorPlateId)
 
             For Each id As Long In oSidePlateCreator1.mAccessoryPlates
                 oConnAdpt.AppendCreatedObjectId(id)
@@ -1075,41 +1075,6 @@ Public Class UserConnection
 
 
                     oConnection.RemoveAllAdditionalEntity(False)
-
-                    'now remove the new created left/right plate
-                    For i As Integer = oConnection.ArrayCreatedEntityCount(0) - 1 To 0 Step -1
-                        oConnection.RemoveArrayCreatedObjectId(0, i)
-                    Next
-
-                    'now remove the new created connecting main plate
-                    For i As Integer = oConnection.ArrayCreatedEntityCount(1) - 1 To 0 Step -1
-                        oConnection.RemoveArrayCreatedObjectId(1, i)
-                    Next
-
-                    'now remove the new created connecting inner plates
-                    For i As Integer = oConnection.ArrayCreatedEntityCount(2) - 1 To 0 Step -1
-                        oConnection.RemoveArrayCreatedObjectId(2, i)
-                    Next
-
-                    'now remove the new created side plates for connect member 1
-                    For i As Integer = oConnection.ArrayCreatedEntityCount(3) - 1 To 0 Step -1
-                        oConnection.RemoveArrayCreatedObjectId(3, i)
-                    Next
-
-                    'now remove the new created side plates for connect member 2
-                    For i As Integer = oConnection.ArrayCreatedEntityCount(4) - 1 To 0 Step -1
-                        oConnection.RemoveArrayCreatedObjectId(4, i)
-                    Next
-
-                    'now remove the new created web plates for connect member 1
-                    For i As Integer = oConnection.ArrayCreatedEntityCount(5) - 1 To 0 Step -1
-                        oConnection.RemoveArrayCreatedObjectId(5, i)
-                    Next
-
-                    'now remove the new created web plates for connect member 2
-                    For i As Integer = oConnection.ArrayCreatedEntityCount(6) - 1 To 0 Step -1
-                        oConnection.RemoveArrayCreatedObjectId(6, i)
-                    Next
 
                     oConnection.RemoveAllSecondActiveEntity(True)
 

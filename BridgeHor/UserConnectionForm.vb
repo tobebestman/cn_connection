@@ -149,8 +149,18 @@ Friend Class UserConnectionForm
         If mIsCreatingConn Then
             mCallBack.CleanI(ConnectionId)
         Else
+
+            Dim oConnAdpt As New ConnectionAdapter(ConnectionId)
+            Dim data As New Parameters
+
+            data.ReadFromConnectionId(ConnectionId)
+            oConnAdpt.ReadAddtionalObjects()
+
             mCallBack.CleanI(ConnectionId, False)
+
             CancelData.WriteToConnectionId(ConnectionId)
+            oConnAdpt.CommitAppendObjects()
+
             Dim oTrans As New PsTransaction
             Try
                 If oTrans.GetObject(ConnectionId, PsOpenMode.kForWrite, eConnection) Then
@@ -296,8 +306,13 @@ Friend Class UserConnectionForm
         Data.mFlangeConnectPlate.mVerDist = UIConverter.ConvertToNumeric(txtVerDist.Text)
         Data.mFlangeConnectPlate.mVerCount = UIConverter.ConvertToNumeric(txtVerCount.Text)
 
-        Data.mDiagFlangeConnectPlate.thickness = UIConverter.ConvertToNumeric(txtDiagFlageConnectPlateThk.Text)
         Data.mDiagFlangeConnectPlate.middleDistance = UIConverter.ConvertToNumeric(txtHoleMiddleDist.Text)
+
+        If Data.mDiagFlangeConnectPlate.holeDefs IsNot Nothing Then
+            Data.mDiagFlangeConnectPlate.holeDefs.Clear()
+        Else
+            Data.mDiagFlangeConnectPlate.holeDefs = New List(Of HoleColumnDefinition)
+        End If
 
         For Each oRow As DataGridViewRow In DataGridViewHole.Rows
             Dim oDef As New HoleColumnDefinition
@@ -305,6 +320,7 @@ Friend Class UserConnectionForm
             oDef.horDistance = UIConverter.ConvertToNumeric(oRow.Cells("HorDist").Value)
             oDef.YDesc = oRow.Cells("YDesc").Value
             oDef.groupId = 0
+            Data.mDiagFlangeConnectPlate.holeDefs.Add(oDef)
         Next
     End Sub
 
@@ -358,8 +374,11 @@ Friend Class UserConnectionForm
         txtVerDist.Text = UIConverter.ConvertToText(Data.mFlangeConnectPlate.mVerDist)
         txtVerCount.Text = UIConverter.ConvertToText(Data.mFlangeConnectPlate.mVerCount)
 
-        txtDiagFlageConnectPlateThk.Text = UIConverter.ConvertToText(Data.mDiagFlangeConnectPlate.thickness)
         txtHoleMiddleDist.Text = UIConverter.ConvertToText(Data.mDiagFlangeConnectPlate.middleDistance)
+
+        If DataGridViewHole.Rows.Count > 0 Then
+            DataGridViewHole.Rows.Clear()
+        End If
 
         For Each oDef As HoleColumnDefinition In Data.mDiagFlangeConnectPlate.holeDefs
             DataGridViewHole.Rows.Add(UIConverter.ConvertToText(oDef.edgeDistance),
@@ -578,7 +597,7 @@ Friend Class UserConnectionForm
         txtHorHoleEdgeDist.Leave, txtHorHoleDist.Leave, txtOutsidePlateThickness.Leave,
         txtInsidePlateThickness.Leave, txtTopHorDist.Leave,
         txtTopDiagDist.Leave, txtVerHoleEdgeDist.Leave, txtVerHoleDist.Leave,
-        txtHoleDiameter.Leave, txtConnectPlateThickness.Leave, txtBottomHorDist.Leave, txtBottomDiagDist.Leave, txtVerDist.Leave, txtVerMiddleDist.Leave, txtBackingPlateThickness.Leave, txtHoleMiddleDist.Leave, txtDiagFlageConnectPlateThk.Leave, txtDiagnalExtend.Leave
+        txtHoleDiameter.Leave, txtConnectPlateThickness.Leave, txtBottomHorDist.Leave, txtBottomDiagDist.Leave, txtVerDist.Leave, txtVerMiddleDist.Leave, txtHoleMiddleDist.Leave, txtDiagnalExtend.Leave
 
         Dim oldValue As String = eventSender.Text
         eventSender.Text = oCheckInput.CheckPositive(eventSender.Text)

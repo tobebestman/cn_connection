@@ -150,8 +150,17 @@ Friend Class UserConnectionForm
         If mIsCreatingConn Then
             mCallBack.CleanI(ConnectionId)
         Else
+            Dim oConnAdpt As New ConnectionAdapter(ConnectionId)
+            Dim data As New Parameters
+
+            data.ReadFromConnectionId(ConnectionId)
+            oConnAdpt.ReadAddtionalObjects()
+
             mCallBack.CleanI(ConnectionId, False)
+
             CancelData.WriteToConnectionId(ConnectionId)
+            oConnAdpt.CommitAppendObjects()
+
             Dim oTrans As New PsTransaction
             Try
                 If oTrans.GetObject(ConnectionId, PsOpenMode.kForWrite, eConnection) Then
@@ -356,7 +365,12 @@ Friend Class UserConnectionForm
         Data.mColumnWebConnectPlate.HoleGrop.upperEdgeDistance = UIConverter.ConvertToNumeric(txtColumnUpperEdgeDist.Text)
         Data.mColumnWebConnectPlate.HoleGrop.lowerEdgeDistance = UIConverter.ConvertToNumeric(txtColumnLowerEdgeDist.Text)
 
-        Data.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions.Clear()
+        If (Data.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions IsNot Nothing) Then
+            Data.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions.Clear()
+        Else
+            Data.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions = New List(Of HoleColumnDefinition)
+        End If
+
         For i As Integer = 0 To Me.DataGridViewHoleGroup.RowCount - 1
             Try
                 Dim edgeDist As String = DataGridViewHoleGroup.Rows(i).Cells(0).Value
@@ -375,7 +389,12 @@ Friend Class UserConnectionForm
             End Try
         Next
 
-        Data.mColumnWebConnectPlate.XColumnWebs.Clear()
+        If Data.mColumnWebConnectPlate.XColumnWebs IsNot Nothing Then
+            Data.mColumnWebConnectPlate.XColumnWebs.Clear()
+        Else
+            Data.mColumnWebConnectPlate.XColumnWebs = New List(Of ColumnWebDefinition)
+        End If
+
         For i As Integer = 0 To Me.DataGridViewWebPlate.RowCount - 1
             Try
                 Dim strEdgeDistance As String = DataGridViewWebPlate.Rows(i).Cells(0).Value
@@ -511,12 +530,18 @@ Friend Class UserConnectionForm
         txtColumnUpperEdgeDist.Text = UIConverter.ConvertToText(Data.mColumnWebConnectPlate.HoleGrop.upperEdgeDistance)
         txtColumnLowerEdgeDist.Text = UIConverter.ConvertToText(Data.mColumnWebConnectPlate.HoleGrop.lowerEdgeDistance)
 
+        If DataGridViewHoleGroup.Rows.Count > 0 Then
+            DataGridViewHoleGroup.Rows.Clear()
+        End If
         For i As Integer = 0 To Data.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions.Count - 1
             DataGridViewHoleGroup.Rows.Add(Data.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions(i).horDistance.ToString(),
                                            Data.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions(i).YDesc,
                                            Data.mColumnWebConnectPlate.HoleGrop.HoleColumnDefinitions(i).groupId.ToString())
         Next
 
+        If DataGridViewWebPlate.Rows.Count > 0 Then
+            DataGridViewWebPlate.Rows.Clear()
+        End If
         For i As Integer = 0 To Data.mColumnWebConnectPlate.XColumnWebs.Count - 1
             DataGridViewWebPlate.Rows.Add(Data.mColumnWebConnectPlate.XColumnWebs(i).edgeDistance.ToString(),
                                            Data.mColumnWebConnectPlate.XColumnWebs(i).thickness.ToString(),
