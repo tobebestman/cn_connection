@@ -160,7 +160,7 @@ Public Class SidePlateCreator
             CutDiagShape(zDir, midPt)
         End If
 
-        'drawBall(midPt, 20)
+        'drawBall(midPt, 30)
 
         Dim diagCutDir As New PsVector
         diagCutDir.SetFromPoints(points(2), midPt)
@@ -193,17 +193,23 @@ Public Class SidePlateCreator
         Dim dirInwards As New PsVector
         oMat.getZAxis(dirInwards)
 
-        Dim xDir As New PsVector
         Dim yDir As New PsVector
-        mDiagUcs.getZAxis(xDir)
-        yDir.SetFromCrossProduct(xDir, dirInwards)
+        mDiagUcs.getZAxis(yDir)
 
-        Dim diagConnPlateCreator As New DiagConnectPlateCreator(getDiagShapeCutPlane(zDir, midPt),
-                                                                mDiagUcs, mDiagId, mParam)
-        If (isFirstFoldLine) Then
-            'If diagConnPlateCreator.Create() = False Then
-            '    Debug.Assert(False)
-            'End If
+        If (isFirstFoldLine = False) Then
+            dirInwards = -dirInwards
+        End If
+
+        Dim xDir As New PsVector
+        xDir.SetFromCrossProduct(dirInwards, yDir)
+
+        Dim oDiagHoleMat As New PsMatrix
+        oDiagHoleMat.SetCoordinateSystem(midPt, xDir, yDir)
+
+        Dim diagConnPlateCreator As New DiagConnectPlateCreator(midPt, oDiagHoleMat, mDiagId, mParam)
+
+        If diagConnPlateCreator.Create(mCreatedDiagPlateId) = False Then
+            Debug.Assert(False)
         End If
 
         'Dim length As Double = diagConnPlateCreator.getPlateWidth() / 2

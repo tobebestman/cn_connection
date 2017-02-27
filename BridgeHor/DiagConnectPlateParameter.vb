@@ -116,6 +116,11 @@ Public Class DiagConnectPlateParameter
 
     Public Sub ReadFromConnection(eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromConnection
         Dim count As Integer = eConnection.Number(iNum) : iNum = iNum + 1
+
+        If holeDefs.Count > 0 Then
+            holeDefs.Clear()
+        End If
+
         For i As Integer = 0 To count - 1
             Dim holeDef As New HoleColumnDefinition
             holeDef.ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
@@ -127,6 +132,10 @@ Public Class DiagConnectPlateParameter
 
     Public Sub ReadFromTemplate(Template As PsTemplateManager, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromTemplate
         Dim count As Integer = Template.Number(iNum) : iNum = iNum + 1
+
+        If holeDefs.Count > 0 Then
+            holeDefs.Clear()
+        End If
 
         For i As Integer = 0 To count - 1
             Dim holeDef As New HoleColumnDefinition

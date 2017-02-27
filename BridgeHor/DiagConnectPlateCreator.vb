@@ -46,87 +46,128 @@ Imports PSN_BridgeHor
 
 Public Class DiagConnectPlateCreator
 
-    Public mCutPlane As PsCutPlane
-    Public mConnMat As PsMatrix
+    Public mMidPt As PsPoint
+    Public mDiagHoleMat As PsMatrix
     Public mDiagId As Long
     Public mParam As Parameters
 
     Public mResult As List(Of Long)
 
-    Public Sub New(cutPlane As PsCutPlane,
-                   connMat As PsMatrix,
+    Public Sub New(midPt As PsPoint,
+                   diagHoleMat As PsMatrix,
                    id As Long,
                    param As Parameters)
-        mConnMat = connMat
+        mDiagHoleMat = diagHoleMat
         mDiagId = id
-        mCutPlane = cutPlane
+        mMidPt = midPt
         mParam = param
 
         mResult = New List(Of Long)
     End Sub
 
-    Public Function Create() As Boolean
+    Public Function Create(plateId As Long) As Boolean
 
-        Dim oMat As PsMatrix = calculateInsertMatrix()
-        Dim diagAdpt As New UserConnection.DiagShapeAdapter(mConnMat, mDiagId)
-        Dim length As Double = getPlateLength()
-        Dim width As Double = getPlateWidth()
-
-        Dim insertOffset As Double
-        insertOffset = diagAdpt.GetFaceDistanceInSideDir() / 2 +
-                       mParam.mSidePlate.mBackingPlateThickness +
-                       mParam.mDiagFlangeConnectPlate.thickness / 2
-
-        Dim id As Long = Utility.CreatePlate(width, length, mParam.mDiagFlangeConnectPlate.thickness,
-                             0, 0, insertOffset,
-                             VerticalPosition.kMiddle, oMat)
-
-        If (id <> -1) Then
-            mResult.Add(id)
-        Else
-            Debug.Assert(False)
+        If mParam.mDiagFlangeConnectPlate.holeDefs Is Nothing Then
             Return False
         End If
-        id = Utility.CreatePlate(width, length, mParam.mDiagFlangeConnectPlate.thickness,
-                             0, 0, -insertOffset,
-                             VerticalPosition.kMiddle, oMat)
-        If (id <> -1) Then
-            mResult.Add(id)
-        Else
-            Debug.Assert(False)
-            Return False
-        End If
+
+        Dim xDir As New PsVector
+        mDiagHoleMat.getXAxis(xDir)
+        Dim yDir As New PsVector
+        mDiagHoleMat.getYAxis(yDir)
+        Dim zDir As New PsVector
+        mDiagHoleMat.getZAxis(zDir)
+
+        Dim org As New PsPoint
+        mDiagHoleMat.getOrigin(org)
+
+        Dim xDist As Double = mParam.mDiagFlangeConnectPlate.middleDistance / 2
+        Dim oDef As HoleColumnDefinition
+
+        For i As Integer = mParam.mDiagFlangeConnectPlate.holeDefs.Count - 1 To 0 Step -1
+            oDef = mParam.mDiagFlangeConnectPlate.holeDefs(i)
+
+            Dim oCenter As New PsPoint
+            oCenter = MathTool.GetPointInDirection(org, xDir, xDist)
+            oCenter = MathTool.GetPointInDirection(oCenter, yDir, oDef.edgeDistance)
+
+            'Utility.drawBall(oCenter, 30)
+
+            Dim oPlateAdpt As New PlateAdapter(plateId)
+            Dim plateDir As PsVector = oPlateAdpt.GetDirection
+            If GeoHelper.IsInSameDirection(plateDir, zDir) = True Then
+                oCenter = MathTool.OrthoProjectPointToPlane(oCenter, oPlateAdpt.MidLineStart, zDir)
+            Else
+                oCenter = MathTool.OrthoProjectPointToPlane(oCenter, oPlateAdpt.MidLineEnd, zDir)
+            End If
+
+
+            xDist += oDef.horDistance
+
+            Dim oDrill As New PsDrillObject
+            oDrill.SetToDefaults()
+            oDrill.SetXYPlane(xDir, yDir)
+
+            Dim oParser As New Utility.BoltDescParser()
+            If oParser.Parse(oDef.YDesc) = False Then
+                Debug.Assert(False)
+                Continue For
+            End If
+
+            Dim yOffset As Double = oParser.count * oParser.distance
+            oDrill.SetYOffset(yOffset / 2)
+            oDrill.SetInsertPoint(oCenter)
+            oDrill.SetLinearHoleField(mParam.mHoleDia, "1*0", oDef.YDesc.Replace("x", "*"))
+            oDrill.SetObjectId(plateId)
+            oDrill.Apply()
+        Next
+
+        'Utility.drawUcs(oMat)
+        Dim xDist2 As Double = mParam.mDiagFlangeConnectPlate.middleDistance / 2
+        Dim oDef2 As HoleColumnDefinition
+
+        For i As Integer = mParam.mDiagFlangeConnectPlate.holeDefs.Count - 1 To 0 Step -1
+            oDef2 = mParam.mDiagFlangeConnectPlate.holeDefs(i)
+
+            Dim oCenter As New PsPoint
+            oCenter = MathTool.GetPointInDirection(org, -xDir, xDist2)
+            oCenter = MathTool.GetPointInDirection(oCenter, yDir, oDef2.edgeDistance)
+
+            'Utility.drawBall(oCenter, 30)
+
+            Dim oPlateAdpt As New PlateAdapter(plateId)
+            Dim plateDir As PsVector = oPlateAdpt.GetDirection
+            If GeoHelper.IsInSameDirection(plateDir, zDir) = True Then
+                oCenter = MathTool.OrthoProjectPointToPlane(oCenter, oPlateAdpt.MidLineStart, zDir)
+            Else
+                oCenter = MathTool.OrthoProjectPointToPlane(oCenter, oPlateAdpt.MidLineEnd, zDir)
+            End If
+
+
+            xDist2 += oDef2.horDistance
+
+            Dim oDrill As New PsDrillObject
+            oDrill.SetToDefaults()
+            oDrill.SetXYPlane(xDir, yDir)
+
+            Dim oParser As New Utility.BoltDescParser()
+            If oParser.Parse(oDef2.YDesc) = False Then
+                Debug.Assert(False)
+                Continue For
+            End If
+
+            Dim yOffset As Double = oParser.count * oParser.distance
+            oDrill.SetYOffset(yOffset / 2)
+            oDrill.SetInsertPoint(oCenter)
+            oDrill.SetLinearHoleField(mParam.mHoleDia, "1*0", oDef2.YDesc.Replace("x", "*"))
+            oDrill.SetObjectId(plateId)
+            oDrill.Apply()
+        Next
 
         Return True
 
     End Function
 
-
-    Private Function calculateInsertMatrix() As PsMatrix
-
-        Dim xDir As New PsVector
-        mConnMat.getZAxis(xDir)
-
-        Dim org As PsPoint = MathTool.GetPointInDirection(mCutPlane.InsertPoint, xDir, mParam.mDiagnalGap / 2)
-
-
-
-        Dim diagAdpt As New UserConnection.DiagShapeAdapter(mConnMat, mDiagId)
-
-        Dim zDir As PsVector = diagAdpt.SideDir()
-        Dim yDir As New PsVector
-        yDir.SetFromCrossProduct(zDir, xDir)
-        yDir.Normalize()
-
-        'make sure the org is on the center line of the shape
-        Dim shpAdpt As New ShapeAdapter(mDiagId)
-        org = MathTool.OrthoProjectPointToLine(org, shpAdpt.MidLineEnd, shpAdpt.MidLineStart)
-
-        Dim result As New PsMatrix
-        result.SetCoordinateSystem(org, xDir, yDir)
-
-        Return result
-    End Function
 
     Public Function getPlateLength() As Double
         If (mParam.mDiagFlangeConnectPlate Is Nothing) Then
