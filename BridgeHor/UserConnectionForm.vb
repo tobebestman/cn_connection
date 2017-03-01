@@ -477,27 +477,27 @@ Friend Class UserConnectionForm
     Private Sub TabStrip1_SelectedIndexChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TabStrip1.SelectedIndexChanged
         Dim fileName As String = String.Empty
 
-        'Select Case Me.TabStrip1.SelectedIndex
-        '    Case 0
-        '        fileName = "BottomP"
-        '    Case 1, 2
-        '        fileName = "BoltWeld"
-        '    Case 3
-        '        fileName = "SideP"
-        '    Case 4
-        '        fileName = "SideP2"
-        '    Case Else
-        '        fileName = "All"
-        'End Select
+        Select Case Me.TabStrip1.SelectedIndex
+            Case 0
+                fileName = "CutBack"
+            Case 1
+                fileName = "SidePlate"
+            Case 2
+                fileName = "MiddleWebPlate"
+            Case 3
+                fileName = "HorFlangeConnectPlate"
+            Case Else
+                fileName = "DiagFlangePlate"
+        End Select
 
-        'picBitmap.Image = Nothing
+        picBitmap.Image = Nothing
 
-        'If Len(fileName) Then
-        '    fileName = UserConnection.GlobalSettings.PluginDataPath & "\" & PLUGIN_IDENTIFIER & "\" & fileName & ".png"
-        '    If Len(Dir(fileName)) > 0 Then
-        '        picBitmap.Image = System.Drawing.Image.FromFile(fileName)
-        '    End If
-        'End If
+        If Len(fileName) Then
+            fileName = UserConnection.GlobalSettings.PluginDataPath & "\" & PLUGIN_IDENTIFIER & "\" & fileName & ".png"
+            If Len(Dir(fileName)) > 0 Then
+                picBitmap.Image = System.Drawing.Image.FromFile(fileName)
+            End If
+        End If
     End Sub
 
 
