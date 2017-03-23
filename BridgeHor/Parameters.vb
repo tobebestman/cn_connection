@@ -268,17 +268,17 @@ Public Class Parameters
     End Sub
 
     Public Sub SetToMetricDefaults() Implements ISetToDefauts.SetToMetricDefaults
-        mHorCutback = 2000.7
-        mHorWebCutback = 3000.7
+        mHorCutback = 1500.7
+        mHorWebCutback = 2500.7
 
-        mDiagnalCutback = 2400
-        mDiagnalExtend = 300
+        mDiagnalCutback = 1800
+        mDiagnalExtend = 320
 
         mHorGap = 40
         mDiagnalGap = 40
 
         mHorPlateThickness = 24
-        mHoleDia = 30
+        mHoleDia = 26
 
         mSidePlate.SetToMetricDefaults()
         mWebPlates.SetToMetricDefaults()

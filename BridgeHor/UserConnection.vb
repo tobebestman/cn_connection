@@ -391,6 +391,14 @@ Public Class UserConnection
                                                                     data, connMat1, connMat2)
             Debug.Assert(foldLine.Count = 4)
 
+            'adjust foldLine start point to plate inner face
+            Dim plateAdpt As New PlateAdapter(sidePlateId)
+            MathTool.IntersectLineWithPlane(foldLine(0), foldLine(1), plateAdpt.MidLineEnd, plateAdpt.GetDirection, foldLine(0))
+            MathTool.IntersectLineWithPlane(foldLine(2), foldLine(3), plateAdpt.MidLineEnd, plateAdpt.GetDirection, foldLine(2))
+            'drawBall(plateAdpt.MidLineStart, 10)
+            'drawBall(plateAdpt.MidLineEnd, 20)
+
+            'create side plates
             Dim oSidePlateCreator1 As New SidePlateCreator(sidePlateId,
                                                            horId, diagnalId,
                                                            connMat1, connMat2,
@@ -1064,9 +1072,10 @@ Public Class UserConnection
             Dim diagId As Long = oBuilder.getOriginDiagnalShapeIdFromAdapter(oAdpt)
             Dim plateId As Long = oBuilder.getOriginSidePlateIdFromAdapter(oAdpt)
 
-            Utility.RecoverShapeLengthTo(horId, plateId)
-            Utility.RecoverShapeLengthTo(diagId, plateId)
-
+            If plateId <> 0 Then
+                Utility.RecoverShapeLengthTo(horId, plateId)
+                Utility.RecoverShapeLengthTo(diagId, plateId)
+            End If
             Try
                 oTrans.GetObject(ConnectionId, PsOpenMode.kForWrite, oConnection)
                 If oConnection IsNot Nothing Then

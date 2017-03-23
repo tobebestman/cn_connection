@@ -560,7 +560,7 @@ Public Class ColumnWebConnectPlateCreator
 
     Private Function ColumnWebAccessoryPlateWidth() As Double
         Dim colAdpt As New ShapeAdapter(Me.columnId)
-        Dim width = colAdpt.Height
+        Dim width = colAdpt.Width
         width -= 2 * param.mColumnWebConnectPlate.columnPlateThickness
         Return width
     End Function

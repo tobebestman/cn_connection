@@ -1146,7 +1146,7 @@ Public Class UserConnection
         Dim pts1 As List(Of PsPoint) = GeoHelper.FilletTwoLine(spt, mPt, upperPoints(1), newEndPt, data.mTopFillet1)
 
         Dim newEndPt2 As New PsPoint
-        GeoHelper.RotateLineByStart(upperPoints(2), inst2, -data.mBottomAngle2,
+        GeoHelper.RotateLineByStart(upperPoints(2), inst2, -data.mTopAngle2,
                                     zAxis, newEndPt2)
         Dim pts2 As List(Of PsPoint) = GeoHelper.FilletTwoLine(ept, mPt,
                                                                upperPoints(2), newEndPt2, data.mTopFillet2)

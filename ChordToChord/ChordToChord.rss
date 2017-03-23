@@ -1,0 +1,79 @@
+#MENUES
+@dummy,1
+"Dummy",0,0,"",
+#ENDMENUES
+
+#DIALOG
+@dm1,"Dummy",AM,AM,
+#ENDDIALOG
+
+#STRINGS
+@D0000,"Error - No right object was selected",
+@D0001,"Bridge Chord To Chord Connection",
+
+@D0100,"General",
+@D0101,"Flange 1 Top Thk",
+@D0102,"Flange 1 Bottom Thk",
+@D0103,"Flange 2 Top Thk",
+@D0104,"Flange 2 Bottom Thk",
+@D0105,"Web 2 Thk",
+@D0106,"Hole Dia",
+
+@D0200,"Web Plate",
+
+@D0300,"Top Plate",
+
+@D0400,"Bottom Plate",
+@D0401,"Dimension",
+@D0402,"Outter PL Thk",
+@D0403,"Inner PL Thk",
+@D0404,"Slot Radius",
+@D0405,"Slot Straight lengh",
+@D0406,"Upper EdgeDist",
+@D0407,"Lower EdgeDist",
+
+@D0600,"Group",
+@D0601,"Create Group",
+
+@D0700,"Assignment",
+@D0701,"Element",
+@D0702,"Material",
+@D0703,"Detail Style",
+@D0704,"Display Class",
+@D0705,"Area Class",
+@D0706,"Part Family",
+@D0707,"Description",
+@D0708,"Level",
+@D0709,"Item Number",
+
+@M0000,"Select first chord",
+@M0001,"Select second chord",
+@M0002,"Select first plate",
+@M0003,"Select second plate",
+@M0004,"Select same connection you want to clone from: ",
+
+@T0003,"Length by line",
+
+@S1000,"OK",
+@S1001,"Cancel",
+@S1003,"Force Update",
+@S1004,"Template",
+@S1006,"Help",
+@S1007,"Clone From",
+@S1008,"Show Illustration",
+@S1009,"Hide Illustration",
+@S1010,"Update Display",
+@S1011,"Switch Rollover",
+
+@S0090,"Select element to edit",
+@S0091,"Select material for elements",
+@S0092,"Select detail style for elements",
+@S0093,"Select display class for elements",
+@S0094,"Select area class for elements",
+@S0095,"Select family class for elements",
+@S0096,"Select description for elements",
+@S0097,"Select layer for elements",
+@S0098,"Specify item number for elements",
+
+@S0100,"Plate",
+@S0101,"Gusset",

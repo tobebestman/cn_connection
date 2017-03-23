@@ -314,13 +314,17 @@ Friend Class UserConnectionForm
             Data.mDiagFlangeConnectPlate.holeDefs = New List(Of HoleColumnDefinition)
         End If
 
-        For Each oRow As DataGridViewRow In DataGridViewHole.Rows
-            Dim oDef As New HoleColumnDefinition
-            oDef.edgeDistance = UIConverter.ConvertToNumeric(oRow.Cells("EdgeDist").Value)
-            oDef.horDistance = UIConverter.ConvertToNumeric(oRow.Cells("HorDist").Value)
-            oDef.YDesc = oRow.Cells("YDesc").Value
-            oDef.groupId = 0
-            Data.mDiagFlangeConnectPlate.holeDefs.Add(oDef)
+        For i As Integer = 0 To Me.DataGridViewHole.RowCount - 1
+            'For Each oRow As DataGridViewRow In DataGridViewHole.Rows
+            If DataGridViewHole.Rows(i).Cells("YDesc").Value IsNot Nothing Then
+
+                Dim oDef As New HoleColumnDefinition
+                oDef.edgeDistance = UIConverter.ConvertToNumeric(DataGridViewHole.Rows(i).Cells("EdgeDist").Value)
+                oDef.horDistance = UIConverter.ConvertToNumeric(DataGridViewHole.Rows(i).Cells("HorDist").Value)
+                oDef.YDesc = DataGridViewHole.Rows(i).Cells("YDesc").Value
+                oDef.groupId = 0
+                Data.mDiagFlangeConnectPlate.holeDefs.Add(oDef)
+            End If
         Next
     End Sub
 

@@ -151,11 +151,11 @@ Public Class DiagConnectPlateParameter
     End Sub
 
     Public Sub SetToMetricDefaults() Implements ISetToDefauts.SetToMetricDefaults
-        holeDefs.Add(New HoleColumnDefinition(130, 130, "2x80", 0))
-        holeDefs.Add(New HoleColumnDefinition(50, 80, "3x80", 0))
-        holeDefs.Add(New HoleColumnDefinition(50, 80, "3x80", 0))
-        holeDefs.Add(New HoleColumnDefinition(130, 80, "3x80", 0))
-        middleDistance = 100
+        holeDefs.Add(New HoleColumnDefinition(0, 80, "3x80", 0))
+        holeDefs.Add(New HoleColumnDefinition(0, 80, "4x80", 0))
+        holeDefs.Add(New HoleColumnDefinition(0, 80, "4x80", 0))
+        holeDefs.Add(New HoleColumnDefinition(0, 80, "4x80", 0))
+        middleDistance = 160
         thickness = 20
     End Sub
 

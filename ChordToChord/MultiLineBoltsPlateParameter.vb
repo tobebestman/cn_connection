@@ -1,6 +1,8 @@
 ﻿Option Strict Off
 Option Explicit On
 
+Imports System.Collections.Generic
+
 Imports Bentley.ProStructures
 Imports Bentley.ProStructures.Annotation
 Imports Bentley.ProStructures.Assignment
@@ -41,70 +43,9 @@ Imports Bentley.ProStructures.StructuralObject.JoistData
 Imports PlugInBase
 Imports PlugInBase.PlugInCommon
 Imports PlugInBase.PlugInCommon.CommonFunctions
-Imports PSN_SubstationShared.UnitConvert
-Imports PSN_BridgeTripleBrace
+Imports PSN_ChordToChord
 
-Public Class ColumnWebDefinition
-    Implements IParameters, ISetToDefauts
-
-    Public edgeDistance As Double
-    Public thickness As Double
-    Public height As Double
-    Public length As Double
-
-    Public Sub New()
-        SetToMetricDefaults()
-    End Sub
-
-    Public Sub New(edgeDistance As Double, thickness As Double,
-                    height As Double, length As Double)
-        Me.edgeDistance = edgeDistance
-        Me.thickness = thickness
-        Me.height = height
-        Me.length = length
-    End Sub
-
-    Public Sub ReadFromConnection(eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromConnection
-        edgeDistance = eConnection.Double(iDbl) : iDbl = iDbl + 1
-        thickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
-        height = eConnection.Double(iDbl) : iDbl = iDbl + 1
-        length = eConnection.Double(iDbl) : iDbl = iDbl + 1
-    End Sub
-
-    Public Sub ReadFromTemplate(Template As PsTemplateManager, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromTemplate
-        edgeDistance = Template.Double(iDbl) : iDbl = iDbl + 1
-        thickness = Template.Double(iDbl) : iDbl = iDbl + 1
-        height = Template.Double(iDbl) : iDbl = iDbl + 1
-        length = Template.Double(iDbl) : iDbl = iDbl + 1
-    End Sub
-
-    Public Sub WriteToConnection(ByRef eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.WriteToConnection
-        eConnection.Double(iDbl) = edgeDistance : iDbl = iDbl + 1
-        eConnection.Double(iDbl) = thickness : iDbl = iDbl + 1
-        eConnection.Double(iDbl) = height : iDbl = iDbl + 1
-        eConnection.Double(iDbl) = length : iDbl = iDbl + 1
-    End Sub
-
-    Public Sub WriteToTemplate(ByRef Template As PsTemplateManager) Implements IParameters.WriteToTemplate
-        Template.AppendDouble(edgeDistance)
-        Template.AppendDouble(thickness)
-        Template.AppendDouble(height)
-        Template.AppendDouble(length)
-    End Sub
-
-    Public Sub SetToImperialDefaults() Implements ISetToDefauts.SetToImperialDefaults
-        Throw New NotImplementedException()
-    End Sub
-
-    Public Sub SetToMetricDefaults() Implements ISetToDefauts.SetToMetricDefaults
-        edgeDistance = 0
-        thickness = 0
-        height = 0
-        length = 0
-    End Sub
-End Class
-
-Public Class HoleColumnDefinition
+Public Class HoleLineDefinition
     Implements IParameters, ISetToDefauts
 
     Public horDistance As Double
@@ -157,23 +98,22 @@ Public Class HoleColumnDefinition
 End Class
 
 Public Class HoleGroupDefinition
-    Implements IParameters, ISetToDefauts
+    Implements IParameters
 
     Public upperEdgeDistance As Double
     Public lowerEdgeDistance As Double
-    Public HoleColumnDefinitions As List(Of HoleColumnDefinition)
-
+    Public HoleColumnDefinitions As List(Of HoleLineDefinition)
     Public Sub New()
-        HoleColumnDefinitions = New List(Of HoleColumnDefinition)()
+        HoleColumnDefinitions = New List(Of HoleLineDefinition)()
     End Sub
     Public Sub ReadFromConnection(eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromConnection
         Me.upperEdgeDistance = eConnection.Double(iDbl) : iDbl = iDbl + 1
         Me.lowerEdgeDistance = eConnection.Double(iDbl) : iDbl = iDbl + 1
 
         Dim count As Integer = eConnection.Number(iNum) : iNum = iNum + 1
-        HoleColumnDefinitions = New List(Of HoleColumnDefinition)
+        HoleColumnDefinitions = New List(Of HoleLineDefinition)
         For i As Integer = 0 To count - 1
-            Dim oDef As New HoleColumnDefinition
+            Dim oDef As New HoleLineDefinition
             oDef.ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
             HoleColumnDefinitions.Add(oDef)
         Next
@@ -184,9 +124,9 @@ Public Class HoleGroupDefinition
         Me.lowerEdgeDistance = Template.Double(iDbl) : iDbl = iDbl + 1
 
         Dim count As Integer = Template.Number(iNum) : iNum = iNum + 1
-        HoleColumnDefinitions = New List(Of HoleColumnDefinition)
+        HoleColumnDefinitions = New List(Of HoleLineDefinition)
         For i As Integer = 0 To count - 1
-            Dim oDef As New HoleColumnDefinition
+            Dim oDef As New HoleLineDefinition
             oDef.ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
             HoleColumnDefinitions.Add(oDef)
         Next
@@ -209,133 +149,62 @@ Public Class HoleGroupDefinition
             HoleColumnDefinitions(i).WriteToTemplate(Template)
         Next
     End Sub
-
-    Public Sub SetToImperialDefaults() Implements ISetToDefauts.SetToImperialDefaults
-        Throw New NotImplementedException()
-    End Sub
-
-    Public Sub SetToMetricDefaults() Implements ISetToDefauts.SetToMetricDefaults
-        upperEdgeDistance = 50
-        lowerEdgeDistance = 100
-
-        HoleColumnDefinitions = New List(Of HoleColumnDefinition)
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(50, "6x100", 0))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100", 0))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100", 0))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100", 0))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100", 0))
-
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(200, "6x100", 1))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "4x100", 1))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "3x100", 1))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "3x100", 1))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "4x100", 1))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100", 1))
-
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(200, "6x100", 2))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100", 2))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100", 2))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100", 2))
-        HoleColumnDefinitions.Add(New HoleColumnDefinition(100, "6x100", 2))
-    End Sub
 End Class
 
-Public Class ColumnWebConnectPlateParameter
-    Implements IParameters, ISetToDefauts
+Public Class MultiBoltsPlateParameters
+    Implements IParameters
 
     Public outterPlateThickness As Double
     Public innerPlateThickness As Double
-    Public columnPlateThickness As Double
 
     Public centerDistance As Double
     Public radius As Double
 
     Public HoleGrop As HoleGroupDefinition
 
-    Public XColumnWebs As List(Of ColumnWebDefinition)
-
     Public owner As Parameters
 
     Public Sub New(owner As Parameters)
         Me.owner = owner
         HoleGrop = New HoleGroupDefinition()
-        XColumnWebs = New List(Of ColumnWebDefinition)
     End Sub
 
     Public Sub ReadFromConnection(eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromConnection
         Me.outterPlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
         Me.innerPlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
-        Me.columnPlateThickness = eConnection.Double(iDbl) : iDbl = iDbl + 1
         Me.centerDistance = eConnection.Double(iDbl) : iDbl = iDbl + 1
         Me.radius = eConnection.Double(iDbl) : iDbl = iDbl + 1
         HoleGrop.ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
 
-        Dim count As Integer = eConnection.Number(iNum) : iNum = iNum + 1
-        For i As Integer = 0 To count - 1
-            Dim oDef As New ColumnWebDefinition
-            oDef.ReadFromConnection(eConnection, iDbl, iNum, iBln, iStr)
-            XColumnWebs.Add(oDef)
-        Next
+
     End Sub
 
     Public Sub ReadFromTemplate(Template As PsTemplateManager, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.ReadFromTemplate
         Me.outterPlateThickness = Template.Double(iDbl) : iDbl = iDbl + 1
         Me.innerPlateThickness = Template.Double(iDbl) : iDbl = iDbl + 1
-        Me.columnPlateThickness = Template.Double(iDbl) : iDbl = iDbl + 1
         Me.centerDistance = Template.Double(iDbl) : iDbl = iDbl + 1
         Me.radius = Template.Double(iDbl) : iDbl = iDbl + 1
         HoleGrop.ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
 
-        Dim count As Integer = Template.Number(iNum) : iNum = iNum + 1
-        For i As Integer = 0 To count - 1
-            Dim oDef As New ColumnWebDefinition
-            oDef.ReadFromTemplate(Template, iDbl, iNum, iBln, iStr)
-            XColumnWebs.Add(oDef)
-        Next
-
-    End Sub
-
-    Public Sub SetToImperialDefaults() Implements ISetToDefauts.SetToImperialDefaults
-        Throw New NotImplementedException()
-    End Sub
-
-    Public Sub SetToMetricDefaults() Implements ISetToDefauts.SetToMetricDefaults
-        Me.outterPlateThickness = 22
-        Me.innerPlateThickness = 26
-        Me.columnPlateThickness = 52
-        Me.centerDistance = 300
-        Me.radius = 150
-        HoleGrop.SetToMetricDefaults()
-
-        XColumnWebs.Add(New ColumnWebDefinition(650, 24, 250, 686))
-        XColumnWebs.Add(New ColumnWebDefinition(700, 24, 250, 686))
     End Sub
 
     Public Sub WriteToConnection(ByRef eConnection As PsConnection, ByRef iDbl As Integer, ByRef iNum As Integer, ByRef iBln As Integer, ByRef iStr As Integer) Implements IParameters.WriteToConnection
         eConnection.Double(iDbl) = Me.outterPlateThickness : iDbl = iDbl + 1
         eConnection.Double(iDbl) = Me.innerPlateThickness : iDbl = iDbl + 1
-        eConnection.Double(iDbl) = Me.columnPlateThickness : iDbl = iDbl + 1
         eConnection.Double(iDbl) = Me.centerDistance : iDbl = iDbl + 1
         eConnection.Double(iDbl) = Me.radius : iDbl = iDbl + 1
         HoleGrop.WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
 
-        eConnection.Number(iNum) = Me.XColumnWebs.Count
-        For i As Integer = 0 To Me.XColumnWebs.Count - 1
-            XColumnWebs(i).WriteToConnection(eConnection, iDbl, iNum, iBln, iStr)
-        Next
     End Sub
 
     Public Sub WriteToTemplate(ByRef Template As PsTemplateManager) Implements IParameters.WriteToTemplate
         Template.AppendDouble(Me.outterPlateThickness)
         Template.AppendDouble(Me.innerPlateThickness)
-        Template.AppendDouble(Me.columnPlateThickness)
         Template.AppendDouble(Me.centerDistance)
         Template.AppendDouble(Me.radius)
         HoleGrop.WriteToTemplate(Template)
 
-        Template.AppendNumber(Me.XColumnWebs.Count)
-        For i As Integer = 0 To XColumnWebs.Count - 1
-            XColumnWebs(i).WriteToTemplate(Template)
-        Next
     End Sub
 End Class
+
+

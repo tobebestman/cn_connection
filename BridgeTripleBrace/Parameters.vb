@@ -449,25 +449,25 @@ Public Class Parameters
         mConnect1CutBack = 2400
         mConnect2CutBack = 2400
 
-        mPlateThickness = 104
+        mPlateThickness = 52
 
         mBottomAngle1 = 0.1
         mBottomAngle2 = 45
         mBottomAngle3 = 45
         mBottomAngle4 = 0.1
 
-        mBottomFillet1 = 100
-        mBottomFillet2 = 100
+        mBottomFillet1 = 1000
+        mBottomFillet2 = 1000
 
         mMainChordPlateThickness = 52
         mHoleDia = 30
 
-        mColumnCutBack = 2600
+        mColumnCutBack = 2000
 
         mTopAngle1 = 45
         mTopAngle2 = 45
-        mTopFillet1 = 200
-        mTopFillet2 = 200
+        mTopFillet1 = 1000
+        mTopFillet2 = 1000
 
         mColumnGap = 40
 

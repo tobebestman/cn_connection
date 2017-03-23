@@ -99,12 +99,12 @@ Public Class SidePlateParameter
         Me.mDiagFillet = 200
         Me.mHorAngle = 30
         Me.mDiagAngle = 90
-        Me.mHorTopDist = 580
+        Me.mHorTopDist = 380
         Me.mDiagTopDist = 238.5
         Me.mHorBottomDist = 974.6
         Me.mDiagBottomDist = 954.1
         Me.mOutsidePlateThickness = 20
-        Me.mInsidePlateThickness = 16
+        Me.mInsidePlateThickness = 20
         Me.mBackingPlateThickness = 10
     End Sub
 

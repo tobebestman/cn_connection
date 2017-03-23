@@ -152,6 +152,10 @@ Module Utility
     End Function
 
     Public Sub RecoverShapeLengthTo(horId As Long, plateId As Long)
+        Dim plateAdpt As New PlateAdapter(plateId)
+        If plateAdpt.Length <= 0 Or plateAdpt.Width <= 0 Then
+            Return
+        End If
         Dim instPt As PsPoint = Utility.GetShapePlateIntersetPoint(horId, plateId)
         Dim shpAdpt As New ShapeAdapter(horId)
         If shpAdpt.MidLineEnd.get_DistanceTo(instPt) <= shpAdpt.MidLineStart.get_DistanceTo(instPt) Then
@@ -181,9 +185,9 @@ Module Utility
 
     Public Sub DrawLines(points As List(Of PsPoint))
         For i = 0 To points.Count - 2
-            drawLine(points(i), points(i + 1), "1", 1)
+            drawLine(points(i), points(i + 1), "1", 10)
         Next
-        drawLine(points(0), points(points.Count - 1), "1", 1)
+        drawLine(points(0), points(points.Count - 1), "1", 10)
     End Sub
 
 

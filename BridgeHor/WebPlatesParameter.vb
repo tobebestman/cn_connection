@@ -111,7 +111,7 @@ Public Class WebPlatesParameter
         mSupportPlateOffset = 100
         mSupportPlateThickness = 24
 
-        mHoleDiameter = 30
+        mHoleDiameter = 26
         mHorHoleDist = 80
         mHorHoleEdgeDist = 60
         mVerHoleDist = 80
